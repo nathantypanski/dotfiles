@@ -1,3 +1,4 @@
+Xcursor.size: 16
 !!Source http://github.com/altercation/solarized
 
 *background: #002b36
@@ -52,10 +53,10 @@ Xft.hintstyle:  hintslight
 # urxvt settings #
 ##################
 
-urxvt*termName: rxvt-256color
-URxvt*depth: 8
+# urxvt*termName: rxvt-256color
+URxvt*depth: 16
 URxvt*scrollBar: off
-URxvt*font: xft:Terminus:pixelsize=16
+URxvt.font: -*-terminus-medium-*-*-*-*-140-*-*-*-*-iso8859-1
 URxvt*scrollstyle: plain
 URxvt*scrollBar: True
 URxvt*scrollBar_right: True
