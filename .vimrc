@@ -119,7 +119,7 @@ highlight MatchParen ctermbg=4
 
 " Favorite Color Scheme
 if has("gui_running")
-   colorscheme inkpot
+   colorscheme solarized
    " Remove Toolbar
    set guioptions-=T
    "Terminus is AWESOME
@@ -342,8 +342,21 @@ map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
 
-" Tired of clearing highlighted searches by searching for “ldsfhjkhgakjks”? Use this:
+" Tired of clearing highlighted searches by searching for dsfhjkhgakjks
+" Use this:
 nmap <silent> ,/ :nohlsearch<CR>
 
 " autocmd VimEnter * NERDTree
 autocmd VimEnter * wincmd p
+function RunTest()
+    let cla = matchstr(expand("%:p"), '^.*[/\\]src[/\\]\(test\|java\)[/\\]\zs.*')
+    let class = "java -cp \"/usr/share/java/junit.jar;./\" org.junit.runner.JUnitCore fullpackagename.MyClassTest"
+    if match(class, "Test") == -1
+        let class = class . "Test"
+    endif
+endfunction
+map <F6> <Esc>:echo RunTest()<CR>
+
+let windowid=v:windowid
+autocmd VimEnter * execute '!xseticon -id ' . v:windowid . ' /usr/share/icons/Faenza/apps/32/vim.png'
+autocmd VimLeave * execute '!xseticon -id ' . v:windowid . ' /usr/share/icons/Faenza/apps/32/terminal.png'

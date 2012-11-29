@@ -1,20 +1,30 @@
-# useful shorthand
-#alias mpd='mpd && mpdas'
+###############
+# zsh options #
+###############
+zstyle ':completion:*' menu select
+
+#########
+# alias #
+#########
+
+# rotate tablet for lefties
 alias wacom='xsetwacom --set "Wacom Intuos4 6x9 stylus" rotate half && xsetwacom --set "Wacom Intuos4 6x9 cursor" rotate half && xsetwacom --set "Wacom Intuos4 6x9 eraser" rotate half'
-# alias aircnu='sudo wpa_supplicant -i wlan0 -c /etc/wpa_supplicant.conf && sleep 10 && sudo dhcpcd wlan0'
-# alias wpa='sudo wpa_supplicant -K -Dwext -i wlan0 -c /run/network//wpa.wlan0/wpa.conf'
-alias pacman-disowned='/home/nathan/scripts/pacman-disowned'
+
+# connect with wpa.conf
+alias wpa='sudo wpa_supplicant -K -Dwext -i wlan0 -c /run/network//wpa.wlan0/wpa.conf'
+
+
 alias urxvt='urxvt --meta8'
 # check wpa status
 alias wpacli='wpa_cli -p /run/wpa_supplicant -i wlan0 status'
+
 alias skype='xhost +local: && sudo -u skype /usr/bin/skype'
-# alias fastreboot='sudo /usr/local/sbin/kexec-reboot.sh 1'
+
 alias suspend='systemctl suspend'
 # color my searches
 alias grep='grep --color=auto'
-# less is more
+
 alias more='less'
-alias dotfiles='git --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME'
 
 #ls
 alias ls='ls --color=auto'
@@ -24,21 +34,36 @@ alias lx='ll -BX --color=auto'                   # sort by extension
 alias lz='ll -rS --color=auto'                   # sort by size
 alias lt='ll -rt --color=auto'                   # sort by date
 
+#cd
+alias ..="cd .."
+alias ...="cd ../.."
+
+# git
+alias gitps="git push origin master"
+alias gitp="git pull"
+alias gitc="git commit -a"
+alias gitm="git commit "
+alias giti="git init"
+alias dotfiles='git --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME'
+
 # safety features
-alias cp='cp -i'
-alias mv='mv -i'
-alias rm='rm -i'                    # 'rm -i' prompts for every file
-alias ln='ln -i'
+#alias cp='cp -i'
+#alias mv='mv -i'
+#alias rm='rm -i'                    # 'rm -i' prompts for every file
+#alias ln='ln -i'
 alias chown='chown --preserve-root'
 alias chmod='chmod --preserve-root'
 alias chgrp='chgrp --preserve-root'
+
+# view disowned files in pacman. Dangerous!
+alias pacman-disowned='/home/nathan/scripts/pacman-disowned'
 
 # envars
 export EDITOR="urxvt -e vim"
 export BROWSER="firefox"
 export GREP_COLOR="1;33"
 export LESS="-R"
-
+export CLASSPATH="/usr/share/java/junit.jar"
 
 # number of lines kept in history
 export HISTSIZE=1000
@@ -64,4 +89,9 @@ chpwd() {
       ;;
   esac
 }
-zstyle ':completion:*' menu select
+mktar() { tar cvf "${1%%/}.tar" "${1%%/}/"; }
+mktgz() { tar cvzf "${1%%/}.tar.gz" "${1%%/}/"; }
+mktbz() { tar cvjf "${1%%/}.tar.bz2" "${1%%/}/"; }
+
+# set window icon
+xseticon -id $WINDOWID /usr/share/icons/Faenza/apps/32/terminal.png
