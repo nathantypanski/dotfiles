@@ -1,4 +1,3 @@
-Xcursor.size: 16
 !!Source http://github.com/altercation/solarized
 
 *background: #002b36
@@ -41,14 +40,6 @@ Xcursor.size: 16
 *color7: #eee8d5
 *color15: #fdf6e3
 
-! Xft settings ---------------------------------------------------------------
-
-Xft.dpi:        131
-Xft.antialias:  true
-Xft.rgba:       rgb
-Xft.hinting:    true
-Xft.hintstyle:  hintslight
-
 ##################
 # urxvt settings #
 ##################
@@ -56,23 +47,22 @@ Xft.hintstyle:  hintslight
 # urxvt*termName: rxvt-256color
 URxvt*depth: 16
 URxvt*scrollBar: off
-URxvt.font: -*-terminus-medium-*-*-*-*-140-*-*-*-*-iso8859-1
+URxvt*font: -*-terminus-medium-*-*-*-*-140-*-*-*-*-iso8859-1
 URxvt*scrollstyle: plain
 URxvt*scrollBar: True
 URxvt*scrollBar_right: True
 URxvt*scrollBar_align: top
 # Makes urxvt invisible to window managers. Or not.
 URxvt*override-redirect: False
-URxvt*geometry: 80x25
+URxvt*geometry: 100x30
 URxvt*internalBorder: 0
 URxvt*externalBorder: 0
 URxvt*lineSpace: 0
 URxvt*borderLess: False
-## Don't know what this does:
 URxvt*preeditType: OverTheSpot
 URxvt*urlLauncher: firefox
 URxvt*cursorBlink: True
 URxvt*pointerBlank: True
-URxvt*savelines 65535
+URxvt*savelines: 65535
 URxvt*scrollttykeypress: true
 # URxvt*print-pipe:       cat > $(echo urxvt.dump.`date +'%Y%M%d%H%m%S'`)

@@ -1,0 +1,16 @@
+(if
+  (is (window_class) "Firefox")
+    (begin
+      (maximize)
+      (set_workspace 3)
+    )
+)
+(if
+  (is (window_class) "URxvt")
+    (begin
+      (fullscreen)
+      (set_workspace 1)
+      (focus)
+    )
+)
+

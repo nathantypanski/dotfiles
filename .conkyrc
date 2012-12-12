@@ -1,59 +1,108 @@
+#!! drop in Solarized colorscheme for Xresources/Xdefaults
+#
+#!!SOLARIZED HEX     16/8 TERMCOL  XTERM/HEX   L*A*B      RGB         HSB
+#!!--------- ------- ---- -------  ----------- ---------- ----------- -----------
+#!!base03    #002b36  8/4 brblack  234 #1c1c1c 15 -12 -12   0  43  54 193 100  21
+#!!base02    #073642  0/4 black    235 #262626 20 -12 -12   7  54  66 192  90  26
+#!!base01    #586e75 10/7 brgreen  240 #585858 45 -07 -07  88 110 117 194  25  46
+#!!base00    #657b83 11/7 bryellow 241 #626262 50 -07 -07 101 123 131 195  23  51
+#!!base0     #839496 12/6 brblue   244 #808080 60 -06 -03 131 148 150 186  13  59
+#!!base1     #93a1a1 14/4 brcyan   245 #8a8a8a 65 -05 -02 147 161 161 180   9  63
+#!!base2     #eee8d5  7/7 white    254 #e4e4e4 92 -00  10 238 232 213  44  11  93
+#!!base3     #fdf6e3 15/7 brwhite  230 #ffffd7 97  00  10 253 246 227  44  10  99
+#!!yellow    #b58900  3/3 yellow   136 #af8700 60  10  65 181 137   0  45 100  71
+#!!orange    #cb4b16  9/3 brred    166 #d75f00 50  50  55 203  75  22  18  89  80
+#!!red       #dc322f  1/1 red      160 #d70000 50  65  45 220  50  47   1  79  86
+#!!magenta   #d33682  5/5 magenta  125 #af005f 50  65 -05 211  54 130 331  74  83
+#!!violet    #6c71c4 13/5 brmagenta 61 #5f5faf 50  15 -45 108 113 196 237  45  77
+#!!blue      #268bd2  4/4 blue      33 #0087ff 55 -10 -45  38 139 210 205  82  82
+#!!cyan      #2aa198  6/6 cyan      37 #00afaf 60 -35 -05  42 161 152 175  74  63
+#!!green     #859900  2/2 green     64 #5f8700 60 -20  65 133 153   0  68 100  60
+
+own_window_class Conky
+own_window yes
+own_window_type override
+own_window_transparent yes
+own_window_hints undecorated,below,sticky,skip_taskbar,skip_pager
+
 background yes
 use_xft yes
-xftfont Terminus:size=8
+xftfont Terminus:size=9
 xftalpha 1.0
 out_to_console no
 update_interval 1.0
 total_run_times 0
-own_window yes
-own_window_transparent yes
-own_window_type desktop
-# own_window_hints undecorate,below,sticky,skip_taskbar,skip_pager
 double_buffer yes
-minimum_size 1580 900
-maximum_size 1580 900
+minimum_size 1596 855
 draw_shades yes
 draw_outline no
-draw_borders no
-stippled_borders 8
-border_margin 4
+draw_borders yes
+stippled_borders 0
 border_width 1
-default_color white
+default_color 657b83
 default_shade_color black
 default_outline_color white
 alignment top_left
-gap_x 10
-gap_y 10
+gap_x 0
+gap_y 0
 no_buffers yes
 uppercase no
 cpu_avg_samples 2
 net_avg_samples 2
 override_utf8_locale no
 use_spacer yes
+background 657b83
+# basetext
+color0 839496
+# emphasized
+color1 93a1a1
+#yellow
+color2 b58900
+#orange
+color3 cb4b16
+#red
+color4 dc322f
+#magenta
+color5 d33682
+#violet
+color6 6c71c4
+#blue
+color7 268bd2
+#cyan
+color9 2aa198
 
-#mpd
-mpd_host /home/nathan/.mpd/socket
-mpd_port 6606
-
+TEXT
+${color0}ac               ${battery}
+${color0}kernel           ${color3}${kernel}
+${color0}vd1_temp         ${color3}${exec sensors | awk 'NR==3 {print $2}'} ${color9}C
+${color0}ip               ${if_up wlan0}${addr wlan0}${endif}${if_up eth0}${addr eth0}${endif}
+${color0}diskio           ${color3}${diskio /dev/sda}
+${color0}cpu              ${color3}${cpu}
+${color0}cpufreq          ${color3}${freq}
+${color0}acpi             ${color3}${exec acpi}
 TEXT
 # ${color slate grey}
 # ${color #ddaa00}
-#${color #ccccee}BATTERY
-${color #ccccee}${exec ibam}${alignr}${color #ccccee}DISK
-${color slate grey}power ${color #ddaa00}${if_match "$acpiacadapter"=="on-line"}charging${else}${color lightgrey}draining${endif} ${battery_percent}%${alignr}${color #ddaa00}${diskio_read}${color slate grey} read
-${color }${battery_bar 10,200}${alignr}${color}${diskiograph_read 10,130 000000 ffffff -t -l}
-${color #ccccee}net${alignr}${color #ddaa00}${diskio_write}${color slate grey} write
-${color slate grey}essid ${color #ddaa00}${wireless_essid wlan0}${alignr}${color}${diskiograph_write 10,130 000000 ffffff -t -l}
-${color slate grey}ip ${color #ddaa00}${addr wlan0}${alignr}${color #ccccee}CPU
+${color #ccccee}BATTERY
+${color slate grey}power ${color #ddaa00}${if_match "$acpiacadapter"=="on-line"}charging${else}${color lightgrey}draining${endif} ${battery_percent}%
+${color }${battery_bar 10,130}
+${alignr}${color #ccccee}DISK
+${alignr}${color #ddaa00}${diskio_read}${color slate grey} read
+${alignr}${color}${diskiograph_read 10,130 000000 ffffff -t -l}
+${alignr}${color #ddaa00}${diskio_write}${color slate grey} write
+${alignr}${color}${diskiograph_write 10,130 000000 ffffff -t -l}
+${color #ccccee}NETWORK
+${color slate grey}essid ${color #ddaa00}${wireless_essid wlan0}
+${color slate grey}ip ${color #ddaa00}${addr wlan0}
 ${color slate grey}mode ${color #ddaa00}${wireless_mode wlan0}
-${color slate grey}up ${color #ddaa00}${upspeed wlan0}${alignr}${color slate grey}core 1: ${color #ddaa00}${cpu cpu1}%${color} ${color}${freq_g 1}GHz
-${color }${upspeedgraph wlan0 10,130 000000 ffffff -l -t}${alignr}${cpugraph cpu1 20,150 000000 ffffff -t -l}
-${color slate grey}down ${color #ddaa00}${downspeed wlan0}${color}${alignr}${color slate grey}core 2: ${color #ddaa00}${cpu cpu2}%${color} ${color}${freq_g 2}GHz
-${color }${downspeedgraph wlan0 10,130 000000 ffffff -l -t}${alignr}${cpugraph cpu2 20,150 000000 ffffff -t -l}
-${color slate grey}gmail${color} ${execpi 300 python ~/scripts/gmail.py}${alignr}${color slate grey}core 3: ${color #ddaa00}${cpu cpu3}%${color} ${color}${freq_g 3}GHz
-${color slate grey}/: ${color #ddaa00}${fs_free /}${color }/${fs_size /}${alignr}${cpugraph cpu3 20,150 000000 ffffff -t -l}
-${fs_bar 20,130 /}${alignr}${color slate grey}core 4: ${color #ddaa00}${cpu cpu4}%${color} ${color}${freq_g 4}GHz
-${alignr}${cpugraph cpu4 20,150 000000 ffffff -t -l}
-${color slate grey}/home: ${color #ddaa00}${fs_free /home}${color }/${fs_size /home}${alignr}${color #ccccee}RAM
-${fs_bar 20,130 /home}${alignr}${color slate grey}${color #ddaa00}${mem}${color}/ ${memmax}
+${color slate grey}up ${color #ddaa00}${upspeed wlan0}
+${color }${upspeedgraph wlan0 10,130 000000 ffffff -l -t}
+${color slate grey}down ${color #ddaa00}${downspeed wlan0}${color}
+${color }${downspeedgraph wlan0 10,130 000000 ffffff -l -t}
+${alignr}${color #ccccee}CPU
+${alignr}${color slate grey}core 1: ${color #ddaa00}${cpu}%${color} ${color}${freq_g 1}GHz ${cpugraph cpu1 10,130 000000 ffffff -t -l}
+${alignr}${color slate grey}core 2: ${color #ddaa00}${cpu}%${color} ${color}${freq_g 2}GHz ${cpugraph cpu2 10,130 000000 ffffff -t -l}
+${alignr}${color slate grey}core 3: ${color #ddaa00}${cpu}%${color} ${color}${freq_g 3}GHz ${cpugraph cpu3 10,130 000000 ffffff -t -l}
+${alignr}${color slate grey}core 4: ${color #ddaa00}${cpu}%${color} ${color}${freq_g 4}GHz ${cpugraph cpu4 10,130 000000 ffffff -t -l}
+${alignr}${color slate grey}ram ${color #ddaa00}${mem}${color}/ ${memmax}
 ${alignr}${color}${membar 10, 200}
