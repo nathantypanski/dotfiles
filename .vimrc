@@ -118,6 +118,7 @@ highlight MatchParen ctermbg=4
 "{{{Look and Feel
 
 " Favorite Color Scheme
+set background=dark
 if has("gui_running")
    colorscheme solarized
    " Remove Toolbar
@@ -348,15 +349,27 @@ nmap <silent> ,/ :nohlsearch<CR>
 
 " autocmd VimEnter * NERDTree
 autocmd VimEnter * wincmd p
-function RunTest()
+function RunJTest()
     let cla = matchstr(expand("%:p"), '^.*[/\\]src[/\\]\(test\|java\)[/\\]\zs.*')
     let class = "java -cp \"/usr/share/java/junit.jar;./\" org.junit.runner.JUnitCore fullpackagename.MyClassTest"
     if match(class, "Test") == -1
         let class = class . "Test"
     endif
 endfunction
-map <F6> <Esc>:echo RunTest()<CR>
+map <F6> <Esc>:echo RunJTest()<CR>
 
 let windowid=v:windowid
 autocmd VimEnter * execute '!xseticon -id ' . v:windowid . ' /usr/share/icons/Faenza/apps/32/vim.png'
 autocmd VimLeave * execute '!xseticon -id ' . v:windowid . ' /usr/share/icons/Faenza/apps/32/terminal.png'
+
+" http://writequit.org/blog/?p=279
+" Supertab settings
+" supertab + eclim == java win
+let g:SuperTabDefaultCompletionTypeDiscovery = [
+\ "&completefunc:<c-x><c-u>",
+\ "&omnifunc:<c-x><c-o>",
+\ ]
+let g:SuperTabLongestHighlight = 1
+
+" menu something?
+set wildmenu

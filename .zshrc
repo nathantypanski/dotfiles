@@ -13,6 +13,9 @@ alias wacom='xsetwacom --set "Wacom Intuos4 6x9 stylus" rotate half && xsetwacom
 # connect with wpa.conf
 alias wpa='sudo wpa_supplicant -K -Dwext -i wlan0 -c /run/network//wpa.wlan0/wpa.conf'
 
+# touchpad onoff
+alias touchon='synclient TouchpadOff=0'
+alias touchoff='synclient TouchpadOff=1'
 
 alias urxvt='urxvt --meta8'
 # check wpa status
@@ -57,6 +60,8 @@ alias chgrp='chgrp --preserve-root'
 
 # view disowned files in pacman. Dangerous!
 alias pacman-disowned='/home/nathan/scripts/pacman-disowned'
+# start eclim daemon
+#alias eclimd = "/usr/share/eclipse/eclimd -Dosgi.instance.area.default=@nathan.home/jeclipse"
 
 # envars
 export EDITOR="urxvt -e vim"
@@ -64,6 +69,9 @@ export BROWSER="firefox"
 export GREP_COLOR="1;33"
 export LESS="-R"
 export CLASSPATH="/usr/share/java/junit.jar"
+#steam
+export SDL_AUDIODRIVER=alsa
+export ECLIPSE_HOME="/usr/share/eclipse"
 
 # number of lines kept in history
 export HISTSIZE=1000
@@ -78,7 +86,7 @@ compinit
 #enable set/save zsh theme
 autoload -Uz promptinit
 promptinit
-prompt redhat
+prompt walters
 # directory in title bar
 chpwd() {
   [[ -o interactive ]] || return
@@ -95,3 +103,6 @@ mktbz() { tar cvjf "${1%%/}.tar.bz2" "${1%%/}/"; }
 
 # set window icon
 xseticon -id $WINDOWID /usr/share/icons/Faenza/apps/32/terminal.png
+
+#eclim
+alias eclim='/usr/share/eclipse/eclimd -Dnailgun.server.port=9091'
