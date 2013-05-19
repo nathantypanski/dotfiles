@@ -38,6 +38,23 @@ augroup END
 
 " Necesary  for lots of cool vim things
 set nocompatible
+set modeline
+
+set undolevels=10		" 50 undos - saved in memory
+set updatecount=250		" switch every 250 chars, save swap
+
+" When included, as much as possible of the last line
+" in a window will be displayed.  When not included, a
+" last line that doesn't fit is replaced with "@" lines.
+set display+=lastline
+
+set title titlelen=150 titlestring=%(\ %M%)%(\ (%{expand(\"%:p:h\")})%)%(\ %a%)\ -\ %{v:servername}
+
+set ttyfast				" we have a fast terminal
+set scrolljump=5	  " when scrolling up down, show at least 5 lines
+set ttyscroll=999	  " make vim redraw screen instead of scrolling when there are more than 3 lines to be scrolled
+
+"set tags=tags;/			" search recursively up for tags
 
 " This shows what you are typing as a command.  I love this!
 set showcmd
@@ -48,7 +65,11 @@ set foldmethod=marker
 " Needed for Syntax Highlighting and stuff
 filetype on
 filetype plugin on
-syntax enable
+
+" Autoindent
+filetype indent on
+
+" I don't know.
 set grepprg=grep\ -nH\ $*
 
 " Who doesn't like autoindent?
@@ -113,6 +134,10 @@ set nohidden
 
 " Set off the other paren
 highlight MatchParen ctermbg=4
+
+" map latex-box compilation to <f5> ... change this later to only work in .tex
+" docs
+map! <F3> :Latexmk
 " }}}
 
 "{{{Look and Feel
@@ -268,7 +293,7 @@ inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
 inoremap <expr> <c-n> pumvisible() ? "\<lt>c-n>" : "\<lt>c-n>\<lt>c-r>=pumvisible() ? \"\\<lt>down>\" : \"\"\<lt>cr>"
 inoremap <expr> <m-;> pumvisible() ? "\<lt>c-n>" : "\<lt>c-x>\<lt>c-o>\<lt>c-n>\<lt>c-p>\<lt>c-r>=pumvisible() ? \"\\<lt>down>\" : \"\"\<lt>cr>"
 
-" Swap ; and :  Convenient.
+" " Swap ; and :  Convenient.
 nnoremap ; :
 nnoremap : ;
 
@@ -288,37 +313,6 @@ let Tlist_Inc_Winwidth = 0
 "}}}
 
 let rct_completion_use_fri = 1
-let Tex_DefaultTargetFormat = "pdf"
-let Tex_ViewRule_pdf = "zathura"
-" If set to 0, Latex-Suite will suppress showing all menus. Useful if you mostly work in terminals.
-let g:Tex_Menus = 0
-let g:Tex_MultipleCompileFormats = "pdf,dvi"
-let g:Tex_SmartKeyDot=0
-
-filetype plugin indent on
-syntax on
-
-" REQUIRED. This makes vim invoke Latex-Suite when you open a tex file.
-filetype plugin on
-
-" IMPORTANT: win32 users will need to have 'shellslash' set so that latex
-" can be called correctly.
-set shellslash
-
-" IMPORTANT: grep will sometimes skip displaying the file name if you
-" search in a singe file. This will confuse Latex-Suite. Set your grep
-" program to always generate a file-name.
-set grepprg=grep\ -nH\ $*
-
-" OPTIONAL: This enables automatic indentation as you type.
-filetype indent on
-
-" OPTIONAL: Starting with Vim 7, the filetype of empty .tex files defaults to
-" 'plaintex' instead of 'tex', which results in vim-latex not being loaded.
-" The following changes the default filetype back to 'tex':
-let g:tex_flavor='latex'
-" let g:Tex_CompileRule_dvi = 'latex -interaction=nonstopmode -file-line-error-style $*'
-" let g:Tex_CompileRule_pdf = 'pdflatex -interaction=nonstopmode -file-line-error-style $*'
 
 " Strip the newline from the end of a string
 function! Chomp(str)
@@ -362,14 +356,34 @@ let windowid=v:windowid
 autocmd VimEnter * execute '!xseticon -id ' . v:windowid . ' /usr/share/icons/Faenza/apps/32/vim.png'
 autocmd VimLeave * execute '!xseticon -id ' . v:windowid . ' /usr/share/icons/Faenza/apps/32/terminal.png'
 
-" http://writequit.org/blog/?p=279
-" Supertab settings
-" supertab + eclim == java win
-let g:SuperTabDefaultCompletionTypeDiscovery = [
-\ "&completefunc:<c-x><c-u>",
-\ "&omnifunc:<c-x><c-o>",
-\ ]
-let g:SuperTabLongestHighlight = 1
+" " http://writequit.org/blog/?p=279
+" " Supertab settings
+" " supertab + eclim == java win
+" let g:SuperTabDefaultCompletionTypeDiscovery = [
+" \ "&completefunc:<c-x><c-u>",
+" \ "&omnifunc:<c-x><c-o>",
+" \ ]
+" let g:SuperTabLongestHighlight = 1
+" let g:SuperTabDefaultCompletionType = "<c-x><c-u>"
 
-" menu something?
+" Tab view of menus.
 set wildmenu
+
+call pathogen#infect()
+call pathogen#helptags()
+call pathogen#runtime_append_all_bundles()
+
+"" 80 columns
+"highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+"match OverLength /\%81v.\+/
+"
+" Turn syntax highlighting on by default, try to keep this near the end of
+" this file.
+syntax on
+
+" Current line highlighting
+augroup CursorLine
+  au!
+  au VimEnter,WinEnter,BufWinEnter * setlocal cursorline
+  au WinLeave * setlocal nocursorline
+augroup END
