@@ -1,6 +1,7 @@
 !##########################
 ! solarized color scheme  #
 !##########################
+!URxvt.depth: 32
 
 *background: #002b36
 *foreground: #657b83
@@ -55,7 +56,8 @@ Xft.antialias:  true
 ! urxvt #
 !########
 
-! urxvt*termName: rxvt-256color
+URxvt*termName: rxvt-unicode
+#URxvt*imLocale: en_Us.utf8
 URxvt*depth:                  16
 URxvt*font:                   -*-terminus-medium-*-normal-*-*-*-*-*-*-*-iso10646-*
 URxvt*scrollstyle:            plain
@@ -82,7 +84,7 @@ URxvt.colorIT:                #268bd2
 URxvt.colorBD:                #dc322f
 URxvt.colorUL:                #859900
 ! URxvt*print-pipe:       cat > $(echo urxvt.dump.`date +'%Y%M%d%H%m%S'`)
-!
+
 !########
 ! dzen2 #
 !########

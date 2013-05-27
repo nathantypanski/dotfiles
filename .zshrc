@@ -10,7 +10,7 @@ setopt inc_append_history
 autoload -U compinit
 compinit
 
-# Set/save zsh theme.
+# # Set/save zsh theme.
 autoload -Uz promptinit
 promptinit
 prompt walters
@@ -97,6 +97,7 @@ alias skype='xhost +local: && sudo -u skype /usr/bin/skype'
 
 # start mpd and scmpc
 alias mpd='mpd  && ~/scripts/scmpc.sh'
+alias pms='pms -p 6606'
 
 # color my searches
 alias grep='grep --color=auto'
@@ -109,43 +110,81 @@ alias pacman-disowned='/home/nathan/scripts/pacman-disowned'
 # start eclim daemon
 #alias eclimd = "/usr/share/eclipse/eclimd -Dosgi.instance.area.default=@nathan.home/jeclipse"
 
-# envars
+# Firefox addon SDK shortcut.
+alias addon-sdk="cd /opt/addon-sdk && source bin/activate; cd -"
+
+# Vim for life.
 export EDITOR="vim"
+
+# Since there's nothing better out there ...
 export BROWSER="firefox"
+
 export GREP_COLOR="1;33"
+
 export LESS="-R"
+
 export CLASSPATH="/usr/share/java/junit.jar"
+
 # scripts in path
 export PATH=$PATH:~/scripts
-#steam
+
+# Steam likes this
 export SDL_AUDIODRIVER=alsa
+
+# Eclipse doesn't seem to play nice by default.
 export ECLIPSE_HOME="/usr/share/eclipse"
-# firefox addon dev
-alias addon-sdk="cd /opt/addon-sdk && source bin/activate; cd -"
 
 # number of lines kept in history
 export HISTSIZE=1000
+
 # number of lines saved in the history after logout
-export SAVEHIST=1000
+export SAVEHIST=500
+
 # location of history
 export HISTFILE=~/.zhistory
+
 #syncad
 export SYNCAD_LICENSE_FILE=~/synapticad-17.07d/license.dat
 
-# directory in title bar
-chpwd() {
-  [[ -o interactive ]] || return
-  case $TERM in
-    sun-cmd) print -Pn "\e]l%~\e\\"
-      ;;
-    *xterm*|rxvt|(dt|k|E)term) print -Pn "\e]2;%~\a"
-      ;;
-  esac
-}
+# ~/.ccache to ramdisk
+export CCACHE_DIR=/mnt/ramdisk/ccache
+
+# Show active directory in title bar.
+# chpwd() {
+#   [[ -o interactive ]] || return
+#   case $TERM in
+#     sun-cmd) print -Pn "\e]l%~\e\\"
+#       ;;
+#     *xterm*|rxvt|(dt|k|E)term) print -Pn "\e]2;%~\a"
+#       ;;
+#   esac
+# }
 mktar() { tar cvf "${1%%/}.tar" "${1%%/}/"; }
 mktgz() { tar cvzf "${1%%/}.tar.gz" "${1%%/}/"; }
 mktbz() { tar cvjf "${1%%/}.tar.bz2" "${1%%/}/"; }
 
+# File extract from somewhere on the Internet.
+extract () {
+   if [ -f $1 ] ; then
+       case $1 in
+	*.tar.bz2)	tar xvjf $1 && cd $(basename "$1" .tar.bz2) ;;
+	*.tar.gz)	tar xvzf $1 && cd $(basename "$1" .tar.gz) ;;
+	*.tar.xz)	tar Jxvf $1 && cd $(basename "$1" .tar.xz) ;;
+	*.bz2)		bunzip2 $1 && cd $(basename "$1" /bz2) ;;
+	*.rar)		unrar x $1 && cd $(basename "$1" .rar) ;;
+	*.gz)		gunzip $1 && cd $(basename "$1" .gz) ;;
+	*.tar)		tar xvf $1 && cd $(basename "$1" .tar) ;;
+	*.tbz2)		tar xvjf $1 && cd $(basename "$1" .tbz2) ;;
+	*.tgz)		tar xvzf $1 && cd $(basename "$1" .tgz) ;;
+	*.zip)		unzip $1 && cd $(basename "$1" .zip) ;;
+	*.Z)		uncompress $1 && cd $(basename "$1" .Z) ;;
+	*.7z)		7z x $1 && cd $(basename "$1" .7z) ;;
+	*)		echo "don't know how to extract '$1'..." ;;
+       esac
+   else
+       echo "'$1' is not a valid file!"
+   fi
+}
+
 #eclim
 alias eclim='/usr/share/eclipse/eclimd -Dnailgun.server.port=9091'
-
