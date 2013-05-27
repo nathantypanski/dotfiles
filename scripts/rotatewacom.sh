@@ -1,4 +1,7 @@
 #!/bin/bash
+
+# This script rotates a wacom tablet for lefties.
+
 device="Wacom Intuos4 6x9"
 stylus="$device Pen stylus"
 eraser="$device Pen eraser"
