@@ -80,8 +80,8 @@ set expandtab
 set smarttab
 
 " Who wants an 8 character tab?  Not me!
-set shiftwidth=2
-set softtabstop=2
+set shiftwidth=4
+set softtabstop=4
 
 " Use english for spellchecking, but don't spellcheck by default
 if version >= 700
@@ -143,7 +143,8 @@ map! <F3> :Latexmk
 "{{{Look and Feel
 
 " Favorite Color Scheme
-set background=dark
+" set background=dark
+:set t_co=256
 if has("gui_running")
    colorscheme solarized
    " Remove Toolbar
@@ -153,6 +154,9 @@ if has("gui_running")
 else
    colorscheme solarized
 endif
+" Make search highlighting more visible
+:hi search ctermbg=223 ctermfg=238
+:hi incsearch ctermbg=216 ctermfg=242
 
 "Status line gnarliness
 set laststatus=2
@@ -353,8 +357,10 @@ endfunction
 map <F6> <Esc>:echo RunJTest()<CR>
 
 let windowid=v:windowid
-autocmd VimEnter * execute '!xseticon -id ' . v:windowid . ' /usr/share/icons/Faenza/apps/32/vim.png'
-autocmd VimLeave * execute '!xseticon -id ' . v:windowid . ' /usr/share/icons/Faenza/apps/32/terminal.png'
+
+"" Vim icons
+" autocmd VimEnter * execute '!xseticon -id ' . v:windowid . ' /usr/share/icons/Faenza/apps/32/vim.png'
+" autocmd VimLeave * execute '!xseticon -id ' . v:windowid . ' /usr/share/icons/Faenza/apps/32/terminal.png'
 
 " " http://writequit.org/blog/?p=279
 " " Supertab settings
@@ -387,3 +393,8 @@ augroup CursorLine
   au VimEnter,WinEnter,BufWinEnter * setlocal cursorline
   au WinLeave * setlocal nocursorline
 augroup END
+
+"UTF-8
+set enc=utf-8
+set fileencoding=utf-8
+set fileencodings=ucs-bom,utf8,prc
