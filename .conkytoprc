@@ -1,0 +1,57 @@
+background no
+out_to_console yes
+out_to_x no
+update_interval 1.5
+total_run_times 0
+use_spacer none
+mpd_host localhost
+mpd_port 6606
+#^fg(\#002b36)^r(2x16)^fg()^fg(\#073642)^r(16x16)^fg()^fg(\#002b36)^r(2x16)^fg()\
+#${if_match ${cpu 0}<40}^fg(\#dc322f)${endif}\
+TEXT
+^fg(\#268bd2)^i(.dzen/icons/arch_10x10.xbm)^fg() \
+^fg(\#859900)${nodename}^fg() \
+${if_match ${cpu cpu1}>80}^fg(\#dc322f)${endif}\
+${if_match ${cpu cpu1}<80}^fg(\#b58900)${endif}\
+${if_match ${cpu cpu1}<30}^fg(\#859900)${endif}\
+^i(.dzen/icons/cpu.xbm)\
+${if_match ${cpu cpu1}<10} ${endif}\
+${cpu cpu1} \
+${if_match ${cpu cpu2}>80}^fg(\#dc322f)${endif}\
+${if_match ${cpu cpu2}<80}^fg(\#b58900)${endif}\
+${if_match ${cpu cpu2}<30}^fg(\#859900)${endif}\
+^i(.dzen/icons/cpu.xbm)\
+${if_match ${cpu cpu2}<10} ${endif}\
+${cpu cpu2} \
+${if_match ${cpu cpu3}>80}^fg(\#dc322f)${endif}\
+${if_match ${cpu cpu3}<80}^fg(\#b58900)${endif}\
+${if_match ${cpu cpu3}<30}^fg(\#859900)${endif}\
+^i(.dzen/icons/cpu.xbm)\
+${if_match ${cpu cpu3}<10} ${endif}\
+${cpu cpu3} \
+${if_match ${cpu cpu4}>80}^fg(\#dc322f)${endif}\
+${if_match ${cpu cpu4}<80}^fg(\#b58900)${endif}\
+${if_match ${cpu cpu4}<30}^fg(\#859900)${endif}\
+^i(.dzen/icons/cpu.xbm)\
+${if_match ${cpu cpu4}<10} ${endif}\
+${cpu cpu4} \
+^fg(\#93a1a1)^i(.dzen/icons/mem.xbm)^fg() \
+${mem}\
+^fg(\#93a1a1)/^fg()\
+${memmax}\
+${if_up wlan0} \
+^fg(\#268bd2)^i(.dzen/icons/wifi_02.xbm)^fg() \
+^fg(\#268bd2)${exec iwgetid | cut -d\" -f2 | awk '{print  $1}'}^fg() \
+${if_match ${wireless_link_qual wlan0}<40}^fg(\#dc322f)${endif}\
+${if_match ${wireless_link_qual wlan0}>=40}^fg(\#b58900)${endif}\
+${if_match ${wireless_link_qual wlan0}>50}^fg(\#859900)${endif}\
+${wireless_link_qual wlan0}^fg()/70 \
+^fg(\#93a1a1)@^fg() \
+${downspeed wlan0} \
+${endif}\
+${if_match ${battery_percent}<30}^fg(\#dc322f)^i(.dzen/icons/bat_empty_01.xbm)${endif}\
+${if_match ${battery_percent}<65}${if_match ${battery_percent}>=30}^fg(\#b58900)^i(.dzen/icons/bat_low_01.xbm)$endif$endif\
+${if_match ${battery_percent}>=65}^fg(\#859900)^i(.dzen/icons/bat_full_01.xbm)${endif}\
+${if_match ${battery_percent}<10} ${endif}\
+${battery_percent}^fg() \
+^fg(\#93a1a1)${time %a %b %d %I:%M%P}^fg()\
