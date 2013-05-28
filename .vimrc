@@ -1,9 +1,12 @@
-"{{{Auto Commands
+" Sane vim plugin management.
+call pathogen#infect()
+call pathogen#helptags()
+call pathogen#runtime_append_all_bundles()
 
-" Automatically cd into the directory that the file is in
-autocmd BufEnter * execute "chdir ".escape(expand("%:p:h"), ' ')
+" Automatically cd into file directory.
+set autochdir
 
-" Remove any trailing whitespace that is in the file
+" Remove any trailing whitespace
 autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
 
 " Restore cursor position to where it was before
@@ -32,15 +35,13 @@ augroup JumpCursorOnEdit
             \ endif
 augroup END
 
-"}}}
-
-"{{{Misc Settings
-
 " Necesary  for lots of cool vim things
 set nocompatible
-set modeline
 
-set undolevels=10		" 50 undos - saved in memory
+" Modelines are neat, but they're a security hole.
+set nomodeline
+
+set undolevels=50		" 50 undos - saved in memory
 set updatecount=250		" switch every 250 chars, save swap
 
 " When included, as much as possible of the last line
@@ -48,19 +49,12 @@ set updatecount=250		" switch every 250 chars, save swap
 " last line that doesn't fit is replaced with "@" lines.
 set display+=lastline
 
-set title titlelen=150 titlestring=%(\ %M%)%(\ (%{expand(\"%:p:h\")})%)%(\ %a%)\ -\ %{v:servername}
-
 set ttyfast				" we have a fast terminal
 set scrolljump=5	  " when scrolling up down, show at least 5 lines
 set ttyscroll=999	  " make vim redraw screen instead of scrolling when there are more than 3 lines to be scrolled
 
-"set tags=tags;/			" search recursively up for tags
-
 " This shows what you are typing as a command.  I love this!
 set showcmd
-
-" Folding Stuffs
-set foldmethod=marker
 
 " Needed for Syntax Highlighting and stuff
 filetype on
@@ -69,17 +63,14 @@ filetype plugin on
 " Autoindent
 filetype indent on
 
-" I don't know.
-set grepprg=grep\ -nH\ $*
-
 " Who doesn't like autoindent?
 set autoindent
 
-" Spaces are better than a tab character
+" Spaces as tabs
 set expandtab
 set smarttab
 
-" Who wants an 8 character tab?  Not me!
+" Tab length
 set shiftwidth=4
 set softtabstop=4
 
@@ -88,9 +79,6 @@ if version >= 700
    set spl=en spell
    set nospell
 endif
-
-" Real men use gcc
-"compiler gcc
 
 " Cool tab completion stuff
 set wildmenu
@@ -102,7 +90,7 @@ set mouse=a
 " Got backspace?
 set backspace=2
 
-" Line Numbers PWN!
+" Show line numbers
 set number
 
 " Ignoring case is a fun trick
@@ -110,11 +98,6 @@ set ignorecase
 
 " And so is Artificial Intellegence!
 set smartcase
-
-" This is totally awesome - remap jj to escape in insert mode.  You'll never type jj anyway, so it's great!
-inoremap jj <Esc>
-
-nnoremap JJJJ <Nop>
 
 " Changes behaviour so that it jumps to the next row in the editor (much more natural):
 nnoremap j gj
@@ -140,200 +123,26 @@ highlight MatchParen ctermbg=4
 map! <F3> :Latexmk
 " }}}
 
-"{{{Look and Feel
-
-" Favorite Color Scheme
-" set background=dark
+" Solarized settings
 :set t_co=256
-if has("gui_running")
-   colorscheme solarized
-   " Remove Toolbar
-   set guioptions-=T
-   "Terminus is AWESOME
-   set guifont=Terminus\ 10
-else
-   colorscheme solarized
-endif
-" Make search highlighting more visible
-:hi search ctermbg=223 ctermfg=238
-:hi incsearch ctermbg=216 ctermfg=242
+let g:solarized_contrast="high"
+let g:solarized_visibility="normal"
+let g:solarized_hitrail=0
+syntax enable
+set background=dark
+colorscheme solarized
+let g:solarized_termtrans=0
+let g:solarized_degrade=0
+let g:solarized_bold=1
+let g:solarized_underline=1
+let g:solarized_italic=1
+let g:solarized_termcolors=16
+let g:solarized_diffmode="normal"
+let g:solarized_menu=1
 
 "Status line gnarliness
 set laststatus=2
 set statusline=%F%m%r%h%w\ (%{&ff}){%Y}\ [%l,%v][%p%%]
-
-" }}}
-
-"{{{ Functions
-
-"{{{ Open URL in browser
-
-function! Browser ()
-   let line = getline (".")
-   let line = matchstr (line, "http[^   ]*")
-   exec "!konqueror ".line
-endfunction
-
-"}}}
-
-"{{{Theme Rotating
-let themeindex=0
-function! RotateColorTheme()
-   let y = -1
-   while y == -1
-      let colorstring = "inkpot#ron#blue#elflord#evening#koehler#murphy#pablo#desert#torte#"
-      let x = match( colorstring, "#", g:themeindex )
-      let y = match( colorstring, "#", x + 1 )
-      let g:themeindex = x + 1
-      if y == -1
-         let g:themeindex = 0
-      else
-         let themestring = strpart(colorstring, x + 1, y - x - 1)
-         return ":colorscheme ".themestring
-      endif
-   endwhile
-endfunction
-" }}}
-
-"{{{ Paste Toggle
-let paste_mode = 0 " 0 = normal, 1 = paste
-
-func! Paste_on_off()
-   if g:paste_mode == 0
-      set paste
-      let g:paste_mode = 1
-   else
-      set nopaste
-      let g:paste_mode = 0
-   endif
-   return
-endfunc
-"}}}
-
-"{{{ Todo List Mode
-
-function! TodoListMode()
-   e ~/.todo.otl
-   Calendar
-   wincmd l
-   set foldlevel=1
-   tabnew ~/.notes.txt
-   tabfirst
-   " or 'norm! zMzr'
-endfunction
-
-"}}}
-
-"}}}
-
-"{{{ Mappings
-
-" Open Url on this line with the browser \w
-map <Leader>w :call Browser ()<CR>
-
-" Open the Project Plugin <F2>
-nnoremap <silent> <F2> :Project<CR>
-
-" Open the Project Plugin
-nnoremap <silent> <Leader>pal  :Project .vimproject<CR>
-
-" TODO Mode
-nnoremap <silent> <Leader>todo :execute TodoListMode()<CR>
-
-" Open the TagList Plugin <F3>
-nnoremap <silent> <F3> :Tlist<CR>
-
-" Next Tab
-nnoremap <silent> <C-Right> :tabnext<CR>
-
-" Previous Tab
-nnoremap <silent> <C-Left> :tabprevious<CR>
-
-" New Tab
-nnoremap <silent> <C-t> :tabnew<CR>
-
-" Rotate Color Scheme <F8>
-nnoremap <silent> <F8> :execute RotateColorTheme()<CR>
-
-" DOS is for fools.
-nnoremap <silent> <F9> :%s/$//g<CR>:%s// /g<CR>
-
-" Paste Mode!  Dang! <F10>
-nnoremap <silent> <F10> :call Paste_on_off()<CR>
-set pastetoggle=<F10>
-
-" Edit vimrc \ev
-nnoremap <silent> <Leader>ev :tabnew<CR>:e ~/.vimrc<CR>
-
-" Edit gvimrc \gv
-nnoremap <silent> <Leader>gv :tabnew<CR>:e ~/.gvimrc<CR>
-
-" Up and down are more logical with g..
-nnoremap <silent> k gk
-nnoremap <silent> j gj
-inoremap <silent> <Up> <Esc>gka
-inoremap <silent> <Down> <Esc>gja
-
-" Good call Benjie (r for i)
-nnoremap <silent> <Home> i <Esc>r
-nnoremap <silent> <End> a <Esc>r
-
-" Create Blank Newlines and stay in Normal mode
-nnoremap <silent> zj o<Esc>
-nnoremap <silent> zk O<Esc>
-
-" Space will toggle folds!
-nnoremap <space> za
-
-" Search mappings: These will make it so that going to the next one in a
-" search will center on the line it's found in.
-map N Nzz
-map n nzz
-
-" Testing
-set completeopt=longest,menuone,preview
-
-inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
-inoremap <expr> <c-n> pumvisible() ? "\<lt>c-n>" : "\<lt>c-n>\<lt>c-r>=pumvisible() ? \"\\<lt>down>\" : \"\"\<lt>cr>"
-inoremap <expr> <m-;> pumvisible() ? "\<lt>c-n>" : "\<lt>c-x>\<lt>c-o>\<lt>c-n>\<lt>c-p>\<lt>c-r>=pumvisible() ? \"\\<lt>down>\" : \"\"\<lt>cr>"
-
-" " Swap ; and :  Convenient.
-nnoremap ; :
-nnoremap : ;
-
-" Fix email paragraphs
-nnoremap <leader>par :%s/^>$//<CR>
-
-"ly$O#{{{ "lpjjj_%A#}}}jjzajj
-
-"}}}
-
-"{{{Taglist configuration
-let Tlist_Use_Right_Window = 1
-let Tlist_Enable_Fold_Column = 0
-let Tlist_Exit_OnlyWindow = 1
-let Tlist_Use_SingleClick = 1
-let Tlist_Inc_Winwidth = 0
-"}}}
-
-let rct_completion_use_fri = 1
-
-" Strip the newline from the end of a string
-function! Chomp(str)
-  return substitute(a:str, '\n$', '', '')
-endfunction
-
-" Find a file and pass it to cmd
-function! DmenuOpen(cmd)
-  let fname = Chomp(system("find | dmenu -i -l 20 -p " . a:cmd))
-  if empty(fname)
-    return
-  endif
-  execute a:cmd . " " . fname
-endfunction
-
-map <c-t> :call DmenuOpen("tabe")<cr>
-map <c-f> :call DmenuOpen("e")<cr>
 
 " Navigate windows with C-hjkl
 map <C-h> <C-w>h
@@ -358,34 +167,10 @@ map <F6> <Esc>:echo RunJTest()<CR>
 
 let windowid=v:windowid
 
-"" Vim icons
-" autocmd VimEnter * execute '!xseticon -id ' . v:windowid . ' /usr/share/icons/Faenza/apps/32/vim.png'
-" autocmd VimLeave * execute '!xseticon -id ' . v:windowid . ' /usr/share/icons/Faenza/apps/32/terminal.png'
-
-" " http://writequit.org/blog/?p=279
-" " Supertab settings
-" " supertab + eclim == java win
-" let g:SuperTabDefaultCompletionTypeDiscovery = [
-" \ "&completefunc:<c-x><c-u>",
-" \ "&omnifunc:<c-x><c-o>",
-" \ ]
-" let g:SuperTabLongestHighlight = 1
-" let g:SuperTabDefaultCompletionType = "<c-x><c-u>"
-
-" Tab view of menus.
-set wildmenu
-
-call pathogen#infect()
-call pathogen#helptags()
-call pathogen#runtime_append_all_bundles()
-
 "" 80 columns
 "highlight OverLength ctermbg=red ctermfg=white guibg=#592929
 "match OverLength /\%81v.\+/
 "
-" Turn syntax highlighting on by default, try to keep this near the end of
-" this file.
-syntax on
 
 " Current line highlighting
 augroup CursorLine
@@ -398,3 +183,7 @@ augroup END
 set enc=utf-8
 set fileencoding=utf-8
 set fileencodings=ucs-bom,utf8,prc
+
+" ; as : always
+map ; :
+noremap ;; ;
