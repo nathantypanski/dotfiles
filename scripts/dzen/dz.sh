@@ -2,5 +2,5 @@
 
 killall conky
 killall dzen2
-/home/nathan/scripts/dzen/dz_top.sh &
-/home/nathan/scripts/dzen/dz_bottom.sh &
+(sleep 1; ~/scripts/dzen/dz_top.sh) &
+(sleep 1; ~/scripts/dzen/dz_bottom.sh) &

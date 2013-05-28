@@ -96,7 +96,6 @@ alias wpacli='wpa_cli -p /run/wpa_supplicant -i wlan0 status'
 alias skype='xhost +local: && sudo -u skype /usr/bin/skype'
 
 # start mpd and scmpc
-alias mpd='mpd  && ~/scripts/scmpc.sh'
 alias pms='pms -p 6606'
 
 # color my searches

@@ -26,7 +26,7 @@ bindsym $mod+Return exec ~/scripts/urxvt.sh
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec dmenu_run -i -p '> ' -fn Terminus-10 -nb '#073642' -sb '#00141a' -nf '#93a1a1' -sf '#268bd2'
+bindsym $mod+d exec 'scripts/dmenu/dmenu_run.sh' -p '$ '
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
@@ -131,17 +131,19 @@ bindsym $mod+r mode "resize"
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
-bar {
-    status_command 'scripts/dzen/dz.sh'
-
-    colors {
-        background #00141a
-        statusline #839496
-        separator #586e75
-        focused_workspace #268bd2 #268bd2 #00141a
-        inactive_workspace #073642 #00141a #839496
-    }
-}
+# bar {
+#     status_command 'scripts/dzen/dz.sh'
+#     tray_output none
+#     workspace_buttons no
+#
+#     colors {
+#         background #00141a
+#         statusline #839496
+#         separator #586e75
+#         focused_workspace #268bd2 #268bd2 #00141a
+#         inactive_workspace #073642 #00141a #839496
+#     }
+# }
 
 # Hide vertical borders at screen edges
 # hide_edge_borders vertical
@@ -152,11 +154,22 @@ force_display_urgency_hint 500 ms
 # Make the currently focused window a scratchpad
 bindsym $mod+Shift+minus move scratchpad
 
+# Window list
+bindsym $mod+equal exec 'scripts/i3/winmenu.py'
+
 # Show the first scratchpad window
 bindsym $mod+minus scratchpad show
 
 # Use compositing
 exec compton -I .04 -O .04 -b -f -D 5 &
 
+# Disable touchpad initially
+exec touchoff
+
 # Sets the background color.
 exec hsetroot -solid '#002b36'
+exec_always --no-startup-id 'scripts/dzen/dz.sh'
+
+# The IPC interface allows programs like an external workspace bar
+# (i3-wsbar) or i3-msg (can be used to "remote-control" i3) to work.
+ipc-socket ~/.i3/ipc.sock
