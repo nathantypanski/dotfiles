@@ -1,19 +1,54 @@
+# The following lines were added by compinstall
+
+zstyle ':completion:*' auto-description '%d'
+zstyle ':completion:*' completer _expand _complete _ignored _match
+zstyle ':completion:*' completions 1
+zstyle ':completion:*' file-sort name
+zstyle ':completion:*' format '[\E[35;47m%d]'
+zstyle ':completion:*' glob 1
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*' ignore-parents parent pwd ..
+zstyle ':completion:*' list-colors ''
+zstyle ':completion:*' match-original both
+zstyle ':completion:*' matcher-list '+' 'r:|[._-;,/\]=* r:|=*' 'm:{[:lower:]}={[:upper:]}'
+zstyle ':completion:*' max-errors 1 not-numeric
+zstyle ':completion:*' menu select=1
+zstyle ':completion:*' preserve-prefix '//[^/]##/'
+zstyle ':completion:*' prompt '%e §'
+zstyle ':completion:*' select-prompt %p
+zstyle ':completion:*' substitute 1
+zstyle ':completion:*' verbose true
+zstyle ':completion:*' word true
+zstyle :compinstall filename '/home/nathan/.zshrc'
+
+autoload -Uz compinit
+compinit
+# End of lines added by compinstall
+# Lines configured by zsh-newuser-install
+HISTFILE=~/.histfile
+HISTSIZE=1000
+SAVEHIST=1000
+setopt appendhistory autocd extendedglob
+unsetopt beep nomatch notify
+bindkey -v
+# End of lines configured by zsh-newuser-install
+#
 #######################
 # zsh & urxvt options #
 #######################
 
-# Give me auto completion.
-zstyle ':completion:*' menu select
-
-# Append command to history file once executed.
-setopt inc_append_history
-autoload -U compinit
-compinit
-
-# # Set/save zsh theme.
-autoload -Uz promptinit
-promptinit
-prompt walters
+# # Give me auto completion.
+# zstyle ':completion:*' menu select
+#
+# # Append command to history file once executed.
+# setopt inc_append_history
+# autoload -U compinit
+# compinit
+#
+# # # Set/save zsh theme.
+# autoload -Uz promptinit
+# promptinit
+# prompt walters
 
 # Run urxvt via my script.
 alias urxvt ="/home/nathan/scripts/urxvt.sh"
@@ -79,6 +114,9 @@ alias wacom='xsetwacom --set "Wacom Intuos4 6x9 stylus" rotate half && xsetwacom
 alias touchon='synclient TouchpadOff=0'
 alias touchoff='synclient TouchpadOff=1'
 
+# blanking disable
+alias blankoff='xset -dpms; xset s off'
+
 # Suspend my computer.
 alias suspend='systemctl suspend'
 
@@ -127,6 +165,11 @@ export CLASSPATH="/usr/share/java/junit.jar"
 # scripts in path
 export PATH=$PATH:~/scripts
 
+export PYTHONPATH=$PYTHONPATH:python/i3-wm
+
+# Some people like $TERM_PROGRAM. Like the solarized colorscheme for vim. I don't.
+export TERM_PROGRAM=$TERM
+
 # Steam likes this
 export SDL_AUDIODRIVER=alsa
 
@@ -145,8 +188,7 @@ export HISTFILE=~/.zhistory
 #syncad
 export SYNCAD_LICENSE_FILE=~/synapticad-17.07d/license.dat
 
-# ~/.ccache to ramdisk
-export CCACHE_DIR=/mnt/ramdisk/ccache
+export CCACHE_DIR=~/.ccache
 
 # Show active directory in title bar.
 # chpwd() {
