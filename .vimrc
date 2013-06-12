@@ -1,7 +1,3 @@
-" Sane vim plugin management.
-call pathogen#infect()
-call pathogen#helptags()
-call pathogen#runtime_append_all_bundles()
 
 " Automatically cd into file directory.
 set autochdir
@@ -56,6 +52,8 @@ set ttyscroll=999	  " make vim redraw screen instead of scrolling when there are
 " This shows what you are typing as a command.  I love this!
 set showcmd
 
+" Use my own ftplugins
+":autocmd BufEnter * let b:did_ftplugin = 1
 " Needed for Syntax Highlighting and stuff
 filetype on
 filetype plugin on
@@ -73,16 +71,6 @@ set smarttab
 " Tab length
 set shiftwidth=4
 set softtabstop=4
-
-" Use english for spellchecking, but don't spellcheck by default
-if version >= 700
-   set spl=en spell
-   set nospell
-endif
-
-" Cool tab completion stuff
-set wildmenu
-set wildmode=list:longest,full
 
 " Enable mouse support in console
 set mouse=a
@@ -112,33 +100,28 @@ set hlsearch
 " Since I use linux, I want this
 let g:clipbrdDefaultReg = '+'
 
-" When I close a tab, remove the buffer
-set nohidden
-
-" Set off the other paren
-highlight MatchParen ctermbg=4
-
-" map latex-box compilation to <f5> ... change this later to only work in .tex
-" docs
-map! <F3> :Latexmk
-" }}}
+" Sane vim plugin management.
+call pathogen#infect()
+call pathogen#incubate()
+call pathogen#helptags()
 
 " Solarized settings
-:set t_co=256
-let g:solarized_contrast="high"
+":set t_co=256
+let g:solarized_contrast="normal"
 let g:solarized_visibility="normal"
 let g:solarized_hitrail=0
-syntax enable
-set background=dark
-colorscheme solarized
 let g:solarized_termtrans=0
 let g:solarized_degrade=0
 let g:solarized_bold=1
 let g:solarized_underline=1
 let g:solarized_italic=1
+" 16 is better than 256 with solarized for some reason.
 let g:solarized_termcolors=16
 let g:solarized_diffmode="normal"
 let g:solarized_menu=1
+syntax enable
+set background=dark
+colorscheme solarized
 
 "Status line gnarliness
 set laststatus=2
@@ -154,23 +137,21 @@ map <C-l> <C-w>l
 " Use this:
 nmap <silent> ,/ :nohlsearch<CR>
 
-" autocmd VimEnter * NERDTree
-autocmd VimEnter * wincmd p
-function RunJTest()
-    let cla = matchstr(expand("%:p"), '^.*[/\\]src[/\\]\(test\|java\)[/\\]\zs.*')
-    let class = "java -cp \"/usr/share/java/junit.jar;./\" org.junit.runner.JUnitCore fullpackagename.MyClassTest"
-    if match(class, "Test") == -1
-        let class = class . "Test"
-    endif
-endfunction
-map <F6> <Esc>:echo RunJTest()<CR>
+" autocmd VimEnter * wincmd p
+" function RunJTest()
+"     let cla = matchstr(expand("%:p"), '^.*[/\\]src[/\\]\(test\|java\)[/\\]\zs.*')
+"     let class = "java -cp \"/usr/share/java/junit.jar;./\" org.junit.runner.JUnitCore fullpackagename.MyClassTest"
+"     if match(class, "Test") == -1
+"         let class = class . "Test"
+"     endif
+" endfunction
+" map <F6> <Esc>:echo RunJTest()<CR>
 
 let windowid=v:windowid
 
-"" 80 columns
-"highlight OverLength ctermbg=red ctermfg=white guibg=#592929
-"match OverLength /\%81v.\+/
-"
+" " 80 columns
+" highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+" match OverLength /\%81v.\+/
 
 " Current line highlighting
 augroup CursorLine
@@ -187,3 +168,32 @@ set fileencodings=ucs-bom,utf8,prc
 " ; as : always
 map ; :
 noremap ;; ;
+
+" USE GUNDO
+map <leader>g :GundoToggle<CR>
+
+" pep8
+let g:pep8_map='<leader>8'
+
+" Omnifunc tab completion
+"au FileType python set omnifunc=pythoncomplete#Complete
+"let g:SuperTabDefaultCompletionType = "context"
+"set completeopt=menuone,longest,preview
+
+"Ropevim is also a great tool that will allow you to navigate around your code.
+"It supports automatically inserting import statements, goto definition, refactoring, and code completion.
+"You'll really want to read up on everything it does, but the two big things I use it for is to jump to function or class definitions quickly and to rename things (including all their references).
+"
+"For instance, if you are using django and you place your cursor over the class models.
+"Model you reference and then called :RopeGotoDefintion, it would jump you straight to the django library to that class definition.
+"We already have it installed in our bundles, so we bind it to a key to use it:
+map <leader>j :RopeGotoDefinition<CR>
+map <leader>r :RopeRename<CR>
+
+" Spellbad background color is UGLY!
+hi clear SpellBad
+"hi SpellBad cterm=underline
+"highlight SpellBad term=reverse ctermbg=1
+"
+" Disable comment continuing (hopefully)
+au FileType c,cpp setlocal comments-=:// comments+=f://

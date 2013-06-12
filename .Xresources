@@ -43,25 +43,24 @@
 *color7: #eee8d5
 *color15: #fdf6e3
 
+!! Font for everything
+*font: -*-terminus-medium-r-normal-*-16-*-*-*-*-*-iso10646-*
+URxvt*italicFont: -*-terminus-medium-r-normal-*-16-*-*-*-*-*-iso10646-*
+URxvt*boldItalicFont: -*-terminus-bold-r-normal-*-16-*-*-*-*-*-iso10646-*
+
+!! Cursor size
 Xcursor.size: 16
 
-!#######
-! xft  #
-!#######
-
+!! xft
 Xft.dpi:        131
 Xft.antialias:  true
 
-!########
-! urxvt #
-!########
-
+!! urxvt
 URxvt*termName: rxvt-unicode
-#URxvt*imLocale: en_Us.utf8
+URxvt*imLocale: en_Us.utf8
 URxvt*depth:                  16
-URxvt*font:                   -*-terminus-medium-*-normal-*-*-*-*-*-*-*-iso10646-*
 URxvt*scrollstyle:            plain
-URxvt*scrollBar:              True
+URxvt*scrollBar:              False
 URxvt*scrollBar_right:        True
 URxvt*scrollBar_align:        top
 ! Makes urxvt invisible to window managers. Or not when its false.
@@ -71,6 +70,7 @@ URxvt*internalBorder:         0
 URxvt*externalBorder:         0
 URxvt*lineSpace:              0
 URxvt*borderLess:             False
+URxvt.intensityStyles:        false
 ! Dont know what this does:
 URxvt*preeditType:            OverTheSpot
 URxvt*urlLauncher:            firefox
@@ -85,9 +85,7 @@ URxvt.colorBD:                #dc322f
 URxvt.colorUL:                #859900
 ! URxvt*print-pipe:       cat > $(echo urxvt.dump.`date +'%Y%M%d%H%m%S'`)
 
-!########
-! dzen2 #
-!########
+!! dzen2
 
 dzen2.font:                   -*-terminus-medium-r-*-*-18-*-*-*-*-*-*-*
 dzen2.foreground:             #fdf6e3
