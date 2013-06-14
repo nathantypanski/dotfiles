@@ -121,8 +121,8 @@ alias blankoff='xset -dpms; xset s off'
 alias suspend='systemctl suspend'
 
 # Window pager
-alias pager='~/scripts/wmpager.sh && tail -f /tmp/wmpager.sh.pipe | dzen2 -ta l -x 0 -y 0 -w 153 -fn Terminus-8 -bg #002b36 -fg #657b83'
-alias czen='conky -c ~/.conkytoprc | dzen2 -ta l -x 153 -fn Terminus-8 -bg #002b36 -fg #657b83'
+#alias pager='~/scripts/wmpager.sh && tail -f /tmp/wmpager.sh.pipe | dzen2 -ta l -x 0 -y 0 -w 153 -fn Terminus-8 -bg #002b36 -fg #657b83'
+#alias czen='conky -c ~/.conkytoprc | dzen2 -ta l -x 153 -fn Terminus-8 -bg #002b36 -fg #657b83'
 
 # connect with wpa.conf
 alias wpa='sudo wpa_supplicant -K -Dwext -i wlan0 -c /run/network//wpa.wlan0/wpa.conf'
@@ -163,7 +163,7 @@ export LESS="-R"
 export CLASSPATH="/usr/share/java/junit.jar"
 
 # scripts in path
-export PATH=$PATH:~/scripts
+export PATH=$PATH:~/scripts:~/.gem/ruby/2.0.0/bin
 
 export PYTHONPATH=$PYTHONPATH:python/i3-wm
 
