@@ -165,9 +165,10 @@ set enc=utf-8
 set fileencoding=utf-8
 set fileencodings=ucs-bom,utf8,prc
 
-" ; as : always
-map ; :
-noremap ;; ;
+" " ; as : always
+" Bad practice. Servers without my .vimrc make vim hard to use.
+" map ; :
+" noremap ;; ;
 
 " USE GUNDO
 map <leader>g :GundoToggle<CR>
