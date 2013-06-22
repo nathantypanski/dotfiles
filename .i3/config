@@ -9,11 +9,13 @@ focus_follows_mouse no
 popup_during_fullscreen smart
 workspace_auto_back_and_forth yes
 force_display_urgency_hint 500 ms
+force_focus_wrapping no
+force_xinerama yes
 
 # Solarized
 # class                 border  backgr. text    indicator
 client.focused          #268bd2 #268bd2 #073642 #dc322f
-client.focused_inactive #073642 #073642 #839496 #b58900
+client.focused_inactive #93a1a1 #073642 #839496 #b58900
 client.unfocused        #073642 #073642 #839496 #b58900
 client.urgent           #dc322f #dc322f #002b36 #002b36
 
@@ -82,10 +84,10 @@ bindsym $mod+Shift+space floating toggle
 bindsym $mod+space focus mode_toggle
 
 # focus the parent container
-bindsym $mod+a focus parent
+bindsym $mod+bracketleft focus parent
 
 # focus the child container
-#bindsym $mod+d focus child
+bindsym $mod+bracketright focus child
 
 # switch to workspace
 bindsym $mod+1 workspace 1
@@ -184,15 +186,12 @@ bindsym $mod+equal exec 'scripts/i3/winmenu.py'
 # Show the first scratchpad window
 bindsym $mod+minus scratchpad show
 
-# Turn off touchpad
-exec --no-startup-id 'synclient TouchpadOff=1'
-
 # Use compositing
-exec --no-startup-id compton -I .04 -O .04 -b -f -D 5 &
+# exec --no-startup-id compton -I .04 -O .04 -b -f -D 5 &
 
 exec 'firefox'
 
-exec --no-startup-id i3-msg 'workspace 9; exec scripts/urxvt.sh -e irssi; workspace 1'
+#exec --no-startup-id i3-msg 'workspace 9; exec scripts/urxvt.sh -e irssi; workspace 1'
 exec --no-startup-id 'unclutter'
 exec --no-startup-id hsetroot -solid '#002b36'
 exec --no-startup-id 'scripts/dzen/dz.sh'
