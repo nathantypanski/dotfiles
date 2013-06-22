@@ -4,7 +4,7 @@ zstyle ':completion:*' auto-description '%d'
 zstyle ':completion:*' completer _expand _complete _ignored _match
 zstyle ':completion:*' completions 1
 zstyle ':completion:*' file-sort name
-zstyle ':completion:*' format '[\E[35;47m%d]'
+zstyle ':completion:*' format '[%d]'
 zstyle ':completion:*' glob 1
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' ignore-parents parent pwd ..
@@ -189,6 +189,8 @@ export HISTFILE=~/.zhistory
 export SYNCAD_LICENSE_FILE=~/synapticad-17.07d/license.dat
 
 export CCACHE_DIR=~/.ccache
+
+export CHROOT=$HOME/chroot
 
 # Show active directory in title bar.
 # chpwd() {
