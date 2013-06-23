@@ -36,7 +36,7 @@ bindsym $mod+Return exec urxvt
 # bindsym $mod+o exec 'i3lock -c 004354'
 
 # kill focused window
-bindsym $mod+Shift+q kill
+bindsym $mod+Shift+c kill
 
 # start dmenu (a program launcher)
 bindsym $mod+d exec 'scripts/dmenu/dmenu_run.sh' -p '$ '
@@ -114,7 +114,7 @@ bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move container to workspace 10
 
 # Reload the configuration file.
-bindsym $mod+Shift+c reload
+# bindsym $mod+Shift+c reload
 
 # Restart i3 inplace (preserves your layout/session, can be used to upgrade i3).
 bindsym $mod+Shift+r restart
@@ -129,7 +129,7 @@ bindsym $mod+F2 exec --no-startup-id "killall dzen2 conky gcpubar dz.sh"
 bindsym $mod+o exec "uzbl-browser"
 
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'killall dz.sh; i3-msg exit'"
+bindsym $mod+Shift+q exec "i3-nagbar -t warning -m 'Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'killall dz.sh; i3-msg exit'"
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
