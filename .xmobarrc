@@ -1,9 +1,20 @@
-Config { font = "-*-terminus-medium-*-*-*-16-*-*-*-*-*-iso10646-*"
-       , bgColor = "black"
-       , fgColor = "grey"
+Config { font = "-*-terminus-medium-*-*-*-16-*-*-*-*-*-iso8859-*"
+       , bgColor = "#002b36"
+       , fgColor = "#839496"
        , position = TopW L 90
-       , commands = [ Run Weather "EGPF" ["-t"," <tempF>F","-L","64","-H","77","--normal","green","--high","red","--low","lightblue"] 36000
-                    , Run Cpu ["-L","3","-H","50","--normal","green","--high","red"] 10
+       , commands = [ Run Weather "EGPF"
+                        [
+                         "-t"
+                         ," <tempF>F"
+                         ,"-L"
+                         ,"64"
+                         ,"-H"
+                         ,"77"
+                         ,"--normal","#859900"
+                         ,"--high","#dc322f"
+                         ,"--low","#268bd2"
+                        ] 36000
+                    , Run Cpu ["-L","3","-H","50","--normal","#859900","--high","#dc322f"] 10
                     , Run Memory ["-t","Mem: <usedratio>%"] 10
                     , Run Swap [] 10
                     , Run Date "%a %b %_d %l:%M" "date" 10

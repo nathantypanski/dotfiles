@@ -114,14 +114,14 @@ let g:solarized_termtrans=0
 let g:solarized_degrade=0
 let g:solarized_bold=1
 let g:solarized_underline=1
-let g:solarized_italic=1
-" 16 is better than 256 with solarized for some reason.
+let g:solarized_italic=0
 let g:solarized_termcolors=16
 let g:solarized_diffmode="normal"
 let g:solarized_menu=1
 syntax enable
 set background=dark
 colorscheme solarized
+" colorscheme Tomorrow-Night
 
 "Status line gnarliness
 set laststatus=2

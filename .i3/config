@@ -16,7 +16,7 @@ force_xinerama yes
 # class                 border  backgr. text    indicator
 client.focused          #268bd2 #268bd2 #073642 #dc322f
 client.focused_inactive #93a1a1 #073642 #839496 #b58900
-client.unfocused        #073642 #073642 #839496 #b58900
+client.unfocused        #002b36 #002b36 #839496 #b58900
 client.urgent           #dc322f #dc322f #002b36 #002b36
 
 set $mod Mod4
