@@ -169,7 +169,7 @@ export LESS="-R"
 export CLASSPATH="/usr/share/java/junit.jar"
 
 # scripts in path
-export PATH=$PATH:~/scripts:~/.gem/ruby/2.0.0/bin
+export PATH=$PATH:~/scripts:~/.gem/ruby/2.0.0/bin:~/.cabal/bin
 
 export PYTHONPATH=$PYTHONPATH:python/i3-wm
 

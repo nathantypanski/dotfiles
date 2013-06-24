@@ -3,6 +3,8 @@
 !##########################
 !URxvt.depth: 32
 
+!modified bg
+!*background: #00141a
 *background: #002b36
 *foreground: #657b83
 !!*fading: 40
@@ -44,9 +46,9 @@
 *color15: #fdf6e3
 
 !! Font for everything
-*font: -*-terminus-medium-r-normal-*-16-*-*-*-*-*-iso10646-*
-URxvt*italicFont: -*-terminus-medium-r-normal-*-16-*-*-*-*-*-iso10646-*
-URxvt*boldItalicFont: -*-terminus-bold-r-normal-*-16-*-*-*-*-*-iso10646-*
+*font: -*-terminus-medium-*-*-*-16-*-*-*-*-*-iso8859-*
+URxvt*italicFont: -*-terminus-medium-*-*-*-16-*-*-*-*-*-iso8859-*
+URxvt*boldItalicFont: -*-terminus-medium-*-*-*-16-*-*-*-*-*-iso8859-*
 
 !! Cursor size
 Xcursor.size: 16
@@ -87,6 +89,6 @@ URxvt.colorUL:                #859900
 
 !! dzen2
 
-dzen2.font:                   -*-terminus-medium-r-*-*-18-*-*-*-*-*-*-*
-dzen2.foreground:             #fdf6e3
+dzen2.font:                   -*-terminus-medium-*-*-*-16-*-*-*-*-*-iso8859-*
+dzen2.foreground:             #839496
 dzen2.background:             #002b36
