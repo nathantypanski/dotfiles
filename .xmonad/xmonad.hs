@@ -2,7 +2,6 @@ import XMonad
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Util.Run(spawnPipe)
-import XMonad.Util.EZConfig(additionalKeys)
 import XMonad.Util.Dzen
 import System.Process
 import Data.Time
@@ -11,10 +10,18 @@ import System.IO
 import XMonad
 import Data.Monoid
 import System.Exit
+import XMonad.Layout.NoBorders
+
+import XMonad.Prompt
+import XMonad.Prompt.Input
 
 import qualified System.Dzen     as D
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
+
+------------------------------------------------------------------------
+-- Quick and easy settings
+--
 
 myTerminal      = "urxvt"
 myFocusFollowsMouse :: Bool
@@ -24,6 +31,12 @@ myWorkspaces    = ["1","2","3","4","5","6","7","8","9"]
 myModMask       = mod4Mask
 myNormalBorderColor  = "#002b36"
 myFocusedBorderColor = "#d33682"
+
+dzenCommand = (RawCommand "dzen2" ["-ta","l"])
+
+------------------------------------------------------------------------
+-- Main loop
+--
 
 main = do
     xmproc <- D.createDzen dzenCommand
@@ -50,15 +63,12 @@ main = do
                         },
         startupHook        = myStartupHook
         }
-        `additionalKeys`
-        [ ((mod4Mask .|. shiftMask, xK_z), spawn "i3lock")
-        , ((controlMask, xK_Print), spawn "sleep 0.2; scrot -s")
-        , ((0, xK_Print), spawn "scrot")
-        ]
 
-dzenCommand = (RawCommand "dzen2" ["-ta","l"])
 
--- | Settings to emulate dwm's statusbar, dzen only.
+------------------------------------------------------------------------
+-- dzen pretty printer
+--
+
 myDzenPP :: PP
 myDzenPP = defaultPP { ppCurrent  = dzenColor "#859900" "#073642" . pad . wrap "[" "]"
                      , ppVisible  = dzenColor "#002b36" "#839496" . pad
@@ -141,13 +151,22 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- Use this binding with avoidStruts from Hooks.ManageDocks.
     -- See also the statusBar function from Hooks.DynamicLog.
     --
-    -- , ((modm              , xK_b     ), sendMessage ToggleStruts)
+    --, ((modm              , xK_b     ), sendMessage ToggleStruts)
 
     -- Quit xmonad
     , ((modm .|. shiftMask, xK_q     ), io (exitWith ExitSuccess))
 
     -- Restart xmonad
     , ((modm              , xK_q     ), spawn "xmonad --recompile; xmonad --restart")
+
+    -- Lock the screen
+    , ((mod4Mask .|. shiftMask, xK_z), spawn "i3lock")
+
+    -- take a picture
+    , ((controlMask, xK_Print), spawn "sleep 0.2; scrot -s")
+
+    -- take a picture NOW
+    , ((0, xK_Print), spawn "scrot")
     ]
     ++
 
@@ -198,28 +217,25 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 -- restarting (with 'mod-q') to reset your layout state to the new
 -- defaults, as xmonad preserves your old layout settings by default.
 --
--- * NOTE: XMonad.Hooks.EwmhDesktops users must remove the obsolete
--- ewmhDesktopsLayout modifier from layoutHook. It no longer exists.
--- Instead use the 'ewmh' function from that module to modify your
--- defaultConfig as a whole. (See also logHook, handleEventHook, and
--- startupHook ewmh notes.)
---
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myLayout = avoidStruts $ tiled ||| Mirror tiled ||| Full
-  where
-    -- default tiling algorithm partitions the screen into two panes
-    tiled   = Tall nmaster delta ratio
+myLayout = avoidStruts $
+    smartBorders tiled
+    ||| Mirror tiled
+    ||| smartBorders Full
+        where
+            -- default tiling algorithm partitions the screen into two panes
+            tiled   = Tall nmaster delta ratio
 
-    -- The default number of windows in the master pane
-    nmaster = 1
+            -- The default number of windows in the master pane
+            nmaster = 1
 
-    -- Default proportion of screen occupied by master pane
-    ratio   = 1/2
+            -- Default proportion of screen occupied by master pane
+            ratio   = 1/2
 
-    -- Percent of screen to increment by when resizing panes
-    delta   = 3/100
+            -- Percent of screen to increment by when resizing panes
+            delta   = 3/100
 
 ------------------------------------------------------------------------
 -- Window rules:
@@ -236,11 +252,13 @@ myLayout = avoidStruts $ tiled ||| Mirror tiled ||| Full
 -- To match on the WM_NAME, you can use 'title' in the same way that
 -- 'className' and 'resource' are used below.
 --
-myManageHook = manageDocks <+> composeAll
-    [ className =? "MPlayer"        --> doFloat
-    , className =? "Gimp"           --> doFloat
-    , resource  =? "desktop_window" --> doIgnore
-    , resource  =? "kdesktop"       --> doIgnore ]
+myManageHook = manageDocks
+    <+> composeAll
+        [ className =? "MPlayer"        --> doFloat
+        , className =? "Gimp"           --> doFloat
+        , resource  =? "desktop_window" --> doIgnore
+        , resource  =? "kdesktop"       --> doIgnore
+        ]
 
 ------------------------------------------------------------------------
 -- Event handling
@@ -249,11 +267,6 @@ myManageHook = manageDocks <+> composeAll
 -- return (All True) if the default handler is to be run afterwards. To
 -- combine event hooks use mappend or mconcat from Data.Monoid.
 --
--- * NOTE: EwmhDesktops users should use the 'ewmh' function from
--- XMonad.Hooks.EwmhDesktops to modify their defaultConfig as a whole.
--- It will add EWMH event handling to your custom event hooks by
--- combining them with ewmhDesktopsEventHook.
---
 myEventHook = mempty
 
 ------------------------------------------------------------------------
@@ -261,12 +274,6 @@ myEventHook = mempty
 
 -- Perform an arbitrary action on each internal state change or X event.
 -- See the 'XMonad.Hooks.DynamicLog' extension for examples.
---
---
--- * NOTE: EwmhDesktops users should use the 'ewmh' function from
--- XMonad.Hooks.EwmhDesktops to modify their defaultConfig as a whole.
--- It will add EWMH logHook actions to your custom log hook by
--- combining it with ewmhDesktopsLogHook.
 --
 myLogHook = return ()
 ------------------------------------------------------------------------
@@ -286,10 +293,7 @@ myLogHook = return ()
 myStartupHook = return ()
 
 ------------------------------------------------------------------------
--- Now run xmonad with all the defaults we set up.
-
--- Run xmonad with the settings you specify. No need to modify this.
---
+-- Default config
 
 -- A structure containing your configuration settings, overriding
 -- fields in the default config. Any you don't override, will
