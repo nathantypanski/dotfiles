@@ -1,57 +1,48 @@
-# # The following lines were added by compinstall
+# ~/.zshrc
 #
-# zstyle ':completion:*' auto-description '%d'
-# zstyle ':completion:*' completer _expand _complete _ignored _match
-# zstyle ':completion:*' completions 1
-# zstyle ':completion:*' file-sort name
-# zstyle ':completion:*' format '[%d]'
-# zstyle ':completion:*' glob 1
-# zstyle ':completion:*' group-name ''
-# zstyle ':completion:*' ignore-parents parent pwd ..
-# zstyle ':completion:*' list-colors ''
-# zstyle ':completion:*' match-original both
-# zstyle ':completion:*' matcher-list '+' 'r:|[._-;,/\]=* r:|=*' 'm:{[:lower:]}={[:upper:]}'
-# zstyle ':completion:*' max-errors 1 not-numeric
-# zstyle ':completion:*' menu select=1
-# zstyle ':completion:*' preserve-prefix '//[^/]##/'
-# zstyle ':completion:*' prompt '%e §'
-# zstyle ':completion:*' select-prompt %p
-# zstyle ':completion:*' substitute 1
-# zstyle ':completion:*' verbose true
-# zstyle ':completion:*' word true
-# zstyle :compinstall filename '/home/nathan/.zshrc'
-
-# autoload -Uz compinit
-# compinit
+# This file uses grml's zshrc as a master, and builds upon that.
+# Keep this in mind when working with these things.
 
 # In grml's zshrc, this enables vi mode instead of emacs by default.
 setopt vi
-# End of lines added by compinstall
-# Lines configured by zsh-newuser-install
+
+# better grml prompt
+zstyle ':prompt:grml:*:percent' token '§ '
+zstyle ':prompt:grml:*:percent' pre '%F{blue}'
+zstyle ':prompt:grml:*:percent' post '%f'
+zstyle ':prompt:grml:*:user' pre '%F{green}'
+zstyle ':prompt:grml:*:user' post '%f'
+zstyle ':prompt:grml:*:host' pre '%f'
+zstyle ':prompt:grml:*:host' post '%f'
+zstyle ':prompt:grml:*:at' token '@'
+zstyle ':prompt:grml:*:at' pre '%f'
+zstyle ':prompt:grml:*:at' post '%f'
+zstyle ':prompt:grml:*:sad-smiley' token '%(?..×)'
+zstyle ':prompt:grml:*:sad-smiley' pre '%B%F{red}'
+zstyle ':prompt:grml:*:sad-smiley' post '%f%b'
+zstyle ':prompt:grml:*:path' token '%40<..<%~%<< '
+zstyle ':prompt:grml:*:path' pre '%F{blue}%B'
+zstyle ':prompt:grml:*:path' post '%f%b'
+
+
+# Hiztory is stored here
 HISTFILE=~/.histfile
+
+# The number of commands stored in memory
 HISTSIZE=1000
+
+# The number of commands saved in my history file
 SAVEHIST=1000
-setopt appendhistory autocd extendedglob
+
+# Append all history to this file
+setopt appendhistory
+setopt autocd
 unsetopt beep nomatch notify
 bindkey -v
-# End of lines configured by zsh-newuser-install
-#
+
 #######################
 # zsh & urxvt options #
 #######################
-
-# # Give me auto completion.
-# zstyle ':completion:*' menu select
-#
-# # Append command to history file once executed.
-# setopt inc_append_history
-# autoload -U compinit
-# compinit
-#
-# # # Set/save zsh theme.
-# autoload -Uz promptinit
-# promptinit
-# prompt walters
 
 # Run urxvt via my script.
 alias urxvt ="/home/nathan/scripts/urxvt.sh"
@@ -71,15 +62,20 @@ man() {
 	man "$@"
 }
 
-#ls
+# ls
 alias ls='ls --color=auto'
+# abbreviated listing
 alias la='ls -a --color=auto'
+# verbose listing
 alias ll='ls -l --color=auto'
-alias lx='ll -BX --color=auto'                   # sort by extension
-alias lz='ll -rS --color=auto'                   # sort by size
-alias lt='ll -rt --color=auto'                   # sort by date
+# sort by extension
+alias lx='ll -BX --color=auto'
+# sort by size
+alias lz='ll -rS --color=auto'
+# sort by date
+alias lt='ll -rt --color=auto'
 
-#cd
+# cd
 alias ..="cd .."
 alias ...="cd ../.."
 
@@ -91,15 +87,10 @@ alias gitm="git commit "
 alias giti="git init"
 alias dotfiles='git --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME'
 
-# safety features
-#alias cp='cp -i'
-#alias mv='mv -i'
-#alias rm='rm -i'                    # 'rm -i' prompts for every file
-#alias ln='ln -i'
+# chown
 alias chown='chown --preserve-root'
 alias chmod='chmod --preserve-root'
 alias chgrp='chgrp --preserve-root'
-
 
 #############
 # Hardware  #

@@ -1,3 +1,10 @@
+" ~/.vimrc
+" Settings for vim.
+
+" Turn backup off, since most stuff is in SVN, git et.c anyway...
+set nobackup
+set nowb
+set noswapfile
 
 " Automatically cd into file directory.
 set autochdir
@@ -106,21 +113,10 @@ call pathogen#incubate()
 call pathogen#helptags()
 
 " Solarized settings
-":set t_co=256
-" let g:solarized_contrast="normal"
-" let g:solarized_visibility="normal"
-" let g:solarized_hitrail=1
-" let g:solarized_termtrans=0
-" let g:solarized_degrade=0
-" let g:solarized_bold=1
-" let g:solarized_underline=1
-" let g:solarized_italic=0
-" let g:solarized_termcolors=16
-" let g:solarized_diffmode="normal"
-" let g:solarized_menu=1
 syntax enable
-set background=dark
-colorscheme solarized
+" set background=dark
+let g:hybrid_use_Xresources = 1
+colorscheme hybrid
 " colorscheme Tomorrow-Night
 
 "Status line gnarliness
