@@ -23,7 +23,7 @@ import qualified Data.Map        as M
 -- Quick and easy settings
 --
 
-myTerminal      = "urxvt"
+myTerminal      = "termite"
 myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = True
 myBorderWidth   = 1
@@ -39,8 +39,9 @@ dzenCommand = (RawCommand "dzen2" ["-ta","l"])
 --
 
 main = do
-    xmproc <- D.createDzen dzenCommand
-    xmonad $ defaultConfig
+    dzw <- D.createDzen dzenCommand
+    dzt <- D.createDzen dzenCommand
+    xmonad $ defaults
         {
         terminal           = myTerminal,
         focusFollowsMouse  = myFocusFollowsMouse,
@@ -59,7 +60,7 @@ main = do
         manageHook         = myManageHook,
         handleEventHook    = myEventHook,
         logHook            = dynamicLogWithPP myDzenPP
-                        { ppOutput = hPutStrLn xmproc
+                        { ppOutput = hPutStrLn dzw
                         },
         startupHook        = myStartupHook
         }
