@@ -43,17 +43,24 @@
 *color15: t_foreground
 
 !! Font for everything
-*font: -*-terminus-medium-*-*-*-16-*-*-*-*-*-iso8859-*
-URxvt*italicFont: -*-terminus-medium-*-*-*-16-*-*-*-*-*-iso8859-*
-URxvt*boldItalicFont: -*-terminus-medium-*-*-*-16-*-*-*-*-*-iso8859-*
+!*font: -*-terminus-medium-*-*-*-16-*-*-*-*-*-iso10646-*
+!URxvt*italicFont:  -*-terminus-medium-*-*-*-16-*-*-*-*-*-iso10646-*
+!URxvt*boldItalicFont: -*-terminus-bold-*-*-*-16-*-*-*-*-*-iso10646-*
+!URxvt.font: xft:PowerlineSymbols:regular,\
+!    xft:DejaVuSansMono:pixelsize=14:antialias=false:hinting=false:autohint=false
+!URxvt.boldFont: xft:Terminus:bold:pixelsize=14:antialias=false:hinting=false:autohint=false
 
 !! Cursor size
 Xcursor.size: 16
 
 !! xft
-Xft.dpi:        131
-Xft.antialias:  true
-
+Xft.dpi:        96
+Xft.autohint: 0
+Xft.lcdfilter:  lcddefault
+Xft.hintstyle:  hintfull
+Xft.hinting: 1
+Xft.antialias: 1
+Xft.rgba: rgb
 !! urxvt
 URxvt*termName: rxvt-unicode
 URxvt*imLocale: en_Us.utf8

@@ -25,7 +25,7 @@ import qualified Data.Map        as M
 
 myTerminal      = "termite"
 myFocusFollowsMouse :: Bool
-myFocusFollowsMouse = True
+myFocusFollowsMouse = False
 myBorderWidth   = 1
 myWorkspaces    = ["1","2","3","4","5","6","7","8","9"]
 myModMask       = mod4Mask

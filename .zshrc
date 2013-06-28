@@ -6,25 +6,8 @@
 # In grml's zshrc, this enables vi mode instead of emacs by default.
 setopt vi
 
-# better grml prompt
-zstyle ':prompt:grml:*:percent' token '§ '
-zstyle ':prompt:grml:*:percent' pre '%F{blue}'
-zstyle ':prompt:grml:*:percent' post '%f'
-zstyle ':prompt:grml:*:user' pre '%F{green}'
-zstyle ':prompt:grml:*:user' post '%f'
-zstyle ':prompt:grml:*:host' pre '%f'
-zstyle ':prompt:grml:*:host' post '%f'
-zstyle ':prompt:grml:*:at' token '@'
-zstyle ':prompt:grml:*:at' pre '%f'
-zstyle ':prompt:grml:*:at' post '%f'
-zstyle ':prompt:grml:*:sad-smiley' token '%(?..×)'
-zstyle ':prompt:grml:*:sad-smiley' pre '%B%F{red}'
-zstyle ':prompt:grml:*:sad-smiley' post '%f%b'
-zstyle ':prompt:grml:*:path' token '%40<..<%~%<< '
-zstyle ':prompt:grml:*:path' pre '%F{blue}%B'
-zstyle ':prompt:grml:*:path' post '%f%b'
-
-
+# Powerline settings
+POWERLINE_CONFIG_PATH="/home/nathan/.config/powerline"
 # Hiztory is stored here
 HISTFILE=~/.histfile
 
@@ -159,10 +142,10 @@ export LESS="-R"
 
 export CLASSPATH="/usr/share/java/junit.jar"
 
+export PYTHONPATH=/usr/lib/python3.3/site-packages
+
 # scripts in path
 export PATH=$PATH:~/scripts:~/.gem/ruby/2.0.0/bin:~/.cabal/bin
-
-export PYTHONPATH=$PYTHONPATH:python/i3-wm
 
 # Some people like $TERM_PROGRAM. Like the solarized colorscheme for vim. I don't.
 export TERM_PROGRAM=$TERM
@@ -235,3 +218,6 @@ extract () {
 
 #eclim
 alias eclim='/usr/share/eclipse/eclimd -Dnailgun.server.port=9091'
+
+# Load powerline
+. $PYTHONPATH/powerline/bindings/zsh/powerline.zsh
