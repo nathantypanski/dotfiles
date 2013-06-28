@@ -112,16 +112,10 @@ call pathogen#infect()
 call pathogen#incubate()
 call pathogen#helptags()
 
-" Solarized settings
+" color settings
 syntax enable
-" set background=dark
 let g:hybrid_use_Xresources = 1
 colorscheme hybrid
-" colorscheme Tomorrow-Night
-
-"Status line gnarliness
-set laststatus=2
-set statusline=%F%m%r%h%w\ (%{&ff}){%Y}\ [%l,%v][%p%%]
 
 " Navigate windows with C-hjkl
 map <C-h> <C-w>h
@@ -194,3 +188,7 @@ hi clear SpellBad
 "
 " Disable comment continuing (hopefully)
 au FileType c,cpp setlocal comments-=:// comments+=f://
+
+" Hide the default --insert-- etc. text, I've got powerline.
+set laststatus=2 " Always display the statusline in all windows
+set noshowmode
