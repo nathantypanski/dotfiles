@@ -2,5 +2,15 @@
 
 # Just runs dmenu, with my settings.
 
-dmenu -fn '-*-terminus-medium-*-*-*-16-*-*-*-*-*-iso8859-*'\
-    -nb '#002b36' -sb '#073642' -nf '#839496' -sf '#859900' "$@" -p "$"
+NORMAL_BACKGROUND='#1D1F21'
+SELECTED_BACKGROUND='#282A2E'
+NORMAL_FOREGROUND='#C5C8C6'
+SELECTED_FOREGROUND='#81A2BE'
+PROMPT='$'
+CASE_INSENSITIVE=true
+LINES=49
+
+dmenu -fn '-*-terminus-medium-*-*-*-16-*-*-*-*-*-iso10646-*'\
+    -nb $NORMAL_BACKGROUND -sb $SELECTED_BACKGROUND \
+    -nf $NORMAL_FOREGROUND -sf $SELECTED_FOREGROUND \
+    -p $PROMPT -i -l $LINES

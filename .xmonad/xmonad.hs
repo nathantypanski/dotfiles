@@ -3,6 +3,7 @@ import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Util.Run(spawnPipe)
 import XMonad.Util.Dzen
+import XMonad.Util.Loggers
 import System.Process
 import Data.Time
 import System.Locale
@@ -32,7 +33,10 @@ myModMask       = mod4Mask
 myNormalBorderColor  = "#002b36"
 myFocusedBorderColor = "#d33682"
 
-dzenCommand = (RawCommand "dzen2" ["-ta","l"])
+dzenCommand = (RawCommand "dzen2" ["-ta","l"
+                                   ,"-fg","#eeeeee"
+                                   ,"-bg","#303030"
+                                   ])
 
 ------------------------------------------------------------------------
 -- Main loop
@@ -60,8 +64,9 @@ main = do
         manageHook         = myManageHook,
         handleEventHook    = myEventHook,
         logHook            = dynamicLogWithPP myDzenPP
-                        { ppOutput = hPutStrLn dzw
-                        },
+                             {
+                                ppOutput = hPutStrLn dzw
+                             },
         startupHook        = myStartupHook
         }
 
@@ -71,21 +76,25 @@ main = do
 --
 
 myDzenPP :: PP
-myDzenPP = defaultPP { ppCurrent  = dzenColor "#859900" "#073642" . pad . wrap "[" "]"
+myDzenPP = defaultPP { ppCurrent  = dzenColor "#005f00" "#afd700" . pad . wrap "" ""
                      , ppVisible  = dzenColor "#002b36" "#839496" . pad
-                     , ppHidden   = dzenColor "#586e75" "#002b36" . pad
-                     , ppUrgent   = dzenColor "#dc322f" "#002b36" . pad
+                     , ppHidden   = dzenColor "#eeeeee" "#808080" . pad
+                     , ppUrgent   = dzenColor "#eeeeee" "#d70000" . pad
+                     , ppExtras   = [
+                                      padL loadAvg
+                                    , date "%r"
+                                    ]
                      , ppHiddenNoWindows = const ""
                      , ppWsSep    = ""
-                     , ppSep      = " "
-                     , ppLayout   = dzenColor "#002b36" "#839496" .
+                     , ppSep      = ""
+                     , ppLayout   = dzenColor "#1c1c1c" "#d0d0d0" .
                                     (\ x -> pad $ case x of
                                               "TilePrime Horizontal" -> "TTT"
                                               "TilePrime Vertical"   -> "[]="
                                               "Hinted Full"          -> "[ ]"
                                               _                      -> x
                                     )
-                     , ppTitle    = ("^bg(#002b36) " ++) . dzenEscape
+                     , ppTitle    = ("^bg(#303030) " ++) . dzenEscape
                      }
 
 
@@ -257,8 +266,12 @@ myManageHook = manageDocks
     <+> composeAll
         [ className =? "MPlayer"        --> doFloat
         , className =? "Gimp"           --> doFloat
+        -- Float Firefox dialog windows
+        , (className =? "Firefox" <&&> resource =? "Dialog") --> doFloat
         , resource  =? "desktop_window" --> doIgnore
         , resource  =? "kdesktop"       --> doIgnore
+        -- Send things to appropriate workspaces
+        , className =? "Firefox"        --> doShift "3:web"
         ]
 
 ------------------------------------------------------------------------
