@@ -1,7 +1,6 @@
 import XMonad
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
-import XMonad.Util.Run(spawnPipe)
 import XMonad.Util.Dzen
 import XMonad.Util.Loggers
 import System.Process
@@ -16,8 +15,16 @@ import XMonad.Layout.NoBorders
 import XMonad.Prompt
 import XMonad.Prompt.Input
 
+-- Nice workspace bindings
+import XMonad.Actions.CycleWS
+
+-- dzen
 import qualified System.Dzen     as D
+
+-- control focus
 import qualified XMonad.StackSet as W
+
+-- key/mouse bindings
 import qualified Data.Map        as M
 
 ------------------------------------------------------------------------
@@ -33,10 +40,11 @@ myModMask       = mod4Mask
 myNormalBorderColor  = "#002b36"
 myFocusedBorderColor = "#d33682"
 
-dzenCommand = (RawCommand "dzen2" ["-ta","l"
-                                   ,"-fg","#eeeeee"
-                                   ,"-bg","#303030"
-                                   ])
+dzenCommand = (RawCommand "dzen2"
+    ["-ta","l"
+    ,"-fg","#eeeeee"
+    ,"-bg","#303030"
+    ])
 
 ------------------------------------------------------------------------
 -- Main loop
@@ -44,7 +52,6 @@ dzenCommand = (RawCommand "dzen2" ["-ta","l"
 
 main = do
     dzw <- D.createDzen dzenCommand
-    dzt <- D.createDzen dzenCommand
     xmonad $ defaults
         {
         terminal           = myTerminal,
@@ -106,13 +113,16 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- launch a terminal
     [ ((modm .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
 
-    -- launch dmenu
+    -- Swap the current window with the master
+    , ((modm,               xK_Return), windows W.swapMaster)
+
+    -- Launch dmenu
     , ((modm,               xK_p     ), spawn "~/scripts/dmenu/dmenu_run.sh")
 
-    -- close focused window
+    -- Close focused window
     , ((modm .|. shiftMask, xK_c     ), kill)
 
-     -- Rotate through the available layout algorithms
+    -- Rotate through the available layout algorithms
     , ((modm,               xK_space ), sendMessage NextLayout)
 
     --  Reset the layouts on the current workspace to default
@@ -161,7 +171,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- Use this binding with avoidStruts from Hooks.ManageDocks.
     -- See also the statusBar function from Hooks.DynamicLog.
     --
-    --, ((modm              , xK_b     ), sendMessage ToggleStruts)
+    , ((modm              , xK_b     ), sendMessage ToggleStruts)
 
     -- Quit xmonad
     , ((modm .|. shiftMask, xK_q     ), io (exitWith ExitSuccess))
