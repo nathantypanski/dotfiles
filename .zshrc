@@ -132,6 +132,7 @@ alias addon-sdk="cd /opt/addon-sdk && source bin/activate; cd -"
 
 # Vim for life.
 export EDITOR="vim"
+export SUDO_EDITOR="rvim"
 
 # Since there's nothing better out there ...
 export BROWSER="firefox"
@@ -188,7 +189,7 @@ mktbz() { tar cvjf "${1%%/}.tar.bz2" "${1%%/}/"; }
 
 # Maps a whole subnet with nmap
 nnet () {
-    if [ $1] ; then
+    if [[ -n $1 ]] ; then
         nmap -sS -P0 $1
     fi
 }
@@ -220,4 +221,4 @@ extract () {
 alias eclim='/usr/share/eclipse/eclimd -Dnailgun.server.port=9091'
 
 # Load powerline
-. $PYTHONPATH/powerline/bindings/zsh/powerline.zsh
+#. $PYTHONPATH/powerline/bindings/zsh/powerline.zsh

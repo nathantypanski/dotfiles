@@ -94,5 +94,5 @@ URxvt.colorUL:                #859900
 !! dzen2
 
 dzen2.font:                   -*-terminus-medium-*-*-*-16-*-*-*-*-*-iso8859-*
-dzen2.foreground:             #839496
-dzen2.background:             #002b36
+! dzen2.foreground:             #839496
+! dzen2.background:             #002b36
