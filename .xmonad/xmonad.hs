@@ -12,6 +12,12 @@ import Data.Monoid
 import System.Exit
 import XMonad.Layout.NoBorders
 
+-- Better ways to spawn apps; safeSpawn and unsafeSpawn
+import XMonad.Util.Run
+
+-- Hints on windows
+import XMonad.Layout.LayoutHints
+
 import XMonad.Prompt
 import XMonad.Prompt.Input
 
@@ -96,8 +102,8 @@ myDzenPP = defaultPP { ppCurrent  = dzenColor "#005f00" "#afd700" . pad . wrap "
                      , ppSep      = ""
                      , ppLayout   = dzenColor "#1c1c1c" "#d0d0d0" .
                                     (\ x -> pad $ case x of
-                                              "TilePrime Horizontal" -> "TTT"
-                                              "TilePrime Vertical"   -> "[]="
+                                              "Tall" -> "||"
+                                              "Mirror Tall"   -> "="
                                               "Hinted Full"          -> "[ ]"
                                               _                      -> x
                                     )
@@ -118,6 +124,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- Launch dmenu
     , ((modm,               xK_p     ), spawn "~/scripts/dmenu/dmenu_run.sh")
+    , ((modm,               xK_o     ), spawn "~/scripts/dmenu/search.sh")
 
     -- Close focused window
     , ((modm .|. shiftMask, xK_c     ), kill)
@@ -243,7 +250,7 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 myLayout = avoidStruts $
     smartBorders tiled
     ||| Mirror tiled
-    ||| smartBorders Full
+    ||| smartBorders (layoutHints (Tall 1 (99/100) (2/5)))
         where
             -- default tiling algorithm partitions the screen into two panes
             tiled   = Tall nmaster delta ratio
