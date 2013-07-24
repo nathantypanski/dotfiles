@@ -1,7 +1,7 @@
 #!/bin/zsh
 FG='#839496'
 BG='#00141a'
-FONT='Terminus-8'
+FONT='Terminus-12'
 CONKYBOTTOMRC='scripts/dzen/conkybottomrc'
 CONKYTOPRC='scripts/dzen/conkytoprc'
 CONKYCALRC='scripts/dzen/conky_cal'
@@ -17,7 +17,6 @@ dzcal () {
         sleep 1
     done | dzen2 -ta r -y 886 -w 800 -x 710 -l 7 -bg $BG -fg $FG -fn $FONT \
         -e 'button2=;entertitle=exec cal,uncollapse,unhide;leaveslave=collapse;leavetitle=collapse' &
-
 }
 
 cpubar () {
