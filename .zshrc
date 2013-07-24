@@ -146,7 +146,7 @@ export CLASSPATH="/usr/share/java/junit.jar"
 export PYTHONPATH=/usr/lib/python3.3/site-packages
 
 # scripts in path
-export PATH=$PATH:~/scripts:~/.gem/ruby/2.0.0/bin:~/.cabal/bin
+export PATH=$PATH:~/scripts:~/.gem/ruby/2.0.0/bin:~/.cabal/bin:/opt/java/jre/bin
 
 # Some people like $TERM_PROGRAM. Like the solarized colorscheme for vim. I don't.
 export TERM_PROGRAM=$TERM

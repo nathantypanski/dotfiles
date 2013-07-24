@@ -17,7 +17,7 @@ search_wrap = true
 #term = xterm-termite
 
 # 0.0: opaque, 1.0: transparent
-transparency = 0.1
+transparency = 0.0
 pseudo_transparency = false
 
 # "system", "on" or "off"
