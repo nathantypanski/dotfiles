@@ -30,7 +30,7 @@ font -*-terminus-medium-*-*-*-16-*-*-*-*-*-iso8859-*
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec termite
+bindsym $mod+Shift+Return exec termite
 
 # lock --- broken!?
 # bindsym $mod+o exec 'i3lock -c 004354'
@@ -39,7 +39,7 @@ bindsym $mod+Return exec termite
 bindsym $mod+Shift+c kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec 'scripts/dmenu/dmenu_run.sh' -p '$ '
+bindsym $mod+p exec 'scripts/dmenu/dmenu_run.sh' -p '$ '
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
@@ -175,7 +175,6 @@ bindsym $mod+r mode "resize"
 
 # Hide vertical borders at screen edges
 # hide_edge_borders vertical
-
 
 # Make the currently focused window a scratchpad
 bindsym $mod+Shift+minus move scratchpad
