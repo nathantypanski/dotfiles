@@ -28,7 +28,7 @@ bindkey -v
 #######################
 
 # Run urxvt via my script.
-alias urxvt ="/home/nathan/scripts/urxvt.sh"
+alias urxvt ="/home/nathan/bin/urxvt.sh"
 
 # less is more.
 alias more='less'
@@ -98,7 +98,7 @@ alias blankoff='xset -dpms; xset s off'
 alias suspend='systemctl suspend'
 
 # Window pager
-#alias pager='~/scripts/wmpager.sh && tail -f /tmp/wmpager.sh.pipe | dzen2 -ta l -x 0 -y 0 -w 153 -fn Terminus-8 -bg #002b36 -fg #657b83'
+#alias pager='~/bin/wmpager.sh && tail -f /tmp/wmpager.sh.pipe | dzen2 -ta l -x 0 -y 0 -w 153 -fn Terminus-8 -bg #002b36 -fg #657b83'
 #alias czen='conky -c ~/.conkytoprc | dzen2 -ta l -x 153 -fn Terminus-8 -bg #002b36 -fg #657b83'
 
 # connect with wpa.conf
@@ -116,10 +116,10 @@ alias pms='pms -p 6606'
 # color my searches
 alias grep='grep --color=auto'
 
-alias sshorange='~/scripts/sshorange.sh'
+alias sshorange='~/bin/sshorange.sh'
 
 # view disowned files in pacman. Dangerous!
-alias pacman-disowned='/home/nathan/scripts/pacman-disowned'
+alias pacman-disowned='/home/nathan/bin/pacman-disowned'
 
 # nmap a whole subnet
 alias nmaps='sudo nmap -sS -P0'
@@ -146,7 +146,7 @@ export CLASSPATH="/usr/share/java/junit.jar"
 export PYTHONPATH=/usr/lib/python3.3/site-packages
 
 # scripts in path
-export PATH=$PATH:~/scripts:~/.gem/ruby/2.0.0/bin:~/.cabal/bin:/opt/java/jre/bin
+export PATH=$PATH:~/bin:~/.gem/ruby/2.0.0/bin:~/.cabal/bin:/opt/java/jre/bin
 
 # Some people like $TERM_PROGRAM. Like the solarized colorscheme for vim. I don't.
 export TERM_PROGRAM=$TERM
@@ -222,3 +222,9 @@ alias eclim='/usr/share/eclipse/eclimd -Dnailgun.server.port=9091'
 
 # Load powerline
 #. $PYTHONPATH/powerline/bindings/zsh/powerline.zsh
+
+export PERL_LOCAL_LIB_ROOT="$PERL_LOCAL_LIB_ROOT:/home/nathan/perl5";
+export PERL_MB_OPT="--install_base /home/nathan/perl5";
+export PERL_MM_OPT="INSTALL_BASE=/home/nathan/perl5";
+export PERL5LIB="/home/nathan/perl5/lib/perl5:$PERL5LIB";
+export PATH="/home/nathan/perl5/bin:$PATH";
