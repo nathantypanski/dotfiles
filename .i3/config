@@ -23,14 +23,14 @@ set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below. ISO 10646 = Unicode
-font -*-terminus-medium-*-*-*-16-*-*-*-*-*-iso10646-*
+font -*-terminus-medium-*-*-*-16-*-*-*-*-*-iso8859-*
 #font pango:Terminus 10
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec urxvt
+bindsym $mod+Return exec termite
 
 # lock --- broken!?
 # bindsym $mod+o exec 'i3lock -c 004354'

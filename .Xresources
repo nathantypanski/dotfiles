@@ -43,7 +43,7 @@
 *color15: t_foreground
 
 !! Font for everything
-!*font: -*-terminus-medium-*-*-*-16-*-*-*-*-*-iso10646-*
+*font: -*-terminus-medium-*-*-*-16-*-*-*-*-*-iso8859-*
 !URxvt*italicFont:  -*-terminus-medium-*-*-*-16-*-*-*-*-*-iso10646-*
 !URxvt*boldItalicFont: -*-terminus-bold-*-*-*-16-*-*-*-*-*-iso10646-*
 !URxvt.font: xft:PowerlineSymbols:regular,\
