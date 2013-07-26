@@ -228,3 +228,6 @@ export PERL_MB_OPT="--install_base /home/nathan/perl5";
 export PERL_MM_OPT="INSTALL_BASE=/home/nathan/perl5";
 export PERL5LIB="/home/nathan/perl5/lib/perl5:$PERL5LIB";
 export PATH="/home/nathan/perl5/bin:$PATH";
+
+# zsh syntax highlighting
+source ~/bin/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
