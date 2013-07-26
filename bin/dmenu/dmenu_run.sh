@@ -8,8 +8,8 @@ fi
 (
 	IFS=:
 	if stest -dqr -n "$cache" $PATH; then
-		stest -flx $PATH | sort -u | tee "$cache" | ~/scripts/dmenu/dmenu.sh "$@"
+		stest -flx $PATH | sort -u | tee "$cache" | ~/bin/dmenu/dmenu.sh "$@"
 	else
-		~/scripts/dmenu/dmenu.sh "$@" < "$cache"
+		~/bin/dmenu/dmenu.sh "$@" < "$cache"
 	fi
 ) | ${SHELL:-"/bin/sh"} &

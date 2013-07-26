@@ -39,7 +39,7 @@ bindsym $mod+Shift+Return exec termite
 bindsym $mod+Shift+c kill
 
 # start dmenu (a program launcher)
-bindsym $mod+p exec 'scripts/dmenu/dmenu_run.sh' -p '$ '
+bindsym $mod+p exec 'bin/dmenu/dmenu_run.sh' -p '$ '
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
@@ -120,10 +120,10 @@ bindsym $mod+Shift+0 move container to workspace 10
 bindsym $mod+Shift+r restart
 
 # dzen customization keybindings
-# bindcode 133 exec --no-startup-id "scripts/dzen/dz.sh"
+# bindcode 133 exec --no-startup-id "bin/dzen/dz.sh"
 # bindcode --release 133 exec --no-startup-id "killall dzen2 conky dz.sh"
 # bindsym --release $mod exec --no-startup-id "killall dzen2 conky dz.sh"
-bindsym $mod+F1 exec --no-startup-id "scripts/dzen/dz.sh"
+bindsym $mod+F1 exec --no-startup-id "bin/dzen/dz.sh"
 bindsym $mod+F2 exec --no-startup-id "killall dzen2 conky gcpubar dz.sh"
 
 bindsym $mod+o exec "uzbl-browser"
@@ -180,20 +180,35 @@ bindsym $mod+r mode "resize"
 bindsym $mod+Shift+minus move scratchpad
 
 # Window list
-bindsym $mod+equal exec 'scripts/i3/winmenu.py'
+bindsym $mod+equal exec 'bin/i3/winmenu.py'
 
 # Show the first scratchpad window
 bindsym $mod+minus scratchpad show
+
+# search for a a program by name
+bindsym $mod+n exec python ~/bin/i3-wm-scripts/nextfind.py
+
+# mark a window
+bindsym $mod+m exec ~/bin/i3-wm-scripts/mark
+
+# unmark a window
+bindsym $mod+u exec ~/bin/i3-wm-scripts/unmark
+
+# use dmenu to jump back to a mark
+bindsym $mod+g exec ~/bin/i3-wm-scripts/goto
+
+# go to my web browser
+bindsym $mod+b exec python ~/bin/i3-wm-scripts/nextmatch.py '(chromium|firefox)'
 
 # Use compositing
 # exec --no-startup-id compton -I .04 -O .04 -b -f -D 5 &
 
 exec 'firefox'
 
-#exec --no-startup-id i3-msg 'workspace 9; exec scripts/urxvt.sh -e irssi; workspace 1'
+#exec --no-startup-id i3-msg 'workspace 9; exec bin/urxvt.sh -e irssi; workspace 1'
 exec --no-startup-id 'unclutter'
 exec --no-startup-id hsetroot -solid '#002b36'
-exec --no-startup-id 'scripts/dzen/dz.sh'
+exec --no-startup-id 'bin/dzen/dz.sh'
 
 # The IPC interface allows programs like an external workspace bar
 # (i3-wsbar) or i3-msg (can be used to "remote-control" i3) to work.
