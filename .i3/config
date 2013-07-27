@@ -203,7 +203,7 @@ bindsym $mod+b exec python ~/bin/i3-wm-scripts/nextmatch.py '(chromium|firefox)'
 # Use compositing
 # exec --no-startup-id compton -I .04 -O .04 -b -f -D 5 &
 
-exec 'firefox'
+exec --no-startup-id 'firefox'
 
 #exec --no-startup-id i3-msg 'workspace 9; exec bin/urxvt.sh -e irssi; workspace 1'
 exec --no-startup-id 'unclutter'
