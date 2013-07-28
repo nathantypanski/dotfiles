@@ -3,18 +3,18 @@ resize_grip = false
 scroll_on_output = false
 scroll_on_keystroke = true
 audible_bell = false
-visible_bell = false
+visible_bell = true
 mouse_autohide = false
 allow_bold = true
 font = Terminus (TTF) 12
 dynamic_title = true
 urgent_on_bell = true
 clickable_url = true
-scrollback_lines = 5000
+scrollback_lines = 10000
 search_wrap = true
 #icon_name = terminal
 #geometry = 640x480
-#term = xterm-termite
+term = xterm-termite
 
 # 0.0: opaque, 1.0: transparent
 transparency = 0.0
@@ -62,7 +62,7 @@ color14 = #8abeb7
 color15 = #c5c8c6
 
 [hints]
-font = Anonymous-Pro 10
+font = Terminus (TTF) 12
 #foreground = #dcdccc
 #background = #3f3f3f
 #padding = 2

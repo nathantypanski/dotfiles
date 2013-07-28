@@ -43,6 +43,9 @@ xset +fp /usr/share/fonts/local
 # Rehash for good measure
 xset fp rehash
 
+# mouse acceleration as "the exponent of a more natural and continuous formula"
+xset m 3/2 0
+
 # Finally!
 
 ## i3 with logging
