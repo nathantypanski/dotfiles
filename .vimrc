@@ -203,6 +203,7 @@ execute "set colorcolumn=" . join(range(81,335), ',')
 
 " Automatically run NERDTree
 autocmd VimEnter * NERDTree
+autocmd VimEnter * wincmd p
 " Latex-suite stuff
 " -----------------
 "
