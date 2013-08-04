@@ -199,7 +199,7 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 " 80 column highlight
 " highlight OverLength cterm=bold
 execute "set colorcolumn=" . join(range(81,335), ',')
-match OverLength /\%81v.\+/
+" match OverLength /\%81v.\+/
 
 " Automatically run NERDTree
 autocmd VimEnter * NERDTree
