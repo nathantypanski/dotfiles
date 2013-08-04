@@ -124,7 +124,7 @@ bindsym $mod+Shift+r restart
 # bindcode --release 133 exec --no-startup-id "killall dzen2 conky dz.sh"
 # bindsym --release $mod exec --no-startup-id "killall dzen2 conky dz.sh"
 bindsym $mod+F1 exec --no-startup-id "bin/dzen/dz.sh"
-bindsym $mod+F2 exec --no-startup-id "killall dzen2 conky gcpubar dz.sh"
+bindsym $mod+F2 exec --no-startup-id "killall dzen2 conky gcpubar dz.sh trayer"
 
 bindsym $mod+o exec "uzbl-browser"
 
@@ -207,7 +207,6 @@ exec --no-startup-id 'firefox'
 
 #exec --no-startup-id i3-msg 'workspace 9; exec bin/urxvt.sh -e irssi; workspace 1'
 exec --no-startup-id 'unclutter'
-exec --no-startup-id hsetroot -solid '#002b36'
 exec --no-startup-id 'bin/dzen/dz.sh'
 
 # The IPC interface allows programs like an external workspace bar

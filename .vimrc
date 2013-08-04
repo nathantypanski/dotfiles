@@ -193,6 +193,15 @@ au FileType c,cpp setlocal comments-=:// comments+=f://
 set laststatus=2 " Always display the statusline in all windows
 set noshowmode
 
+" Disable automatic commenting
+autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+
+" 80 column highlight
+highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+match OverLength /\%81v.\+/
+
+" Automatically run NERDTree
+autocmd VimEnter * NERDTree
 " Latex-suite stuff
 " -----------------
 "
