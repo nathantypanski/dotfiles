@@ -197,7 +197,8 @@ set noshowmode
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
 " 80 column highlight
-highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+" highlight OverLength cterm=bold
+execute "set colorcolumn=" . join(range(81,335), ',')
 match OverLength /\%81v.\+/
 
 " Automatically run NERDTree
