@@ -31,6 +31,7 @@ floating_modifier $mod
 
 # start a terminal
 bindsym $mod+Shift+Return exec termite
+bindsym $mod+grave exec termite
 
 # lock --- broken!?
 # bindsym $mod+o exec 'i3lock -c 004354'
@@ -45,31 +46,25 @@ bindsym $mod+p exec 'bin/dmenu/dmenu_run.sh' -p '$ '
 # installed.
 bindsym $mod+Shift+d exec --no-startup-id i3-dmenu-desktop
 
-# change focus
 bindsym $mod+h focus left
 bindsym $mod+j focus down
 bindsym $mod+k focus up
 bindsym $mod+l focus right
 
 # alternatively, you can use the cursor keys:
-# bindsym $mod+Left focus left
-# bindsym $mod+Down focus down
-# bindsym $mod+Up focus up
-# bindsym $mod+Right focus right
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
 
-# move focused window
 bindsym $mod+Shift+h move left
 bindsym $mod+Shift+j move down
 bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
 
-# split in horizontal orientation
-bindsym $mod+semicolon split h
+bindsym $mod+Shift+apostrophe split v
+bindsym $mod+apostrophe split h
 
-# # split in vertical orientation
-bindsym $mod+v split v
-
-# enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen
 
 # change container layout (stacked, tabbed, toggle split)
@@ -199,6 +194,9 @@ bindsym $mod+g exec ~/bin/i3-wm-scripts/goto
 
 # go to my web browser
 bindsym $mod+b exec python ~/bin/i3-wm-scripts/nextmatch.py '(chromium|firefox)'
+
+# open ranger
+bindsym $mod+d exec "termite -e ranger"
 
 # Use compositing
 # exec --no-startup-id compton -I .04 -O .04 -b -f -D 5 &
