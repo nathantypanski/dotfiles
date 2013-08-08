@@ -14,10 +14,10 @@ force_xinerama yes
 
 # Solarized
 # class                 border  backgr. text    indicator
-client.focused          #268bd2 #268bd2 #073642 #dc322f
-client.focused_inactive #93a1a1 #073642 #839496 #b58900
-client.unfocused        #002b36 #002b36 #839496 #b58900
-client.urgent           #dc322f #dc322f #002b36 #002b36
+client.focused          #a54242 #a54242 #c5c8c6 #b5bd68
+client.focused_inactive #282a2e #282a2e #c5c8c6 #8abeb7
+client.unfocused        #1d1f21 #1d1f21 #707880 #8abeb7
+client.urgent           #5f819d #5f819d #002b36 #85678f
 
 set $mod Mod4
 
@@ -174,7 +174,7 @@ bindsym $mod+r mode "resize"
 #  }
 
 # Hide vertical borders at screen edges
-# hide_edge_borders vertical
+# hide_edge_borders both
 
 # Make the currently focused window a scratchpad
 bindsym $mod+Shift+minus move scratchpad
