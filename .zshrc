@@ -150,6 +150,7 @@ export PATH=$PATH:~/bin:~/.gem/ruby/2.0.0/bin:~/.cabal/bin:/opt/java/jre/bin
 
 # Some people like $TERM_PROGRAM. Like the solarized colorscheme for vim. I don't.
 export TERM_PROGRAM=$TERM
+export TERMCMD=termite
 
 # Steam likes this
 export SDL_AUDIODRIVER=alsa
@@ -215,6 +216,21 @@ extract () {
    else
        echo "'$1' is not a valid file!"
    fi
+}
+
+absend () {
+    if [ -f $1 ] ; then
+        adb push $1 /sdcard/Books
+    else
+        echo "'$1' is not a valid file!"
+    fi
+}
+
+absendall () {
+    for file in `ls`
+    do
+        adb push $file /sdcard/Books
+    done >& results.out
 }
 
 #eclim

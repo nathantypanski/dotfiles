@@ -1,12 +1,12 @@
 #!/bin/zsh
 
 # colors
-FG='#839496'
-BG='#000000'
-RED='#dc322f'
-BLUE='#268bd2'
-GREEN='#859900'
-ORANGE='#b58900'
+FG='#707880'
+BG='#1d1f21'
+RED='#cc6666'
+BLUE='#81a2be'
+GREEN='#b5bd68'
+ORANGE='#de935f'
 
 FONT='Terminus-12'
 CONKYBOTTOMRC='scripts/dzen/conkybottomrc'

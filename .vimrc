@@ -1,16 +1,17 @@
 " ~/.vimrc
 " Settings for vim.
 
-" Turn backup off, since most stuff is in SVN, git et.c anyway...
+" Turn backup off
 set nobackup
 set nowb
 set noswapfile
+
 
 " Automatically cd into file directory.
 set autochdir
 
 " Remove any trailing whitespace
-autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
+" autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
 
 " Restore cursor position to where it was before
 augroup JumpCursorOnEdit
@@ -54,9 +55,19 @@ set display+=lastline
 
 set ttyfast				" we have a fast terminal
 set scrolljump=5	  " when scrolling up down, show at least 5 lines
-set ttyscroll=999	  " make vim redraw screen instead of scrolling when there are more than 3 lines to be scrolled
 
-" This shows what you are typing as a command.  I love this!
+" make vim redraw screen instead of scrolling when there are more than 3 lines 
+" to be scrolled
+set ttyscroll=999	  
+
+" do not redraw while running macros
+set lazyredraw
+
+" Offers a bit of context when scrolling
+set scrolloff=1
+set sidescrolloff=5
+
+" show current typing
 set showcmd
 
 " Use my own ftplugins
@@ -157,8 +168,11 @@ set fileencodings=ucs-bom,utf8,prc
 
 " " ; as : always
 " Bad practice. Servers without my .vimrc make vim hard to use.
-" map ; :
-" noremap ;; ;
+map ; :
+noremap ;; ;
+
+" NERDTree toggle
+map <C-n> :NERDTreeToggle<CR>
 
 " USE GUNDO
 map <leader>g :GundoToggle<CR>
@@ -202,8 +216,8 @@ execute "set colorcolumn=" . join(range(81,335), ',')
 " match OverLength /\%81v.\+/
 
 " Automatically run NERDTree
-autocmd VimEnter * NERDTree
-autocmd VimEnter * wincmd p
+"autocmd VimEnter * NERDTree
+"autocmd VimEnter * wincmd p
 " Latex-suite stuff
 " -----------------
 "
