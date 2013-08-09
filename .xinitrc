@@ -17,6 +17,9 @@ feh --bg-scale pics/Wallpapers/nin_plug.jpg
 # US keyboard layout and thinkpad
 setxkbmap -layout us -geometry thinkpad &
 
+# load my custom keybindings
+xbindkeys &
+
 ## solid background color
 # exec --no-startup-id hsetroot -solid '#002b36'
 

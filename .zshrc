@@ -94,6 +94,8 @@ alias touchoff='synclient TouchpadOff=1'
 # blanking disable
 alias blankoff='xset -dpms; xset s off'
 
+alias blanknow='xset dpms force off'
+
 # Suspend my computer.
 alias suspend='systemctl suspend'
 
