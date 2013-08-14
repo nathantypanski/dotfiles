@@ -21,7 +21,8 @@ export BROWSER="firefox"
 export GREP_COLOR="1;33"
 export LESS="-R"
 export CLASSPATH="/usr/share/java/junit.jar"
-export PYTHONPATH=/usr/lib/python2.7/site-packages:/usr/lib/python3.3/site-packages:~/bin/i3-py
+#export PYTHONPATH=/usr/lib/python2.7/site-packages:/usr/lib/python3.3/site-packages:~/bin/i3-py
+export PYTHONPATH=/usr/lib/python3.3/site-packages:~/bin/i3-py
 # scripts in path
 export PATH=$PATH:~/bin:~/.gem/ruby/2.0.0/bin:~/.cabal/bin:/opt/java/jre/bin
 export TERM_PROGRAM=$TERM
@@ -106,6 +107,24 @@ bindkey -v
 # In grml's zshrc, this enables vi mode instead of emacs by default.
 setopt vi
 source ~/bin/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# better grml prompt
+zstyle ':prompt:grml:*:percent' token '§ '
+zstyle ':prompt:grml:*:percent' pre '%F{blue}'
+zstyle ':prompt:grml:*:percent' post '%f'
+zstyle ':prompt:grml:*:user' pre '%F{green}'
+zstyle ':prompt:grml:*:user' post '%f'
+zstyle ':prompt:grml:*:host' pre '%f'
+zstyle ':prompt:grml:*:host' post '%f'
+zstyle ':prompt:grml:*:at' token '@'
+zstyle ':prompt:grml:*:at' pre '%f'
+zstyle ':prompt:grml:*:at' post '%f'
+zstyle ':prompt:grml:*:sad-smiley' token '%(?..×)'
+zstyle ':prompt:grml:*:sad-smiley' pre '%B%F{red}'
+zstyle ':prompt:grml:*:sad-smiley' post '%f%b'
+zstyle ':prompt:grml:*:path' token '%40<..<%~%<< '
+zstyle ':prompt:grml:*:path' pre '%F{blue}%B'
+zstyle ':prompt:grml:*:path' post '%f%b' 
 
 # Show active directory in title bar.
 # chpwd() {

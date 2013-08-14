@@ -6,7 +6,6 @@ set nobackup
 set nowb
 set noswapfile
 
-
 " Automatically cd into file directory.
 set autochdir
 
@@ -234,3 +233,9 @@ set grepprg=grep\ -nH\ $*
 " The following changes the default filetype back to 'tex':
 let g:tex_flavor='latex'
 let g:Tex_DefaultTargetFormat='pdf'
+
+" vimwiki
+let g:vimwiki_list = [{'path': '~/docs/vimwiki'}]
+" wrap wiki to 72 col
+au BufEnter *.wiki setlocal textwidth=72
+au BufEnter *.wiki setlocal wrapmargin=2
