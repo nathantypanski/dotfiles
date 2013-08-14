@@ -24,10 +24,10 @@ xbindkeys &
 # exec --no-startup-id hsetroot -solid '#002b36'
 
 # set a mouse pointer
-xsetroot -cursor_name left_ptr
+xsetroot -cursor_name left_ptr &
 
 # load x resources db
-xrdb -merge ~/.Xresources
+xrdb -merge ~/.Xresources &
 
 # automounting
 udiskie &
@@ -38,16 +38,19 @@ unclutter &
 ### Now I'm on optimus! Who cares about nvidia settings?
 # nvidia-settings -l
 
-synclient TouchpadOff=1
+synclient TouchpadOff=1 &
 
 # Set the font path ...
-xset +fp /usr/share/fonts/local
+xset +fp /usr/share/fonts/local &
 
 # Rehash for good measure
-xset fp rehash
+xset fp rehash &
 
 # mouse acceleration as "the exponent of a more natural and continuous formula"
-xset m 3/2 0
+xset m 3/2 0 &
+
+# compose
+setxkbmap -option compose:menu &
 
 # Finally!
 
