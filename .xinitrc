@@ -12,7 +12,7 @@ fi
 cd ~/
 
 # background
-feh --bg-scale pics/Wallpapers/nin_plug.jpg
+# feh --bg-scale pics/Wallpapers/nin_plug.jpg
 
 # US keyboard layout and thinkpad
 setxkbmap -layout us -geometry thinkpad &
