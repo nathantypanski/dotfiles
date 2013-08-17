@@ -13,6 +13,8 @@ CONKYBOTTOMRC='scripts/dzen/conkybottomrc'
 CONKYTOPRC='scripts/dzen/conkytoprc'
 CONKYCALRC='scripts/dzen/conky_cal'
 count=1
+baller=0;
+gmailunread=`gmail.py`
 
 dzcal () {
     while :
@@ -28,14 +30,22 @@ dzcal () {
 }
 
 cpubar () {
-    gcpubar -h 16 -w 32 -s h | dzen2 -h 16 -w 100 -x 800 -bg $BG -fg $FG &
+    gcpubar -h 14 -w 16 -s h | dzen2 -h 16 -w 100 -x 1584 -bg $BG -fg $FG &
+}
+
+checkgmail () {
+    while :
+    do
+        gmailunread=`~/bin/gmail.py`;
+        sleep 600;
+    done 
 }
 
 arch () {
     while :
     do
         echo -n "^tw()^fg($BLUE)^i(.dzen/icons/arch_10x10.xbm)^fg() "
-        echo -n `uname -r`
+        echo -n `uname -r | sed -e :a -e 's/^.\{1,30\}$/& /;ta'`
         echo -n '^fg($GREEN) '
         echo -n `hostname`
         echo -n '^fg() '
@@ -52,6 +62,8 @@ arch () {
             echo -n "^fg($GREEN)^i(.dzen/icons/bat_full_01.xbm)"
         fi
         echo -n $battery_percent"%"
+        echo -n " ^fg($BLUE)^i(.dzen/icons/info_02.xbm)^fg() "
+        echo -n $gmailunread
         echo;
         sleep 1
     done | dzen2 -dock -ta l -y 0 -w 1600 -x 0 -bg $BG -fg $FG -fn $FONT \
@@ -75,3 +87,4 @@ arch () {
 # dzcal &
 arch &
 cpubar &
+checkgmail &
