@@ -23,7 +23,8 @@ dzcal () {
 #        topcount=$((topcount + 1))
         sleep 1
     done | dzen2 -ta r -y 886 -w 800 -x 710 -l 7 -bg $BG -fg $FG -fn $FONT \
-        -e 'button2=;entertitle=exec cal,uncollapse,unhide;leaveslave=collapse;leavetitle=collapse' &
+        -e 'button2=;entertitle=exec cal,uncollapse,unhide;leaveslave=collapse;\
+            leavetitle=collapse' &
 }
 
 cpubar () {
