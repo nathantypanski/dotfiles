@@ -52,9 +52,12 @@ xset m 3/2 0 &
 # compose
 setxkbmap -option compose:menu &
 
+# keychain
+eval `keychain --eval --agents ssh,gpg ~/.ssh/id_rsa ~/.ssh/id_rsa_athen@ephesus`
+
 # Finally!
 
 ## i3 with logging
 exec i3 -V >> ~/.i3/i3log 2>&1
 #exec xmonad
-#exec ~/ob/openbox-3.5.0/openbox/openbox
+#exec openbox
