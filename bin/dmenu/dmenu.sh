@@ -17,7 +17,6 @@ dmenucmd="dmenu -fn -*-terminus-medium-*-*-*-16-*-*-*-*-*-*-*\
 
 for arg in "$*"
 do
-    echo $arg
     dmenucmd="$dmenucmd $arg"
 done
 
