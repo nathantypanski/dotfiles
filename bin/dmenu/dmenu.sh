@@ -10,7 +10,15 @@ PROMPT='$'
 CASE_INSENSITIVE=true
 # LINES=49
 
-dmenu -fn '-*-terminus-medium-*-*-*-16-*-*-*-*-*-iso10646-*'\
+dmenucmd="dmenu -fn -*-terminus-medium-*-*-*-16-*-*-*-*-*-*-*\
     -nb $NORMAL_BACKGROUND -sb $SELECTED_BACKGROUND \
     -nf $NORMAL_FOREGROUND -sf $SELECTED_FOREGROUND \
-    -p $PROMPT -i #-l $LINES
+    -p $PROMPT -i" #-l $LINES
+
+for arg in "$*"
+do
+    echo $arg
+    dmenucmd="$dmenucmd $arg"
+done
+
+$($dmenucmd)
