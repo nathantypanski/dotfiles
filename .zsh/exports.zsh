@@ -33,3 +33,4 @@ export ECLIPSE_HOME="/usr/share/eclipse"
 export SYNCAD_LICENSE_FILE=~/synapticad-17.07d/license.dat
 export CCACHE_DIR=~/.ccache
 export CHROOT=$HOME/chroot
+export XDG_CONFIG_HOME='/home/nathan/.config'
