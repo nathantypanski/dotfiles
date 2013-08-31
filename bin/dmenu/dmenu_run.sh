@@ -10,6 +10,6 @@ fi
 	if stest -dqr -n "$cache" $PATH; then
 		stest -flx $PATH | sort -u | tee "$cache" | ~/bin/dmenu/dmenu.sh "$@"
 	else
-		~/bin/dmenu/dmenu.sh "$@" < "$cache"
+		~/bin/dmenu/dmenu.sh -w 800 -x 800 -f -q "$@" < "$cache"
 	fi
 ) | ${SHELL:-"/bin/sh"} &

@@ -78,12 +78,17 @@ def win_menu(clients, l=20):
     """
     Displays a window menu using dmenu.
     """
-    dmenu = subprocess.Popen(['/home/nathan/bin/dmenu/dmenu.sh', '-l', str(l)],
+    dmenu = subprocess.Popen(['dmenu',
+        '-fn', '-*-terminus-medium-*-*-*-16-*-*-*-*-*-*-*',
+        '-nb', '#1D1F21', '-sb', '#282A2E', '-nf', '#C5C8C6', '-sf', '#81A2BE',
+        '-p', '$', '-i', '-w', '800', '-x', '800', '-dim', '0.5',
+        '-l', str(l)],
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE)
     menu_str = '\n'.join(sorted(clients.keys()))
     # Popen.communicate returns a tuple stdout, stderr
     win_str = dmenu.communicate(menu_str.encode('utf-8'))[0].decode().rstrip()
+    print(win_str)
     return win_str
 
 if __name__ == '__main__':

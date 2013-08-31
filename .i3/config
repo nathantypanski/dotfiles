@@ -123,7 +123,7 @@ bindsym $mod+Shift+r restart
 bindsym $mod+F1 exec --no-startup-id "bin/dzen/dz.sh"
 bindsym $mod+F2 exec --no-startup-id "killall dzen2 conky gcpubar dz.sh trayer"
 
-bindsym $mod+o exec "uzbl-browser"
+bindsym $mod+o exec "dwb"
 
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+q exec "i3-nagbar -t warning -m 'Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'killall dz.sh; i3-msg exit'"

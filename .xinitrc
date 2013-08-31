@@ -55,6 +55,9 @@ setxkbmap -option compose:menu &
 # keychain
 eval `keychain --eval --agents ssh,gpg ~/.ssh/id_rsa ~/.ssh/id_rsa_athen@ephesus`
 
+# compositing
+compton &
+
 # Finally!
 
 ## i3 with logging

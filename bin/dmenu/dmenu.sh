@@ -13,7 +13,7 @@ CASE_INSENSITIVE=true
 dmenucmd="dmenu -fn -*-terminus-medium-*-*-*-16-*-*-*-*-*-*-*\
     -nb $NORMAL_BACKGROUND -sb $SELECTED_BACKGROUND \
     -nf $NORMAL_FOREGROUND -sf $SELECTED_FOREGROUND \
-    -p $PROMPT -i" #-l $LINES
+    -p $PROMPT -dim 0.5" #-l $LINES
 
 for arg in "$*"
 do
