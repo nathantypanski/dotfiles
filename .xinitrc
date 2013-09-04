@@ -40,10 +40,8 @@ unclutter &
 
 synclient TouchpadOff=1 &
 
-# Set the font path ...
+# terminus-font is installed here, but it's not in the font path by default.
 xset +fp /usr/share/fonts/local &
-
-# Rehash for good measure
 xset fp rehash &
 
 # mouse acceleration as "the exponent of a more natural and continuous formula"
@@ -53,7 +51,7 @@ xset m 3/2 0 &
 setxkbmap -option compose:menu &
 
 # keychain
-eval `keychain --eval --agents ssh,gpg ~/.ssh/id_rsa ~/.ssh/id_rsa_athen@ephesus`
+eval `keychain --eval --agents ssh,gpg --timeout 5 ~/.ssh/id_rsa ~/.ssh/id_rsa_athen@ephesus`
 
 # compositing
 compton &
@@ -61,6 +59,6 @@ compton &
 # Finally!
 
 ## i3 with logging
-exec i3 -V >> ~/.i3/i3log 2>&1
-#exec xmonad
+#exec i3 -V >> ~/.i3/i3log 2>&1
+exec xmonad
 #exec openbox

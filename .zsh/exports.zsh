@@ -15,7 +15,7 @@ export SAVEHIST=1000
 export EDITOR="vim"
 export SUDO_EDITOR="rvim"
 # Since there's nothing better out there ...
-export BROWSER="firefox"
+export BROWSER="dwb"
 export GREP_COLOR="1;33"
 export LESS="-R"
 export CLASSPATH="/usr/share/java/junit.jar"
