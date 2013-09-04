@@ -234,8 +234,18 @@ set grepprg=grep\ -nH\ $*
 let g:tex_flavor='latex'
 let g:Tex_DefaultTargetFormat='pdf'
 
-" vimwiki
+" latex-search for synctex
+map <silent> <Leader>ls :silent
+                \ !/Applications/Skim.app/Contents/SharedSupport/displayline
+                \ <C-R>=line('.')<CR> "<C-R>=LatexBox_GetOutputFile()<CR>"
+                \ "%:p" <CR>
+
 let g:vimwiki_list = [{'path': '~/docs/vimwiki'}]
 " wrap wiki to 72 col
 au BufEnter *.wiki setlocal textwidth=72
 au BufEnter *.wiki setlocal wrapmargin=2
+
+let g:pandoc_auto_format = 0
+let g:pandoc_no_empty_implicits = 1
+let g:pandoc_no_spans = 1
+let g:pandoc_use_hard_wraps = 1

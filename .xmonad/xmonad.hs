@@ -1,16 +1,18 @@
 import XMonad
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
-import XMonad.Util.Dzen
+-- import XMonad.Util.Dzen
 import XMonad.Util.Loggers
 import System.Process
 import Data.Time
 import System.Locale
 import System.IO
-import XMonad
 import Data.Monoid
 import System.Exit
 import XMonad.Layout.NoBorders
+
+-- functions for tagging windows and selecting them by tags
+import XMonad.Actions.TagWindows
 
 -- Better ways to spawn apps; safeSpawn and unsafeSpawn
 import XMonad.Util.Run
@@ -20,6 +22,7 @@ import XMonad.Layout.LayoutHints
 
 import XMonad.Prompt
 import XMonad.Prompt.Input
+import XMonad.Prompt.Shell
 
 -- Nice workspace bindings
 import XMonad.Actions.CycleWS
@@ -50,6 +53,7 @@ dzenCommand = (RawCommand "dzen2"
     ["-ta","l"
     ,"-fg","#eeeeee"
     ,"-bg","#303030"
+    ,"-e","button2=;"
     ])
 
 ------------------------------------------------------------------------
@@ -96,6 +100,8 @@ myDzenPP = defaultPP { ppCurrent  = dzenColor "#005f00" "#afd700" . pad . wrap "
                      , ppExtras   = [
                                       padL loadAvg
                                     , date "%r"
+                                    , padL battery
+                                    , logCmd "echo -n '@'`hostname`"
                                     ]
                      , ppHiddenNoWindows = const ""
                      , ppWsSep    = ""
@@ -110,7 +116,6 @@ myDzenPP = defaultPP { ppCurrent  = dzenColor "#005f00" "#afd700" . pad . wrap "
                      , ppTitle    = ("^bg(#303030) " ++) . dzenEscape
                      }
 
-
 ------------------------------------------------------------------------
 -- Key bindings. Add, modify or remove key bindings here.
 --
@@ -123,8 +128,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm,               xK_Return), windows W.swapMaster)
 
     -- Launch dmenu
-    , ((modm,               xK_p     ), spawn "~/scripts/dmenu/dmenu_run.sh")
-    , ((modm,               xK_o     ), spawn "~/scripts/dmenu/search.sh")
+    , ((modm,               xK_p     ), spawn "~/bin/dmenu/dmenu_run.sh")
 
     -- Close focused window
     , ((modm .|. shiftMask, xK_c     ), kill)
@@ -140,6 +144,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- Move focus to the next window
     , ((modm,               xK_Tab   ), windows W.focusDown)
+    
+    , ((modm,               xK_y   ), windows W.focusDown)
 
     -- Move focus to the next window
     , ((modm,               xK_j     ), windows W.focusDown)
@@ -194,6 +200,19 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- take a picture NOW
     , ((0, xK_Print), spawn "scrot")
+
+    -- previous workspace
+    , ((modm , xK_o ), toggleWS)
+    
+    -- shell
+    --, ((modm , xK_x ), prompt getBrowser promptConfig)
+    ]
+    ++
+
+    -- tagging
+    [
+      ((modm, xK_g), tagPrompt promptConfig (\s -> withFocused (addTag s)))
+    , ((modm .|. shiftMask, xK_g), tagDelPrompt promptConfig)
     ]
     ++
 
@@ -259,7 +278,7 @@ myLayout = avoidStruts $
             nmaster = 1
 
             -- Default proportion of screen occupied by master pane
-            ratio   = 1/2
+            ratio   = 3/5
 
             -- Percent of screen to increment by when resizing panes
             delta   = 3/100
@@ -323,6 +342,21 @@ myLogHook = return ()
 --
 myStartupHook = return ()
 
+promptConfig = defaultXPConfig {
+      font = "-*-terminus-medium-*-*-*-16-*-*-*-*-*-iso8859-*"
+    , promptBorderWidth = 0
+    , historySize = 1
+    , alwaysHighlight = True
+    , bgColor = "#1D1F21"
+    , fgColor = "#C5C8C6"
+    , fgHLight = "#DE935F"
+    , bgHLight = "#373B41"
+--  , defaultText = "λ "
+    , position = Top
+    , showCompletionOnTab = False
+    , height = 20
+}
+
 ------------------------------------------------------------------------
 -- Default config
 
@@ -338,8 +372,6 @@ defaults = defaultConfig {
         focusFollowsMouse  = myFocusFollowsMouse,
         borderWidth        = myBorderWidth,
         modMask            = myModMask,
-        -- numlockMask deprecated in 0.9.1
-        -- numlockMask        = myNumlockMask,
         workspaces         = myWorkspaces,
         normalBorderColor  = myNormalBorderColor,
         focusedBorderColor = myFocusedBorderColor,
