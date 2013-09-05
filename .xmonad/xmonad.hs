@@ -101,7 +101,7 @@ myDzenPP = defaultPP { ppCurrent  = dzenColor "#005f00" "#afd700" . pad . wrap "
                                       padL loadAvg
                                     , date "%r"
                                     , padL battery
-                                    , logCmd "echo -n '@'`hostname`"
+                                    , logCmd "echo -n '^fg(#81a2be)^i(.dzen/icons/arch_10x10.xbm)^fg() '`hostname`"
                                     ]
                      , ppHiddenNoWindows = const ""
                      , ppWsSep    = ""
