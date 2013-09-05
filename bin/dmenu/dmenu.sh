@@ -20,4 +20,4 @@ do
     dmenucmd="$dmenucmd $arg"
 done
 
-$($dmenucmd)
+`$dmenucmd`

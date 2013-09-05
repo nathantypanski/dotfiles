@@ -51,7 +51,7 @@ xset m 3/2 0 &
 setxkbmap -option compose:menu &
 
 # keychain
-eval `keychain --eval --agents ssh,gpg --timeout 5 ~/.ssh/id_rsa ~/.ssh/id_rsa_athen@ephesus`
+eval `keychain --eval --agents ssh,gpg ~/.ssh/id_rsa ~/.ssh/id_rsa_athen@ephesus`
 
 # compositing
 compton &
