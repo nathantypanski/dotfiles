@@ -90,3 +90,10 @@ alias eclim='/usr/share/eclipse/eclimd -Dnailgun.server.port=9091'
 # file extension handling
 alias -s tex=vim
 alias -s conf=vim
+
+# systemd users
+alias userctl="systemctl --user"
+
+# tmux
+alias tmls="tmux list-sessions"
+alias tmlist="tmux list-sessions"
