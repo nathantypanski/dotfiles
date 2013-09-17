@@ -131,7 +131,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. shiftMask, xK_space ), setLayout $ XMonad.layoutHook conf)
     , ((modm,               xK_n     ), refresh)
     , ((modm,               xK_Tab   ), windows W.focusDown)
-    , ((modm,               xK_y     ), windows W.focusDown)
     , ((modm,               xK_j     ), windows W.focusDown)
     , ((modm,               xK_k     ), windows W.focusUp)
     , ((modm,               xK_m     ), windows W.focusMaster)
