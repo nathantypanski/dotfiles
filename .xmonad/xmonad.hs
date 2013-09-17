@@ -108,28 +108,29 @@ main = do
 --
 
 myDzenPP :: PP
-myDzenPP = defaultPP { ppCurrent  = dzenColor "#005f00" "#afd700" . pad . wrap "" ""
+myDzenPP = defaultPP { ppCurrent  = dzenColor "#005f00" "#afd700" . pad
                      , ppVisible  = dzenColor "#002b36" "#839496" . pad
                      , ppHidden   = dzenColor "#eeeeee" "#808080" . pad
                      , ppUrgent   = dzenColor "#eeeeee" "#d70000" . pad
                      , ppExtras   = [
-                                      padL loadAvg
+                                      logCmd "echo -n '^fg(#c5c8c6)'"
+                                    , loadAvg
                                     , date "%r"
-                                    , padL battery
+                                    , battery
                                     , logCmd "echo -n '^fg(#81a2be)^i(.dzen/icons/arch_10x10.xbm)^fg() '"
                                     ]
                      , ppHiddenNoWindows = const ""
-                     , ppWsSep    = ""
-                     , ppSep      = ""
+                     , ppWsSep    = " "
+                     , ppSep      = " "
                      , ppLayout   = dzenColor "#1c1c1c" "#d0d0d0" .
-                                    (\ x -> pad $ case x of
+                                    pad . (\ x -> case x of
                                               "Tall"        -> "||"
                                               "Mirror Tall" -> "="
                                               "Hinted Full" -> "[H]"
                                               "Hinted Tall" -> "|H|"
                                               _             -> x
                                     )
-                     , ppTitle    = wrap "^ca(2,xdotool key super+shift+c)" "^ca()" . dzenColor "#005f00" "#afd700" . shorten 40 . pad
+                     , ppTitle    = wrap "^ca(2,xdotool key super+shift+c)" "^ca()" . dzenColor "#c5c8c6" "#282a2e" . shorten 40
                      }
 
 ------------------------------------------------------------------------
