@@ -10,6 +10,20 @@ import System.IO
 import Data.Monoid
 import System.Exit
 import XMonad.Layout.NoBorders
+import XMonad.Actions.Navigation2D (
+                                     Navigation2D
+                                   , lineNavigation
+                                   , centerNavigation
+                                   , fullScreenRect
+                                   , singleWindowRect
+                                   , switchLayer
+                                   , windowGo
+                                   , windowSwap
+                                   , windowToScreen
+                                   , screenGo
+                                   , screenSwap
+                                   , Direction2D
+                                   )
 
 -- functions for tagging windows and selecting them by tags
 import XMonad.Actions.TagWindows
@@ -119,36 +133,39 @@ myDzenPP = defaultPP { ppCurrent  = dzenColor "#005f00" "#afd700" . pad . wrap "
                      }
 
 ------------------------------------------------------------------------
--- Key bindings. Add, modify or remove key bindings here.
+-- Key bindings.
 --
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
-    [ ((modm .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
-    , ((modm,               xK_Return), windows W.swapMaster)
-    , ((modm,               xK_p     ), spawn "~/bin/dmenu/dmenu_run.sh")
-    , ((modm .|. shiftMask, xK_c     ), kill)
-    , ((modm,               xK_space ), sendMessage NextLayout)
-    , ((modm .|. shiftMask, xK_space ), setLayout $ XMonad.layoutHook conf)
-    , ((modm,               xK_n     ), refresh)
-    , ((modm,               xK_Tab   ), windows W.focusDown)
-    , ((modm,               xK_j     ), windows W.focusDown)
-    , ((modm,               xK_k     ), windows W.focusUp)
-    , ((modm,               xK_m     ), windows W.focusMaster)
-    , ((modm,               xK_Return), windows W.swapMaster)
-    , ((modm .|. shiftMask, xK_j     ), windows W.swapDown)
-    , ((modm .|. shiftMask, xK_k     ), windows W.swapUp)
-    , ((modm,               xK_h     ), sendMessage Shrink)
-    , ((modm,               xK_l     ), sendMessage Expand)
-    , ((modm,               xK_t     ), withFocused $ windows . W.sink)
-    , ((modm,               xK_comma ), sendMessage (IncMasterN 1))
-    , ((modm,               xK_period), sendMessage (IncMasterN (-1)))
-    , ((modm,               xK_b     ), sendMessage ToggleStruts)
-    , ((modm .|. shiftMask, xK_q     ), io (exitWith ExitSuccess))
-    , ((modm,               xK_q     ), spawn "xmonad --recompile; xmonad --restart")
-    , ((modm .|. shiftMask, xK_z     ), spawn "i3lock")
-    , ((controlMask,        xK_Print), spawn "sleep 0.2; scrot -s")
-    , ((0,                  xK_Print), spawn "scrot")
-    , ((modm,               xK_o ), toggleWS)
+    [ ((modm .|. shiftMask,   xK_Return), spawn $ XMonad.terminal conf)
+    , ((modm,                 xK_Return), windows W.swapMaster)
+    , ((modm,                 xK_p     ), spawn "~/bin/dmenu/dmenu_run.sh")
+    , ((modm .|. shiftMask,   xK_c     ), kill)
+    , ((modm,                 xK_space ), sendMessage NextLayout)
+    , ((modm .|. shiftMask,   xK_space ), setLayout $ XMonad.layoutHook conf)
+    , ((modm,                 xK_n     ), refresh)
+    , ((modm,                 xK_Tab   ), windows W.focusDown)
+    , ((modm,                 xK_h     ), windowGo   L False)
+    , ((modm,                 xK_l     ), windowGo   R False)
+    , ((modm,                 xK_k     ), windowGo   U False)
+    , ((modm,                 xK_j     ), windowGo   D False)
+    , ((modm .|. shiftMask,   xK_h     ), windowSwap L False)
+    , ((modm .|. shiftMask,   xK_l     ), windowSwap R False)
+    , ((modm .|. shiftMask,   xK_k     ), windowSwap U False)
+    , ((modm .|. shiftMask,   xK_j     ), windowSwap D False)
+    , ((modm,                 xK_m     ), windows W.focusMaster)
+    , ((modm .|. controlMask, xK_h     ), sendMessage Shrink)
+    , ((modm .|. controlMask, xK_l     ), sendMessage Expand)
+    , ((modm,                 xK_t     ), withFocused $ windows . W.sink)
+    , ((modm,                 xK_comma ), sendMessage (IncMasterN 1))
+    , ((modm,                 xK_period), sendMessage (IncMasterN (-1)))
+    , ((modm,                 xK_b     ), sendMessage ToggleStruts)
+    , ((modm .|. shiftMask,   xK_q     ), io (exitWith ExitSuccess))
+    , ((modm,                 xK_q     ), spawn "xmonad --recompile; xmonad --restart")
+    , ((modm .|. shiftMask,   xK_z     ), spawn "i3lock")
+    , ((controlMask,          xK_Print ), spawn "sleep 0.2; scrot -s")
+    , ((0,                    xK_Print ), spawn "scrot")
+    , ((modm,                 xK_o     ), toggleWS)
     ]
     ++
 
