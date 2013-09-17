@@ -251,6 +251,29 @@ let g:pandoc_no_spans = 1
 let g:pandoc_use_hard_wraps = 1
 let g:Latexmk_async = 1
 
-map <leader>s :w<CR>
-map <leader>S :w 
-map <leader>q :q<CR>
+" save
+map <leader>s ;w<CR>
+" save as ...
+map <leader>S ;w 
+" quit
+map <leader>q ;q<CR>
+
+" mini buf explorer
+"map <Leader>e :MBEOpen<cr>
+"map <Leader>c :MBEClose<cr>
+function MBEBrowse()
+    :MBEToggle
+    :MBEFocus
+endfunction
+map <Leader>b :exec MBEBrowse()<CR>
+" 20col
+let g:miniBufExplVSplit = 20
+" close once I pick something
+let g:miniBufExplCloseOnSelect = 1
+
+" semicolon is evil
+" nnoremap ; :
+" nnoremap : ;
+" vnoremap ; :
+" vnoremap : ;
+" noremap ;; ;

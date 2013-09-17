@@ -10,10 +10,10 @@ PROMPT='$'
 CASE_INSENSITIVE=true
 # LINES=49
 
-dmenucmd="dmenu -fn Terminus-12\
+dmenucmd="dmenu -fn -*-TERMINUS-MEDIUM-*-*-*-16-*-*-*-*-*-ISO8859-*\
     -nb $NORMAL_BACKGROUND -sb $SELECTED_BACKGROUND \
     -nf $NORMAL_FOREGROUND -sf $SELECTED_FOREGROUND \
-    -p $PROMPT -dim 0.5" #-l $LINES
+    -p $PROMPT" #-l $LINES
 
 for arg in "$*"
 do
