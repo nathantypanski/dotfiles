@@ -96,4 +96,4 @@ alias userctl="systemctl --user"
 
 # tmux
 alias tmls="tmux list-sessions"
-alias tmlist="tmux list-sessions"
+alias tmat="tmux attach -t"
