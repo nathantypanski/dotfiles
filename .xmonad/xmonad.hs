@@ -102,19 +102,20 @@ myDzenPP = defaultPP { ppCurrent  = dzenColor "#005f00" "#afd700" . pad . wrap "
                                       padL loadAvg
                                     , date "%r"
                                     , padL battery
-                                    , logCmd "echo -n '^fg(#81a2be)^i(.dzen/icons/arch_10x10.xbm)^fg() '`hostname`"
+                                    , logCmd "echo -n '^fg(#81a2be)^i(.dzen/icons/arch_10x10.xbm)^fg() '"
                                     ]
                      , ppHiddenNoWindows = const ""
                      , ppWsSep    = ""
                      , ppSep      = ""
                      , ppLayout   = dzenColor "#1c1c1c" "#d0d0d0" .
                                     (\ x -> pad $ case x of
-                                              "Tall" -> "||"
-                                              "Mirror Tall"   -> "="
-                                              "Hinted Full"          -> "[ ]"
-                                              _                      -> x
+                                              "Tall"        -> "||"
+                                              "Mirror Tall" -> "="
+                                              "Hinted Full" -> "[H]"
+                                              "Hinted Tall" -> "|H|"
+                                              _             -> x
                                     )
-                     , ppTitle    = ("^bg(#303030) " ++) . dzenEscape
+                     , ppTitle    = wrap "^ca(2,xdotool key super+shift+c)" "^ca()" . dzenColor "#005f00" "#afd700" . shorten 40 . pad
                      }
 
 ------------------------------------------------------------------------
