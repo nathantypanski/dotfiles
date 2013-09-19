@@ -97,3 +97,6 @@ alias userctl="systemctl --user"
 # tmux
 alias tmls="tmux list-sessions"
 alias tmat="tmux attach -t"
+
+# calibre
+alias calibre="export PYTHONPATH=/usr/lib/python2.7/site-packages && calibre"

@@ -163,6 +163,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm,                 xK_b     ), sendMessage ToggleStruts)
     , ((modm .|. shiftMask,   xK_q     ), io (exitWith ExitSuccess))
     , ((modm,                 xK_q     ), spawn "xmonad --recompile; xmonad --restart")
+    , ((modm,                 xK_f     ), spawn "termite -e ranger")
     , ((modm .|. shiftMask,   xK_z     ), spawn "i3lock")
     , ((controlMask,          xK_Print ), spawn "sleep 0.2; scrot -s")
     , ((0,                    xK_Print ), spawn "scrot")
