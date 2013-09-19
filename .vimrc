@@ -137,21 +137,7 @@ map <C-l> <C-w>l
 " Use this:
 nmap <silent> ,/ :nohlsearch<CR>
 
-" autocmd VimEnter * wincmd p
-" function RunJTest()
-"     let cla = matchstr(expand("%:p"), '^.*[/\\]src[/\\]\(test\|java\)[/\\]\zs.*')
-"     let class = "java -cp \"/usr/share/java/junit.jar;./\" org.junit.runner.JUnitCore fullpackagename.MyClassTest"
-"     if match(class, "Test") == -1
-"         let class = class . "Test"
-"     endif
-" endfunction
-" map <F6> <Esc>:echo RunJTest()<CR>
-
 let windowid=v:windowid
-
-" " 80 columns
-" highlight OverLength ctermbg=red ctermfg=white guibg=#592929
-" match OverLength /\%81v.\+/
 
 " Current line highlighting
 augroup CursorLine
@@ -208,11 +194,6 @@ set noshowmode
 
 " Disable automatic commenting
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-
-" 80 column highlight
-" highlight OverLength cterm=bold
-execute "set colorcolumn=" . join(range(81,335), ',')
-" match OverLength /\%81v.\+/
 
 " Automatically run NERDTree
 "autocmd VimEnter * NERDTree
@@ -271,9 +252,4 @@ let g:miniBufExplVSplit = 20
 " close once I pick something
 let g:miniBufExplCloseOnSelect = 1
 
-" semicolon is evil
-" nnoremap ; :
-" nnoremap : ;
-" vnoremap ; :
-" vnoremap : ;
-" noremap ;; ;
+set colorcolumn=80
