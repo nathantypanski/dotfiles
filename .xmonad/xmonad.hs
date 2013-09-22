@@ -58,7 +58,28 @@ myTerminal      = "termite"
 myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = False
 myBorderWidth   = 2
-myWorkspaces    = ["1","2","3","4","5","6","7","8","9"]
+myWorkspaces    = ["1"
+                  ,"2"
+                  ,"3"
+                  ,"4"
+                  ,"5"
+                  ,"6"
+                  ,"7"
+                  ,"8"
+                  ,"9"
+                  ,"10"
+                  ,"11"
+                  ,"12"
+                  ,"13"
+                  ,"14"
+                  ,"15"
+                  ,"16"
+                  ,"17"
+                  ,"18"
+                  ,"19"
+                  ,"20"
+                  ,"21"
+                  ,"22"]
 myModMask       = mod4Mask
 myNormalBorderColor  = "#282a2e"
 myFocusedBorderColor = "#a54242"
@@ -66,7 +87,7 @@ myFocusedBorderColor = "#a54242"
 dzenCommand = (RawCommand "dzen2"
     ["-ta","l"
     ,"-fg","#eeeeee"
-    ,"-bg","#303030"
+    ,"-bg","#1D1F21"
     ,"-w", "1600"
     ,"-e","button2=;"
     ])
@@ -120,7 +141,7 @@ myDzenPP = defaultPP { ppCurrent  = dzenColor "#005f00" "#afd700" . pad
                                     , logCmd "echo -n '^fg(#81a2be)^i(.dzen/icons/arch_10x10.xbm)^fg() '"
                                     ]
                      , ppHiddenNoWindows = const ""
-                     , ppWsSep    = " "
+                     , ppWsSep    = ""
                      , ppSep      = " "
                      , ppLayout   = dzenColor "#1c1c1c" "#d0d0d0" .
                                     pad . (\ x -> case x of
@@ -185,7 +206,12 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- mod-shift-[1..9], Move client to workspace N
     --
     [((m .|. modm, k), windows $ f i)
-        | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
+        | (i, k) <- zip (XMonad.workspaces conf) workspaceKeys
+        , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
+    ++
+
+    [((m .|. modm, k), windows $ f i)
+        | (i, k) <- zip (XMonad.workspaces conf) workspaceKeys
         , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
     ++
 
@@ -196,6 +222,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
         | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
         , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+
+    where workspaceKeys = [xK_1 .. xK_9] ++ [xK_0] ++ [xK_F1 .. xK_F12]
 
 
 ------------------------------------------------------------------------
@@ -269,7 +297,8 @@ myManageHook = manageDocks
         , resource  =? "desktop_window" --> doIgnore
         , resource  =? "kdesktop"       --> doIgnore
         -- Send things to appropriate workspaces
-        , className =? "Firefox"        --> doShift "3:web"
+        , className =? "Firefox"        --> doShift "3"
+        , className =? "Conky"        --> doShift "22"
         ]
 
 ------------------------------------------------------------------------
