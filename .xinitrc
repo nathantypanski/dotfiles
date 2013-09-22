@@ -8,8 +8,14 @@ if [ -d /etc/X11/xinit/xinitrc.d ]; then
     unset f
 fi
 
-# I like to start X from bad directories when I'm working, so this fixes my mistakes!
 cd ~/
+
+# load x resources db
+xrdb -merge ~/.Xresources &
+
+# terminus-font is installed here, but it's not in the font path by default.
+xset +fp /usr/share/fonts/local &
+xset fp rehash &
 
 # background
 # feh --bg-scale pics/Wallpapers/nin_plug.jpg
@@ -17,17 +23,17 @@ cd ~/
 # US keyboard layout and thinkpad
 setxkbmap -layout us -geometry thinkpad &
 
+# compose
+setxkbmap -option compose:menu &
+
 # load my custom keybindings
-xbindkeys &
+# xbindkeys &
 
 ## solid background color
-# exec --no-startup-id hsetroot -solid '#002b36'
+hsetroot -solid '#1d1f21'
 
 # set a mouse pointer
 xsetroot -cursor_name left_ptr &
-
-# load x resources db
-xrdb -merge ~/.Xresources &
 
 # automounting
 udiskie &
@@ -38,23 +44,19 @@ unclutter &
 ### Now I'm on optimus! Who cares about nvidia settings?
 # nvidia-settings -l
 
+# disable my touchpad
 synclient TouchpadOff=1 &
-
-# terminus-font is installed here, but it's not in the font path by default.
-xset +fp /usr/share/fonts/local &
-xset fp rehash &
 
 # mouse acceleration as "the exponent of a more natural and continuous formula"
 xset m 3/2 0 &
 
-# compose
-setxkbmap -option compose:menu &
-
 # keychain
-# eval `keychain --eval --agents ssh,gpg ~/.ssh/id_rsa ~/.ssh/id_rsa_athen@ephesus`
+# eval `keychain --eval --agents ssh,gpg ~/.ssh/id_rsa ~/.ssh/id_rsa_athen@ephesus` &
 
 # compositing
 compton &
+
+conky &
 
 #/usr/lib/systemd --user
 

@@ -1,6 +1,6 @@
 background no
 use_xft yes
-xftfont 131:size=7
+#xftfont 131:size=7
 xftalpha 0.1
 update_interval 1
 total_run_times 0
@@ -30,29 +30,29 @@ use_spacer none
 
 
 TEXT
-# ${alignc}${font Droid Sans:size=8}${color white}${execi 31 users | cut -c1-5}@$nodename
-${image /usr/share/icons/HighContrast/16x16/emotes/face-devilish.png -p 200}${alignc}${font Droid Sans:size=8}${color white}${execi 30 users}@$nodename
-$color${font}${font Droid Sans:size=7}$alignr${time %H:%M}$font
-${color dodgerblue3}${font Droid Sans:Bold:size=7}Date${hr 1}$color$font
-$color${font Droid Sans:size=7}$alignr${time %a}, ${time %d %b %Y}$font$color
+${font Terminus:size=12}${alignc}${color white}${execi 31 users | cut -d ' ' -f 1}@$nodename
+${color}$alignr${time %H:%M}
+${color dodgerblue3}${offset 4}Date${hr 1}$color
+${color}$alignr${time %a}, ${time %d %b %Y}$color
 
 # SYS
-${image /usr/share/icons/HighContrast/16x16/emblems/emblem-system.png -p 0,80}${font Droid Sans:Bold:size=8}${color dodgerblue3}${offset 18}SYSTEM${hr 1}$color${font}
+${color dodgerblue3}${offset 4}SYSTEM${hr 1}$color
 $sysname $kernel $alignr $machine
 Uptime $alignr $uptime
 GPU Temperature $alignr ${execi 30 sensors | grep 'temp1:' | cut -c16-17}°C
 
 # CPU
-${image /usr/share/icons/HighContrast/16x16/mimetypes/application-x-appliance.png -p 0,155}${offset 18}${font Droid Sans:Bold:size=8}${color dodgerblue3}CPU${hr 1}
-$color${font}Intel i7 $alignr ${freq_g cpu0}GHz
-${font}Core 0 ${color dodgerblue3}${execi 30 sensors | grep 'Core 0:' | cut -c18-19}°C${color} @ ${cpu cpu1} % $alignc ${color dodgerblue3}${cpubar cpu1}${color}
-${font}Core 1 ${color dodgerblue3}${execi 30 sensors | grep 'Core 1:' | cut -c18-19}°C${color} @ ${cpu cpu2} % $alignc ${color dodgerblue3}${cpubar cpu2}${color}
-#${font}Core 2 ${color dodgerblue3}${execi 30 sensors | grep 'Core 2:' | cut -c18-19}°C${color} @ ${cpu cpu3} % $alignc ${color dodgerblue3}${cpubar cpu3}${color}
-#${font}Core 3 ${color dodgerblue3}${execi 30 sensors | grep 'Core 3:' | cut -c18-19}°C${color} @ ${cpu cpu4} % $alignc ${color dodgerblue3}${cpubar cpu4}${color}
+${offset 4}${color dodgerblue3}CPU${hr 1}
+${color}Intel i7 $alignr ${freq_g cpu0}GHz
+${alignc}${color dodgerblue3}${execi 30 sensors | grep 'Core 0:' | cut -c18-19}°C${color} / ${color dodgerblue3}${execi 30 sensors | grep 'Core 1:' | cut -c18-19}°C${color}
+Core 0 @ ${cpu cpu1} % $alignc ${color dodgerblue3}${cpubar cpu1}${color}
+Core 1 @ ${cpu cpu2} % $alignc ${color dodgerblue3}${cpubar cpu2}${color}
+Core 2 @ ${cpu cpu3} % $alignc ${color dodgerblue3}${cpubar cpu3}${color}
+Core 3 @ ${cpu cpu4} % $alignc ${color dodgerblue3}${cpubar cpu4}${color}
 
 # # TOP
-# ${font Droid Sans:Bold:size=7}${color dodgerblue3}TOP${hr 1}
-# $color${font}${font Droid Sans:bold:size=7}PROCESS $alignr CPU USAGE$font
+# ${color dodgerblue3}TOP${hr 1}
+# ${color}PROCESS $alignr CPU USAGE
 # ${top name 1}${alignr}${top cpu 1} %
 # $ {top name 2}${alignr}${top cpu 2} %
 # ${top name 3}${alignr}${top cpu 3} %
@@ -60,32 +60,32 @@ ${font}Core 1 ${color dodgerblue3}${execi 30 sensors | grep 'Core 1:' | cut -c18
 # ${top name 5}${alignr}${top cpu 5} %
 
 # MEMORY
-${image /usr/share/icons/HighContrast/16x16/devices/drive-multidisk.png -p 0,250}${offset 18}${font Droid Sans:Bold:size=8}${color dodgerblue3}MEMORY${hr 1}
-$color${font}${font Droid Sans:bold:size=7}RAM$font
+${offset 4}${color dodgerblue3}MEMORY${hr 1}
+${color}RAM
 $mem / $memmax $alignr $memperc %
 $membar
 
-${font Droid Sans:bold:size=7}SWAP$font
+SWAP
 $swap / $swapmax $alignr $swapperc
 ${swapbar};
 
 # NETWORK
-${image /usr/share/icons/HighContrast/16x16/places/folder-publicshare.png -p 0,390}${offset 18}${font Droid Sans:Bold:size=8}${color dodgerblue3}Network${hr 1}
-$color${font Droid Sans:bold:size=7}External IP ${font}${alignr}${execi 3600 wget -O - http://ip.tupeux.com | tail}$font
+${offset 4}${color dodgerblue3}Network${hr 1}
+${color}External IP ${alignr}${execi 3600 wget -O - http://ip.tupeux.com | tail}
 
-${font Droid Sans:bold:size=7}wlan0 $font$alignr ${addr wlan0}
-down $alignr ${downspeedf wlan0} kb/s
-up $alignr ${upspeedf wlan0} kb/s
-down total ${totaldown wlan0} $alignr up total ${totalup wlan0}
+lan0 $alignr ${addr lan0}
+down $alignr ${downspeedf lan0} kb/s
+up $alignr ${upspeedf lan0} kb/s
+down total ${totaldown lan0} $alignr up total ${totalup lan0}
 
 # HDD
-${image /usr/share/icons/HighContrast/16x16/devices/drive-harddisk.png -p 0,515}${offset 18}${font Droid Sans:Bold:size=8}${color dodgerblue3}Disks${hr 1}
-$color${font Droid Sans:bold:size=7}/dev/sda $font$alignr ${execi 30 sudo hddtemp /dev/sda | grep '/dev/sda:' | cut -c28-29}°C
+${offset 4}${color dodgerblue3}Disks${hr 1}
+${color}/dev/sda $alignr ${execi 30 sudo hddtemp /dev/sda | grep '/dev/sda:' | cut -c28-29}°C
 
-${font Droid Sans:bold:size=7}ROOT $font$font$alignr ${fs_type /}
+ROOT $alignr ${fs_type /}
 ${fs_used /} / ${fs_size /} $alignr ${fs_used_perc /} %
 ${fs_bar /}
 
-${font Droid Sans:bold:size=7}HOME $font$alignr ${fs_type /home}
+HOME $alignr ${fs_type /home}
 ${fs_used /home} / ${fs_size /home} $alignr ${fs_used_perc /home} %
 ${fs_bar /home}
