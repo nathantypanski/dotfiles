@@ -1,7 +1,6 @@
 import XMonad
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
--- import XMonad.Util.Dzen
 import XMonad.Util.Loggers
 import System.Process
 import Data.Time
@@ -10,8 +9,7 @@ import System.IO
 import Data.Monoid
 import System.Exit
 import XMonad.Layout.NoBorders
-import XMonad.Actions.Navigation2D (
-                                     Navigation2D
+import XMonad.Actions.Navigation2D ( Navigation2D
                                    , lineNavigation
                                    , centerNavigation
                                    , fullScreenRect
@@ -26,7 +24,7 @@ import XMonad.Actions.Navigation2D (
                                    )
 
 -- functions for tagging windows and selecting them by tags
-import XMonad.Actions.TagWindows
+-- import XMonad.Actions.TagWindows
 
 -- Better ways to spawn apps; safeSpawn and unsafeSpawn
 import XMonad.Util.Run
@@ -98,6 +96,7 @@ dzenCommand = (RawCommand "dzen2"
 
 main = do
     dzw <- D.createDzen dzenCommand
+    spawn "sh ~/.xmonad/autostart.sh"
     xmonad $ defaults
         {
         terminal           = myTerminal,
@@ -134,11 +133,13 @@ myDzenPP = defaultPP { ppCurrent  = dzenColor "#005f00" "#afd700" . pad
                      , ppHidden   = dzenColor "#eeeeee" "#808080" . pad
                      , ppUrgent   = dzenColor "#eeeeee" "#d70000" . pad
                      , ppExtras   = [
-                                      logCmd "echo -n '^fg(#c5c8c6)'"
+                                      logCmd "echo -n '^fg(#81a2be)^i(.dzen/icons/arch_10x10.xbm)^fg()'"
                                     , loadAvg
+                                    , logCmd "echo -n '^fg(#81a2be)^i(.dzen/icons/clock.xbm)^fg()'"
                                     , date "%r"
-                                    , battery
-                                    , logCmd "echo -n '^fg(#81a2be)^i(.dzen/icons/arch_10x10.xbm)^fg() '"
+                                    , logCmd "echo -n '^fg(#81a2be)^i(.dzen/icons/bat_full_01.xbm)^fg()'"
+                                    , battery 
+                       --             , logCmd "echo -n '^fg(#81a2be)^i(.dzen/icons/mail.xbm)^fg()' $(~/bin/gmail.py)"
                                     ]
                      , ppHiddenNoWindows = const ""
                      , ppWsSep    = ""
@@ -192,12 +193,12 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     ]
     ++
 
-    -- tagging
-    [
-      ((modm, xK_g), tagPrompt promptConfig (\s -> withFocused (addTag s)))
-    , ((modm .|. shiftMask, xK_g), tagDelPrompt promptConfig)
-    ]
-    ++
+--    -- tagging
+--    [
+--      ((modm, xK_g), tagPrompt promptConfig (\s -> withFocused (addTag s)))
+--    , ((modm .|. shiftMask, xK_g), tagDelPrompt promptConfig)
+--    ]
+--    ++
 
     --
     -- mod-[1..9], Switch to workspace N
