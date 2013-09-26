@@ -1,8 +1,8 @@
 background no
-use_xft yes
+use_xft no
 #xftfont 131:size=7
 xftalpha 0.1
-update_interval 1
+update_interval 60
 total_run_times 0
 own_window yes
 own_window_type normal
@@ -10,7 +10,6 @@ own_window_transparent yes
 own_window_hints undecorated,below,sticky,skip_taskbar,skip_pager
 double_buffer yes
 
-maximum_width 400
 draw_shades no
 draw_outline no
 draw_borders no
@@ -23,69 +22,11 @@ gap_x 24
 
 no_buffers yes
 uppercase no
-cpu_avg_samples 2
-net_avg_samples 2
 override_utf8_locale yes
 use_spacer none
 
 
 TEXT
-${font Terminus:size=12}${alignc}${color white}${execi 31 users | cut -d ' ' -f 1}@$nodename
-${color}$alignr${time %H:%M}
-${color dodgerblue3}${offset 4}Date${hr 1}$color
-${color}$alignr${time %a}, ${time %d %b %Y}$color
-
-# SYS
-${color dodgerblue3}${offset 4}SYSTEM${hr 1}$color
-$sysname $kernel $alignr $machine
-Uptime $alignr $uptime
-GPU Temperature $alignr ${execi 30 sensors | grep 'temp1:' | cut -c16-17}°C
-
-# CPU
-${offset 4}${color dodgerblue3}CPU${hr 1}
-${color}Intel i7 $alignr ${freq_g cpu0}GHz
-${alignc}${color dodgerblue3}${execi 30 sensors | grep 'Core 0:' | cut -c18-19}°C${color} / ${color dodgerblue3}${execi 30 sensors | grep 'Core 1:' | cut -c18-19}°C${color}
-Core 0 @ ${cpu cpu1} % $alignc ${color dodgerblue3}${cpubar cpu1}${color}
-Core 1 @ ${cpu cpu2} % $alignc ${color dodgerblue3}${cpubar cpu2}${color}
-Core 2 @ ${cpu cpu3} % $alignc ${color dodgerblue3}${cpubar cpu3}${color}
-Core 3 @ ${cpu cpu4} % $alignc ${color dodgerblue3}${cpubar cpu4}${color}
-
-# # TOP
-# ${color dodgerblue3}TOP${hr 1}
-# ${color}PROCESS $alignr CPU USAGE
-# ${top name 1}${alignr}${top cpu 1} %
-# $ {top name 2}${alignr}${top cpu 2} %
-# ${top name 3}${alignr}${top cpu 3} %
-# ${top name 4}${alignr}${top cpu 4} %
-# ${top name 5}${alignr}${top cpu 5} %
-
-# MEMORY
-${offset 4}${color dodgerblue3}MEMORY${hr 1}
-${color}RAM
-$mem / $memmax $alignr $memperc %
-$membar
-
-SWAP
-$swap / $swapmax $alignr $swapperc
-${swapbar};
-
-# NETWORK
-${offset 4}${color dodgerblue3}Network${hr 1}
-${color}External IP ${alignr}${execi 3600 wget -O - http://ip.tupeux.com | tail}
-
-lan0 $alignr ${addr lan0}
-down $alignr ${downspeedf lan0} kb/s
-up $alignr ${upspeedf lan0} kb/s
-down total ${totaldown lan0} $alignr up total ${totalup lan0}
-
-# HDD
-${offset 4}${color dodgerblue3}Disks${hr 1}
-${color}/dev/sda $alignr ${execi 30 sudo hddtemp /dev/sda | grep '/dev/sda:' | cut -c28-29}°C
-
-ROOT $alignr ${fs_type /}
-${fs_used /} / ${fs_size /} $alignr ${fs_used_perc /} %
-${fs_bar /}
-
-HOME $alignr ${fs_type /home}
-${fs_used /home} / ${fs_size /home} $alignr ${fs_used_perc /home} %
-${fs_bar /home}
+${font -*-terminus-medium-*-*-*-16-*-*-*-*-*-iso8859-*}
+${exec task next > /tmp/tasklist}
+${head /tmp/tasklist 30 60}

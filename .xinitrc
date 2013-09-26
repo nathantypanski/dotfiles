@@ -29,9 +29,6 @@ setxkbmap -option compose:menu &
 # load my custom keybindings
 # xbindkeys &
 
-## solid background color
-hsetroot -solid '#1d1f21'
-
 # set a mouse pointer
 xsetroot -cursor_name left_ptr &
 
@@ -50,13 +47,8 @@ synclient TouchpadOff=1 &
 # mouse acceleration as "the exponent of a more natural and continuous formula"
 xset m 3/2 0 &
 
-# keychain
-# eval `keychain --eval --agents ssh,gpg ~/.ssh/id_rsa ~/.ssh/id_rsa_athen@ephesus` &
-
 # compositing
 compton &
-
-conky &
 
 #/usr/lib/systemd --user
 
