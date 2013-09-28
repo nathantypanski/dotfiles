@@ -252,4 +252,9 @@ let g:miniBufExplVSplit = 20
 " close once I pick something
 let g:miniBufExplCloseOnSelect = 1
 
+" indents
+augroup indent_settings
+    au!
+    au BufEnter *.c setl autoindent smartindent tabstop=8 expandtab shiftwidth=8
+
 set colorcolumn=80
