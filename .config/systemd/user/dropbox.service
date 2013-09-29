@@ -1,0 +1,10 @@
+[Unit]
+Description=Dropbox file sync
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/dropbox start
+ExecStop=/usr/bin/dropbox stop
+
+[Install]
+WantedBy=mystuff.target

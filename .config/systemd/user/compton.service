@@ -1,0 +1,12 @@
+[Unit]
+Description=a simple window compositor
+After=wm.target
+Requires=wm.target
+
+[Service]
+Type=simple
+Environment=DISPLAY=:0
+ExecStart=/usr/sbin/compton
+
+[Install]
+WantedBy=wm.target

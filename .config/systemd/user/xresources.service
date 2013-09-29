@@ -1,0 +1,12 @@
+[Unit]
+Description=Merges in X resources
+After=xorg.target
+Before=wm.target
+
+[Service]
+Type=oneshot
+Environment=DISPLAY=:0
+ExecStart=/usr/bin/xrdb -merge /home/nathan/.Xresources
+
+[Install]
+WantedBy=wm.target

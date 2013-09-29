@@ -1,0 +1,11 @@
+[Unit]
+Description=hide the mouse when not moving
+After=wm.target
+
+[Service]
+Type=simple
+Environment=DISPLAY=:0
+ExecStart=/usr/bin/unclutter
+
+[Install]
+WantedBy=wm.target

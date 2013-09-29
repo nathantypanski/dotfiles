@@ -1,0 +1,11 @@
+[Unit]
+Description=United States Thinkpad keyboard map
+After=wm.target
+
+[Service]
+Type=oneshot
+Environment=DISPLAY=:0
+ExecStart=/usr/bin/setxkbmap -layout us -geometry thinkpad
+
+[Install]
+WantedBy=wm.target
