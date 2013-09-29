@@ -1,0 +1,12 @@
+[Unit]
+Description=Sets the background color
+After=xorg.target
+Before=wm.target
+
+[Service]
+Type=oneshot
+Environment=DISPLAY=:0
+ExecStart=/usr/bin/hsetroot -solid '#1d1f21'
+
+[Install]
+WantedBy=wm.target

@@ -1,0 +1,13 @@
+[Unit]
+Description=set the font directory
+After=wm.target
+Before=fonthash.service
+Wants=fonthash.service
+
+[Service]
+Type=oneshot
+Environment=DISPLAY=:0
+ExecStart=/usr/bin/xset +fp /usr/share/fonts/local
+
+[Install]
+WantedBy=wm.target
