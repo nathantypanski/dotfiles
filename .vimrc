@@ -258,3 +258,7 @@ augroup indent_settings
     au BufEnter *.c setl autoindent smartindent tabstop=8 expandtab shiftwidth=8
 
 set colorcolumn=80
+
+"filename copying
+  nmap ,cs :let @*=expand("%")<CR>
+  nmap ,cl :let @*=expand("%:p")<CR>
