@@ -1,1 +1,33 @@
 set adjust_open 23
+
+include zathura_colors
+
+map q quit
+map Q quit
+map <S-Space> scroll full-up
+map <A-1> set "pages-per-row 1"
+map <A-2> set "pages-per-row 2"
+map <A-b> set "page-padding 3"
+map <A-B> set "page-padding 0"
+map e rotate rotate-ccw
+map [normal] f toggle_fullscreen
+map [fullscreen] f toggle_fullscreen
+map F follow
+unmap j
+unmap k
+unmap <C-j>
+unmap <C-k>
+map <C-j> scroll up
+map <C-k> scroll down
+map j scroll half-down
+map k scroll half-up
+
+set page-padding 0
+#set first-page-column 2
+#set font sans-serif
+#set render-loading falseth
+set window-title-basename true
+set adjust-open "best-fit"
+
+set zoom-min 1
+set zoom-max 5000
