@@ -117,10 +117,10 @@ bindsym $mod+Shift+0 move container to workspace 10
 bindsym $mod+Shift+r restart
 
 # dzen customization keybindings
-bindcode 133 exec --no-startup-id "bin/dzen/dz.sh"
-bindcode --release 133 exec --no-startup-id "killall dzen2 conky dz.sh"
+# bindcode 133 exec --no-startup-id "bin/dzen/dz.sh"
+# bindcode --release 133 exec --no-startup-id "killall dzen2 conky dz.sh"
 # bindsym --release $mod exec --no-startup-id "killall dzen2 conky dz.sh"
-bindsym $mod+F1 exec --no-startup-id "bin/dzen/dz.sh"
+# bindsym $mod+F1 exec --no-startup-id "bin/dzen/dz.sh"
 bindsym $mod+F2 exec --no-startup-id "killall dzen2 conky gcpubar dz.sh trayer"
 
 bindsym $mod+o exec "dwb"
@@ -204,7 +204,7 @@ exec --no-startup-id 'dwb'
 
 #exec --no-startup-id i3-msg 'workspace 9; exec bin/urxvt.sh -e irssi; workspace 1'
 exec --no-startup-id 'unclutter'
-exec --no-startup-id 'bin/dzen/dz.sh'
+# exec --no-startup-id 'bin/dzen/dz.sh'
 
 # The IPC interface allows programs like an external workspace bar
 # (i3-wsbar) or i3-msg (can be used to "remote-control" i3) to work.

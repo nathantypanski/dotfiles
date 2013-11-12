@@ -117,10 +117,52 @@ set hlsearch
 " Since I use linux, I want this
 let g:clipbrdDefaultReg = '+'
 
-" Sane vim plugin management.
-call pathogen#infect()
-call pathogen#incubate()
-call pathogen#helptags()
+" VUNDLE {{{
+let s:bundle_path=$HOME."/.vim/bundle/"
+execute "set rtp+=".s:bundle_path."vundle/"
+call vundle#rc()
+
+" let Vundle manage Vundle
+" required! 
+Bundle 'gmarik/vundle'
+" }}}
+
+Bundle 'Townk/vim-autoclose'
+Bundle 'sjl/gundo.vim'
+Bundle 'jcrocholl/pep8'
+Bundle 'tpope/vim-fugitive'
+Bundle 'scrooloose/syntastic'
+Bundle 'ervandew/supertab'
+Bundle 'altercation/vim-colors-solarized'
+Bundle 'fs111/pydoc.vim'
+Bundle 'davidhalter/jedi-vim'
+Bundle 'kevinw/pyflakes-vim'
+Bundle 'alpha-omega/termite-colors-solarized'
+Bundle 'w0ng/vim-hybrid'
+Bundle 'scrooloose/nerdtree'
+Bundle 'tpope/vim-fugitive'
+Bundle 'vimwiki/vimwiki'
+Bundle 'vim-pandoc/vim-pandoc'
+Bundle 'vim-scripts/mail.vim'
+Bundle 'FuzzyFinder'
+Bundle 'vim-scripts/Vim-R-plugin'
+Bundle 'vim-scripts/Screen-vim---gnu-screentmux'
+Bundle 'jalvesaq/VimCom'
+Bundle 'bling/vim-airline'
+Bundle 'Yggdroot/indentLine'
+Bundle 'troydm/easybuffer.vim'
+Bundle 'LaTeX-Box-Team/LaTeX-Box'
+"Bundle 'klen/python-mode'
+"Bundle 'python.vim'
+"Bundle 'python_match.vim'
+"Bundle 'pythoncomplete'
+Bundle 'kien/ctrlp.vim'
+Bundle 'majutsushi/tagbar'
+Bundle 'tpope/vim-surround'
+let g:ctrlp_working_path_mode = 'ra'
+
+" Don't make symbols in latex documents
+let g:tex_conceal = 1
 
 " color settings
 syntax enable
@@ -239,18 +281,9 @@ map <leader>S ;w
 " quit
 map <leader>q ;q<CR>
 
-" mini buf explorer
-"map <Leader>e :MBEOpen<cr>
-"map <Leader>c :MBEClose<cr>
-function MBEBrowse()
-    :MBEToggle
-    :MBEFocus
-endfunction
-map <Leader>b :exec MBEBrowse()<CR>
-" 20col
-let g:miniBufExplVSplit = 20
-" close once I pick something
-let g:miniBufExplCloseOnSelect = 1
+" FuzzyFinder
+map <leader>f :FufFileWithCurrentBufferDir **/<C-M> 
+map <leader>b :FufBuffer<C-M>
 
 " indents
 augroup indent_settings
@@ -262,3 +295,10 @@ set colorcolumn=80
 "filename copying
   nmap ,cs :let @*=expand("%")<CR>
   nmap ,cl :let @*=expand("%:p")<CR>
+
+" latex box
+let g:LatexBox_output_type="pdf"
+let g:LatexBox_viewer="zathura"
+let g:LatexBox_latexmk_async=0
+let g:LatexBox_quickfix=0 "don't open the quickfix window automatically
+let g:LatexBox_build_dir=""

@@ -4,6 +4,8 @@ alias irc=weechat-curses
 # Run urxvt via my script.
 alias urxvt="/home/nathan/bin/urxvt.sh"
 
+alias hc='herbstclient'
+
 # less is more.
 alias more='less'
 
@@ -95,8 +97,11 @@ alias -s conf=vim
 alias userctl="systemctl --user"
 
 # tmux
-alias tmls="tmux list-sessions"
-alias tmat="tmux attach -t"
+alias xls="tmux list-sessions"
+alias xat="tmux attach -t"
+alias x="tmuxinator"
 
-# calibre
-alias calibre="export PYTHONPATH=/usr/lib/python2.7/site-packages && calibre"
+# vim is v
+alias v="vim"
+
+alias ssh='eval $(/usr/bin/keychain --eval --agents ssh -Q --quiet ~/.ssh/id_rsa ~/.ssh/id_rsa_athen@ephesus) && ssh'

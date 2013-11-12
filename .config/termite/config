@@ -6,7 +6,7 @@ audible_bell = false
 visible_bell = true
 mouse_autohide = false
 allow_bold = true
-font = Terminus 12
+font = Terminus (TTF) 12
 dynamic_title = true
 urgent_on_bell = true
 clickable_url = true
@@ -14,7 +14,7 @@ scrollback_lines = 10000
 search_wrap = true
 #icon_name = terminal
 #geometry = 640x480
-term = xterm-256color
+term = screen-256color
 
 # 0.0: opaque, 1.0: transparent
 transparency = 0.0

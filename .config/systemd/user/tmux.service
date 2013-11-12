@@ -4,12 +4,14 @@ After=multi-user.target
 Before=shutdown.target
  
 [Service]
-Type=forking
+Type=oneshot
+KillMode=none
 User=%I
+RemainAfterExit=yes
 WorkingDirectory=%h 
 ExecStart=/usr/bin/tmux new-session -d -s %u
 ExecStop=/usr/bin/tmux kill-session -t %u
-Restart=always
+Restart=no
  
 [Install]
 WantedBy=multi-user.target

@@ -9,6 +9,8 @@ import System.IO
 import Data.Monoid
 import System.Exit
 import XMonad.Layout.NoBorders
+import XMonad.Actions.WorkspaceNames
+-- import XMonad.Hooks.EwmhDesktops hiding (fullscreenEventHook)
 import XMonad.Actions.Navigation2D ( Navigation2D
                                    , lineNavigation
                                    , centerNavigation
@@ -96,7 +98,6 @@ dzenCommand = (RawCommand "dzen2"
 
 main = do
     dzw <- D.createDzen dzenCommand
-    spawn "sh ~/.xmonad/autostart.sh"
     xmonad $ defaults
         {
         terminal           = myTerminal,
@@ -115,10 +116,7 @@ main = do
         layoutHook         = myLayout,
         manageHook         = myManageHook,
         handleEventHook    = myEventHook,
-        logHook            = dynamicLogWithPP myDzenPP
-                             {
-                                ppOutput = hPutStrLn dzw
-                             },
+        logHook            = dynamicLogWithPP $ myDzenPP { ppOutput = hPutStrLn dzw }, --myLogHook,
         startupHook        = myStartupHook
         }
 
@@ -159,10 +157,8 @@ myDzenPP = defaultPP { ppCurrent  = dzenColor "#005f00" "#afd700" . pad
 -- Key bindings.
 --
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
-
-    [ ((modm .|. shiftMask,   xK_Return), spawn $ XMonad.terminal conf)
-    , ((modm,                 xK_Return), windows W.swapMaster)
-    , ((modm,                 xK_p     ), spawn "~/bin/dmenu/dmenu_run.sh")
+    [ ((modm,                 xK_Return), windows W.swapMaster)
+    , ((modm .|. shiftMask,   xK_r     ), renameWorkspace defaultXPConfig)
     , ((modm .|. shiftMask,   xK_c     ), kill)
     , ((modm,                 xK_space ), sendMessage NextLayout)
     , ((modm .|. shiftMask,   xK_space ), setLayout $ XMonad.layoutHook conf)
@@ -185,8 +181,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm,                 xK_b     ), sendMessage ToggleStruts)
     , ((modm .|. shiftMask,   xK_q     ), io (exitWith ExitSuccess))
     , ((modm,                 xK_q     ), spawn "xmonad --recompile; xmonad --restart")
-    , ((modm,                 xK_f     ), spawn "termite -e ranger")
-    , ((modm .|. shiftMask,   xK_z     ), spawn "i3lock")
     , ((controlMask,          xK_Print ), spawn "sleep 0.2; scrot -s")
     , ((0,                    xK_Print ), spawn "scrot")
     , ((modm,                 xK_o     ), toggleWS)
@@ -317,7 +311,7 @@ myEventHook = mempty
 -- Perform an arbitrary action on each internal state change or X event.
 -- See the 'XMonad.Hooks.DynamicLog' extension for examples.
 --
-myLogHook = return ()
+myLogHook = workspaceNamesPP myDzenPP >>= dynamicLogWithPP
 ------------------------------------------------------------------------
 -- Startup hook
 
