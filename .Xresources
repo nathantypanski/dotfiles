@@ -1,77 +1,44 @@
-!TomorrowNightBright
-#define t_background #000000
-#define t_current_line #2a2a2a
-#define t_selection #424242
-#define t_foreground #eaeaea
-#define t_comment #969896
-#define t_red #d54e53
-#define t_orange #e78c45
-#define t_yellow #e7c547
-#define t_green #b9ca4a
-#define t_aqua #70c0b1
-#define t_blue #7aa6da
-#define t_purple #c397d8
+#include "/home/nathan/.colors/base16-default.xresources"
 
+! Xdefaults file
+!*background: #2c2e2f
+!urxvt*background: [95]#2c2e2f
+!urxvt*foreground: #edeff2
+!*cursorColor: #edeff2
+urxvt*internalBorder: 12
+urxvt*termName: rxvt
+urxvt*scrollBar: false
+urxvt*url-select.launcher: /usr/bin/firefox -new-tab
+URxvt.url-select.underline: true
 
-*.foreground: t_foreground
-*.background: t_background
-*.cursorColor: #aeafad
+urxvt*font: xft:terminus:size=16
 
-! Black / Grey
-*.color0: #000000
-*.color8: #666666
+Xft.hinting: true
+Xft.autohint: false
+Xft.lcdfilter: lcddefault
 
-! Red / Bright Red
-*.color1: t_red
-*.color9: #FF3334
-
-! Green + Bright Green
-*.color2: t_green
-*.color10: #9ec400
-
-! Yellow (Orange) + Bright Yellow (Yellow)
-*.color3: t_orange
-*.color11: t_yellow
-
-! Blue + Bright Blue
-*.color4: t_blue
-*.color12: t_blue
-
-! Magenta (Purple) + Bright Magenta
-*.color5: t_purple
-*.color13: #b777e0
-
-! Cyan (Aqua) + Bright Cyan
-*.color6: t_aqua
-*.color14: #54ced6
-
-! Light Grey (Selection) + White (Current Line)
-*.color7: t_selection
-*.color15: t_current_line
+URxvt.transparent: false
+URxvt.tintColor: white
+URxvt.depth: 32
 
 !! Font for everything
-*font: -*-terminus-medium-*-*-*-16-*-*-*-*-*-iso8859-*
-!!*font: -*-terminus-medium-r-*-*-*-120-75-75-*-*-iso8859-15
-URxvt*italicFont:  -*-terminus-medium-*-*-*-16-*-*-*-*-*-iso10646-*
-URxvt*boldItalicFont: -*-terminus-bold-*-*-*-16-*-*-*-*-*-iso10646-*
-URxvt.font: -*-terminus-medium-*-*-*-16-*-*-*-*-*-iso10646-*
-URxvt.boldFont: -*-terminus-bold-*-*-*-16-*-*-*-*-*-iso10646-*
+!*font: -*-terminus-medium-r-*-*-*-120-75-75-*-*-iso8859-15
+!URxvt*font: -*-terminus-medium-r-*-*-*-120-75-75-*-*-iso8859-15
+!!*font: -*-terminus-medium-r-normal-*-16-*-*-*-*-*-iso8859-* 
 
 !! Cursor size
 Xcursor.size: 16
 
 !! xft
+!Xft.dpi:        121
 Xft.dpi:        96
-Xft.autohint: 0
-Xft.lcdfilter:  lcddefault
 Xft.hintstyle:  hintfull
-Xft.hinting: 1
 Xft.antialias: 1
 Xft.rgba: rgb
 !! urxvt
-URxvt*termName: rxvt-unicode
+!!URxvt*termName: rxvt-unicode
 URxvt*imLocale: en_Us.utf8
-URxvt*depth:                  16
+URxvt*depth:                  24
 URxvt*scrollstyle:            plain
 URxvt*scrollBar:              False
 URxvt*scrollBar_right:        True
@@ -91,15 +58,8 @@ URxvt*cursorBlink:            True
 URxvt*pointerBlank:           True
 URxvt*savelines:              65535
 URxvt*scrollttykeypress:      true
-URxvt.iconFile:               /usr/share/icons/oxygen/32x32/apps/utilities-terminal.svg
 ! Colored man pages and other highlighted stuff
-URxvt.colorIT:                #268bd2
-URxvt.colorBD:                #dc322f
-URxvt.colorUL:                #859900
+!URxvt.colorIT:                #268bd2
+!URxvt.colorBD:                #dc322f
+!URxvt.colorUL:                #859900
 ! URxvt*print-pipe:       cat > $(echo urxvt.dump.`date +'%Y%M%d%H%m%S'`)
-
-!! dzen2
-
-dzen2.font:                   -*-terminus-medium-*-*-*-16-*-*-*-*-*-iso8859-*
-! dzen2.foreground:             #839496
-! dzen2.background:             #002b36
