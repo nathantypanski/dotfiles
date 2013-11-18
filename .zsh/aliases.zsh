@@ -103,5 +103,6 @@ alias x="tmuxinator"
 
 # vim is v
 alias v="vim"
+alias e="emacs -nw"
 
 alias ssh='eval $(/usr/bin/keychain --eval --agents ssh -Q --quiet ~/.ssh/id_rsa ~/.ssh/id_rsa_athen@ephesus) && ssh'

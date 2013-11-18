@@ -24,8 +24,7 @@ export CLASSPATH="/usr/share/java/junit.jar"
 export PYTHONPATH=/usr/lib/python3.3/site-packages:~/bin/i3-py
 # scripts in path
 export PATH=$PATH:~/bin:~/.gem/ruby/2.0.0/bin:~/.cabal/bin:/opt/java/jre/bin
-export TERM_PROGRAM=screen-256color
-export TERMCMD=termite
+export TERMCMD=urxvt
 # Steam likes this
 export SDL_AUDIODRIVER=alsa
 # Eclipse doesn't seem to play nice by default.
@@ -39,4 +38,9 @@ export XDG_CONFIG_HOME='/home/nathan/.config'
 # android
 export ANDROID_HOME=/opt/android-sdk
 export ANDROID_SWT=/usr/share/java
+
+# bspwm
 export PATH=$PATH:$ANDROID_HOME/platform-tools
+export BSPWM_TREE=/tmp/bspwm.tree
+export BSPWM_HISTORY=/tmp/bspwm.history
+export BSPWM_STACK=/tmp/bspwm.stack
