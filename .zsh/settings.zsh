@@ -20,3 +20,6 @@ setopt vi
 #       ;;
 #   esac
 # }
+
+
+eval $(keychain --eval --agents ssh -Q --quiet ~/.ssh/id_rsa ~/.ssh/id_rsa_athen@ephesus)
