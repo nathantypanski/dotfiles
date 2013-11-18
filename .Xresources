@@ -5,13 +5,13 @@
 !urxvt*background: [95]#2c2e2f
 !urxvt*foreground: #edeff2
 !*cursorColor: #edeff2
-urxvt*internalBorder: 12
+urxvt*internalBorder: 4
 urxvt*termName: rxvt
 urxvt*scrollBar: false
 urxvt*url-select.launcher: /usr/bin/firefox -new-tab
 URxvt.url-select.underline: true
 
-urxvt*font: xft:terminus:size=16
+urxvt*font: xft:terminus:size=12
 
 Xft.hinting: true
 Xft.autohint: false
@@ -36,7 +36,7 @@ Xft.hintstyle:  hintfull
 Xft.antialias: 1
 Xft.rgba: rgb
 !! urxvt
-!!URxvt*termName: rxvt-unicode
+URxvt*termName: rxvt-unicode
 URxvt*imLocale: en_Us.utf8
 URxvt*depth:                  24
 URxvt*scrollstyle:            plain
