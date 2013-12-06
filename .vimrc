@@ -127,7 +127,6 @@ call vundle#rc()
 Bundle 'gmarik/vundle'
 " }}}
 
-Bundle 'Townk/vim-autoclose'
 Bundle 'sjl/gundo.vim'
 Bundle 'jcrocholl/pep8'
 Bundle 'tpope/vim-fugitive'
@@ -137,28 +136,21 @@ Bundle 'altercation/vim-colors-solarized'
 Bundle 'fs111/pydoc.vim'
 Bundle 'davidhalter/jedi-vim'
 Bundle 'kevinw/pyflakes-vim'
-Bundle 'alpha-omega/termite-colors-solarized'
 Bundle 'w0ng/vim-hybrid'
 Bundle 'scrooloose/nerdtree'
 Bundle 'tpope/vim-fugitive'
-Bundle 'vimwiki/vimwiki'
 Bundle 'vim-pandoc/vim-pandoc'
 Bundle 'vim-scripts/mail.vim'
 Bundle 'FuzzyFinder'
-Bundle 'vim-scripts/Vim-R-plugin'
-Bundle 'vim-scripts/Screen-vim---gnu-screentmux'
 Bundle 'jalvesaq/VimCom'
 Bundle 'bling/vim-airline'
 Bundle 'Yggdroot/indentLine'
 Bundle 'troydm/easybuffer.vim'
 Bundle 'LaTeX-Box-Team/LaTeX-Box'
-"Bundle 'klen/python-mode'
-"Bundle 'python.vim'
-"Bundle 'python_match.vim'
-"Bundle 'pythoncomplete'
 Bundle 'kien/ctrlp.vim'
 Bundle 'majutsushi/tagbar'
-Bundle 'tpope/vim-surround'
+Bundle 'chriskempson/base16-vim'
+Bundle 'jceb/vim-orgmode'
 let g:ctrlp_working_path_mode = 'ra'
 
 " Don't make symbols in latex documents
@@ -166,14 +158,16 @@ let g:tex_conceal = 1
 
 " color settings
 syntax enable
+set background=dark
 let g:hybrid_use_Xresources = 1
-colorscheme hybrid
+set t_Co=256
+colorscheme base16-default
 
 " Navigate windows with C-hjkl
-map <C-h> <C-w>h
-map <C-j> <C-w>j
-map <C-k> <C-w>k
-map <C-l> <C-w>l
+map<C-h> <C-w>h
+map<C-j> <C-w>j
+map<C-k> <C-w>k
+map<C-l> <C-w>l
 
 " Tired of clearing highlighted searches by searching for dsfhjkhgakjks
 " Use this:
@@ -195,14 +189,14 @@ set fileencodings=ucs-bom,utf8,prc
 
 " " ; as : always
 " Bad practice. Servers without my .vimrc make vim hard to use.
-map ; :
-noremap ;; ;
+map; :
+map;; ;
 
 " NERDTree toggle
-map <C-n> :NERDTreeToggle<CR>
+map<C-n> :NERDTreeToggle<CR>
 
 " USE GUNDO
-map <leader>g :GundoToggle<CR>
+map<leader>g :GundoToggle<CR>
 
 " pep8
 let g:pep8_map='<leader>8'
@@ -219,8 +213,8 @@ let g:pep8_map='<leader>8'
 "For instance, if you are using django and you place your cursor over the class models.
 "Model you reference and then called :RopeGotoDefintion, it would jump you straight to the django library to that class definition.
 "We already have it installed in our bundles, so we bind it to a key to use it:
-map <leader>j :RopeGotoDefinition<CR>
-map <leader>r :RopeRename<CR>
+map<leader>j :RopeGotoDefinition<CR>
+map<leader>r :RopeRename<CR>
 
 " Spellbad background color is UGLY!
 hi clear SpellBad
@@ -258,7 +252,7 @@ let g:tex_flavor='latex'
 let g:Tex_DefaultTargetFormat='pdf'
 
 " latex-search for synctex
-map <silent> <Leader>ls :silent
+map<silent> <Leader>ls :silent
                 \ !/Applications/Skim.app/Contents/SharedSupport/displayline
                 \ <C-R>=line('.')<CR> "<C-R>=LatexBox_GetOutputFile()<CR>"
                 \ "%:p" <CR>
@@ -272,19 +266,11 @@ let g:pandoc_auto_format = 0
 let g:pandoc_no_empty_implicits = 1
 let g:pandoc_no_spans = 1
 let g:pandoc_use_hard_wraps = 1
-let g:Latexmk_async = 1
-
-" save
-map <leader>s ;w<CR>
-" save as ...
-map <leader>S ;w 
-" quit
-map <leader>q ;q<CR>
+let g:LatexBox_latexmk_async = 1
 
 " FuzzyFinder
-map <leader>f :FufFileWithCurrentBufferDir **/<C-M> 
-map <leader>b :FufBuffer<C-M>
-
+map<leader>f :FufFileWithCurrentBufferDir **/<C-M> 
+map<leader>b :FufBuffer<C-M>
 " indents
 augroup indent_settings
     au!
@@ -293,8 +279,8 @@ augroup indent_settings
 set colorcolumn=80
 
 "filename copying
-  nmap ,cs :let @*=expand("%")<CR>
-  nmap ,cl :let @*=expand("%:p")<CR>
+nnoremap ,cs :let @*=expand("%")<CR>
+nnoremap ,cl :let @*=expand("%:p")<CR>
 
 " latex box
 let g:LatexBox_output_type="pdf"
@@ -302,3 +288,27 @@ let g:LatexBox_viewer="zathura"
 let g:LatexBox_latexmk_async=0
 let g:LatexBox_quickfix=0 "don't open the quickfix window automatically
 let g:LatexBox_build_dir=""
+
+" make space more useful
+nnoremap <space> za
+
+" round indent to multiple of 'shiftwidth'
+set shiftround
+
+" show matching parentheses for 1/10 of a second
+set matchtime=1
+
+inoremap <c-d> <esc>ddi
+nnoremap <c-d> dd
+inoremap <c-u> <esc>lbvwUi
+nnoremap <c-u> bvwU
+nnoremap - dd
+map <leader>c :Gcommit<CR>
+map <leader>s :Gstatus<CR>
+" save
+map<leader>w :w<CR>
+" save as ...
+map<leader>W :wq<CR>
+" quit
+map<leader>q :q<CR>
+"unmap <leader>ww
