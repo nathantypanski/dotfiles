@@ -56,7 +56,7 @@ alias wacom='xsetwacom --set "Wacom Intuos4 6x9 stylus" rotate half && xsetwacom
 alias touchon='synclient TouchpadOff=0'
 alias touchoff='synclient TouchpadOff=1'
 
-# blanking 
+# blanking
 alias blankoff='xset -dpms; xset s off'
 alias blanknow='xset dpms force off'
 
@@ -106,3 +106,6 @@ alias v="vim"
 alias e="emacs -nw"
 
 alias ssh='eval $(/usr/bin/keychain --eval --agents ssh -Q --quiet ~/.ssh/id_rsa ~/.ssh/id_rsa_athen@ephesus) && ssh'
+
+# emacs will be CLI!
+alias emacs='emacs -nw'
