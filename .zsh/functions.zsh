@@ -69,3 +69,15 @@ ranger-cd () {
     rm -f -- "$tempfile"'
     zle accept-line
 }
+
+# jump to previous directory by number or last visited:
+# from https://github.com/Stebalien/dotfiles/blob/753cfef52445b5ade33102b1b5c7b636e874e5bb/zsh/config/functions.zsh
+back() {
+    popd
+#  case $1 in
+#  [a-zA-Z]) : ;;
+#  <->) pushd -q +$1 ;;
+#  l) dirs -lpv|sed '2 s|$| \[last\]|' ;;
+#  *) pushd -q -
+#  esac
+}
