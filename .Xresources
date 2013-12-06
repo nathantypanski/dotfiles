@@ -6,7 +6,7 @@
 !urxvt*foreground: #edeff2
 !*cursorColor: #edeff2
 urxvt*internalBorder: 4
-urxvt*termName: rxvt
+urxvt*termName: rxvt-256color
 urxvt*scrollBar: false
 urxvt*url-select.launcher: /usr/bin/firefox -new-tab
 URxvt.url-select.underline: true
@@ -52,7 +52,7 @@ URxvt*lineSpace:              0
 URxvt*borderLess:             False
 URxvt.intensityStyles:        false
 ! Dont know what this does:
-URxvt*preeditType:            OverTheSpot
+URxvt*preeditType:            OffTheSpot
 URxvt*urlLauncher:            firefox
 URxvt*cursorBlink:            True
 URxvt*pointerBlank:           True
