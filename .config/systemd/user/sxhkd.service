@@ -1,0 +1,13 @@
+[Unit]
+Description=Simple X Hotkey Daemon
+After=wm.target
+WantedBy=bspwm.service
+
+[Service]
+Type=simple
+Environment=DISPLAY=:0
+ExecStart=/usr/bin/sxhkd
+ExecReload=/usr/bin/killall -SIGUSR1 sxhkd
+
+[Install]
+WantedBy=wm.target

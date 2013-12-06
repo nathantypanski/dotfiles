@@ -6,7 +6,7 @@ Requires=wm.target
 [Service]
 Type=simple
 Environment=DISPLAY=:0
-ExecStart=/usr/sbin/compton
+ExecStart=/usr/sbin/compton -I0.048 -D5 -O0.04 -c -f -C --inactive-dim 0.0 --shadow-ignore-shaped
 
 [Install]
 WantedBy=wm.target

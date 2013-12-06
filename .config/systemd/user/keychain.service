@@ -1,0 +1,10 @@
+[Unit]
+Description=keychain to manage your keyz
+After=wm.target
+
+[Service]
+Type=forking
+ExecStart=/usr/sbin/keychain -Q -q --nogui --eval --agents ssh,gpg ~/.ssh/id_rsa ~/.ssh/id_rsa_athen@ephesus
+
+[Install]
+WantedBy=multi-user.target
