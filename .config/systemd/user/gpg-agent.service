@@ -1,5 +1,6 @@
 [Unit]
 Description=gpg-agent daemon
+WantedBy=mystuff.target
 
 [Service]
 Type=forking

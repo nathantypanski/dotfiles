@@ -1,6 +1,6 @@
 [Unit]
 Description=rehash the fonts
-After=wm.target
+After=xorg.target
 After=fonts.service
 Wants=fonts.service
 

@@ -1,0 +1,15 @@
+[Unit]
+Description=Lightweight tiling window manager
+Before=mystuff.target
+After=xorg.target
+Requires=xorg.target
+Wants=dwmstatus.service
+
+[Service]
+Environment=DISPLAY=:0
+ExecStart=/usr/bin/dwm
+Restart=always
+RestartSec=10
+ 
+[Install]
+WantedBy=wm.target

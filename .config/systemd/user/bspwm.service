@@ -1,0 +1,23 @@
+[Unit]
+Description=binary space partition wm
+Before=mystuff.target
+After=xorg.target
+Requires=xorg.target
+Wants=panel.service
+Wants=sxhkd.service
+PropagatesReloadTo=panel.service
+PropagatesReloadTo=sxhkd.service
+
+[Service]
+Environment=DISPLAY=:0
+Environment=PANEL_FIFO=/tmp/panel-fifo
+Environment=BSPWM_TREE=/tmp/bspwm-tree
+Environment=BSPWM_HISTORY=/tmp/bspwm-history
+Environment=BSPWM_STACK=/tmp/bspwm-stack
+Environment=BSPWM_SOCKET=/tmp/bspwm-socket
+ExecStart=/usr/bin/bspwm
+Restart=always
+RestartSec=10
+ 
+[Install]
+WantedBy=wm.target
