@@ -1,4 +1,4 @@
 #!/bin/zsh
 ARGS="$@"
 ARGS=`echo $ARGS | sed -e 's/\ /\\ /g'`
-termite -e "vim $ARGS"
+urxvtc -e "vim $ARGS"
