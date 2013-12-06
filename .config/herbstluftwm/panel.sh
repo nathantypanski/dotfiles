@@ -1,6 +1,7 @@
 #!/bin/bash
 
 hc() { "${herbstclient_command[@]:-herbstclient}" "$@" ;}
+
 monitor=${1:-0}
 geometry=( $(herbstclient monitor_rect "$monitor") )
 if [ -z "$geometry" ] ;then
@@ -11,8 +12,9 @@ fi
 x=${geometry[0]}
 y=${geometry[1]}
 panel_width=${geometry[2]}
-panel_height=16
-font="-*-fixed-medium-*-*-*-12-*-*-*-*-*-*-*"
+panel_height=18
+#font="-*-terminus-medium-*-*-*-14-*-*-*-*-*-*-*"
+font="-xos4-terminus-medium-*-normal--12-120-72-72-c-60-iso8859-1"
 bgcolor=$(hc get frame_border_normal_color)
 selbg=$(hc get window_border_active_color)
 selfg='#101010'
@@ -67,6 +69,9 @@ hc pad $monitor $panel_height
     IFS=$'\t' read -ra tags <<< "$(hc tag_status $monitor)"
     visible=true
     date=""
+    charging=$(acpi | awk '{if (substr($3,1,1)=="C") print "+"; else if(substr($3,1,1)=="F")print " "; else print "-" }')
+    batt_percent=$(acpi | cut -d ' ' -f 4 | sed 's/,//g')
+    acpi=$(echo $charging$batt_percent | sed 's/\(.*\)/[\1]/g')
     windowtitle=""
     while true ; do
         bordercolor="#26221C"
@@ -102,7 +107,7 @@ hc pad $monitor $panel_height
         echo -n "$separator"
         echo -n "^bg()^fg() ${windowtitle//^/^^}"
         # small adjustments
-        right="$separator^bg() $date $separator"
+        right="$separator^bg() $date $separator $acpi"
         right_text_only=$(echo -n "$right" | sed 's.\^[^(]*([^)]*)..g')
         # get width of right aligned text.. and add some space..
         width=$($textwidth "$font" "$right_text_only    ")
