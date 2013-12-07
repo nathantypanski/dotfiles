@@ -1,5 +1,6 @@
-# perl
+# android sdk exports
 /etc/profile.d/android-sdk.sh
+# perl
 export PERL_LOCAL_LIB_ROOT="$PERL_LOCAL_LIB_ROOT:/home/nathan/perl5";
 export PERL_MB_OPT="--install_base /home/nathan/perl5";
 export PERL_MM_OPT="INSTALL_BASE=/home/nathan/perl5";
@@ -34,10 +35,6 @@ export SYNCAD_LICENSE_FILE=~/synapticad-17.07d/license.dat
 export CCACHE_DIR=~/.ccache
 export CHROOT=$HOME/chroot
 export XDG_CONFIG_HOME='/home/nathan/.config'
-
-# android
-export ANDROID_HOME=/opt/android-sdk
-export ANDROID_SWT=/usr/share/java
 
 # bspwm
 export PATH=$PATH:$ANDROID_HOME/platform-tools
