@@ -1,5 +1,32 @@
 # android sdk exports
 /etc/profile.d/android-sdk.sh
+
+# ensure all terminal emulators use the right shell
+export SHELL='/bin/zsh'
+
+# pager settings (grml)
+export PAGER=${PAGER:-less}
+export LESS="-R"
+
+# support colors in less (grml)
+export LESS_TERMCAP_mb=$'\E[01;31m'
+export LESS_TERMCAP_md=$'\E[01;31m'
+export LESS_TERMCAP_me=$'\E[0m'
+export LESS_TERMCAP_se=$'\E[0m'
+export LESS_TERMCAP_so=$'\E[01;44;33m'
+export LESS_TERMCAP_ue=$'\E[0m'
+export LESS_TERMCAP_us=$'\E[01;32m'
+
+# mail (grml)
+export MAIL=${MAIL:-/var/mail/$USER}
+
+# mailchecks (grml)
+MAILCHECK=30
+
+# report about cpu-/system-/user-time of command if running longer than
+# 5 seconds (grml)
+REPORTTIME=5
+
 # perl
 export PERL_LOCAL_LIB_ROOT="$PERL_LOCAL_LIB_ROOT:/home/nathan/perl5";
 export PERL_MB_OPT="--install_base /home/nathan/perl5";
@@ -13,13 +40,16 @@ export HISTFILE=~/.zhistory
 export HISTSIZE=1000
 # The number of commands saved in my history file
 export SAVEHIST=1000
+
 # Vim for life.
 export EDITOR="vim"
 export SUDO_EDITOR="rvim"
-# Since there's nothing better out there ...
-export BROWSER="dwb"
+
+export BROWSER="firefox"
+
 export GREP_COLOR="1;33"
-export LESS="-R"
+
+
 export CLASSPATH="/usr/share/java/junit.jar"
 #export PYTHONPATH=/usr/lib/python2.7/site-packages:/usr/lib/python3.3/site-packages:~/bin/i3-py
 export PYTHONPATH=/usr/lib/python3.3/site-packages:~/bin/i3-py
