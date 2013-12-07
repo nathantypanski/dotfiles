@@ -1,4 +1,4 @@
-#include "/home/nathan/.colors/base16-default.xresources"
+#include "/home/nathan/.colors/hybrid.xresources"
 
 ! Xdefaults file
 !*background: #2c2e2f
