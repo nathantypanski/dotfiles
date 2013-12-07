@@ -9,8 +9,6 @@ bindkey '^H' back
 zle -N ranger-cd
 bindkey '^O' ranger-cd
 
-export PROMPT="%1~%(#.#.$BLUE$)$NO_COLOR "
-
 setopt vi
 
 eval $(keychain --eval --agents ssh -Q --quiet $(cat ~/.keychain/keyfiles))
