@@ -149,6 +149,7 @@ Bundle 'troydm/easybuffer.vim'
 Bundle 'LaTeX-Box-Team/LaTeX-Box'
 Bundle 'kien/ctrlp.vim'
 Bundle 'majutsushi/tagbar'
+Bundle 'nanotech/jellybeans.vim'
 Bundle 'chriskempson/base16-vim'
 Bundle 'jceb/vim-orgmode'
 let g:ctrlp_working_path_mode = 'ra'
@@ -160,8 +161,7 @@ let g:tex_conceal = 1
 syntax enable
 set background=dark
 let g:hybrid_use_Xresources = 1
-set t_Co=256
-colorscheme base16-default
+colorscheme hybrid
 
 " Navigate windows with C-hjkl
 map<C-h> <C-w>h
@@ -312,3 +312,5 @@ map<leader>W :wq<CR>
 " quit
 map<leader>q :q<CR>
 "unmap <leader>ww
+
+map <f9> :make<CR>
