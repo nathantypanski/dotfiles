@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# Start emacs daemon if it is not already started, otherwise run emacs in a terminal
+exec emacsclient --alternate-editor="" -c "$@" -nw

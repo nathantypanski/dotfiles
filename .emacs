@@ -1,28 +1,40 @@
-(setq load-path (push "~/.emacs.d/" load-path))
-(add-to-list 'load-path "~/.emacs.d/evil") ; only without ELPA/el-get
-(add-to-list 'load-path "~/.emacs.d/plugins/evil-org-mode")
-(add-to-list 'load-path "~/.emacs.d/elpa/nlinum-1.1")
-(require 'evil)
-(require 'evil-org)
-(evil-mode 1)
+;;; this loads the package manager
+(require 'package)
+
+;;; here there's a variable named package-archives, and we are adding the MELPA repository to it
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(package-initialize)
+
+;;; loads packages and activates them
+(setq package-load-list
+      '(
+        (evil t)
+        (auctex t)
+        (auto-complete t)
+        (csv-mode t)
+        (nlinum t)
+        (org t)
+        (yaml-mode t)
+	(color-theme t)
+	(color-theme-approximate t)
+	(color-theme-sanityinc-tomorrow t)
+        ))
+
+(evil-mode t)
+
+; Color theming stuff
+(color-theme-initialize)
+(setq color-theme-is-global t)
+(load-theme 'sanityinc-tomorrow-night t)
+
 (xterm-mouse-mode 1)
-(global-linum-mode 1)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-enabled-themes (quote (tango-dark)))
- '(inhibit-startup-screen t))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+
+; Enable line numbers
+;(require 'nlinum)
+;(nlinum-mode)
 
 ;;; esc quits
-
 (define-key evil-normal-state-map [escape] 'keyboard-quit)
 (define-key evil-visual-state-map [escape] 'keyboard-quit)
 (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
@@ -32,16 +44,12 @@
 (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
 
 ;; org
-
-(require 'org)
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
 
-(setq x-select-enable-clipboard t)
-(setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
-
-;Do without those obnoxious startup messages
+; Do without those obnoxious startup messages
 (setq inhibit-startup-echo-area-message (user-login-name))
 
+; Basic copy-paste setup. From wiki.
 (setq x-select-enable-clipboard t)
 (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
 
@@ -74,5 +82,16 @@
   ;; http://shreevatsa.wordpress.com/2006/10/22/emacs-copypaste-and-x/
   ;; http://www.mail-archive.com/help-gnu-emacs@gnu.org/msg03577.html
  ))
-
-;end .emacs
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-enabled-themes (quote (sanityinc-tomorrow-night)))
+ '(custom-safe-themes (quote ("06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" default))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
