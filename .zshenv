@@ -42,7 +42,8 @@ export HISTSIZE=1000
 export SAVEHIST=1000
 
 # Vim for life.
-export EDITOR="vim"
+export EDITOR="$HOME/bin/ec"
+EDITOR="emacsclient -t" # text-mode client, connects to running daemon
 export SUDO_EDITOR="rvim"
 
 export BROWSER="firefox"

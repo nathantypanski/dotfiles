@@ -106,6 +106,3 @@ alias v="vim"
 alias e="~/bin/ec"
 
 alias ssh='eval $(/usr/bin/keychain --eval --agents ssh -Q --quiet ~/.ssh/id_rsa ~/.ssh/id_rsa_athen@ephesus) && ssh'
-
-# emacs will be CLI!
-alias emacs='~/bin/ec'
