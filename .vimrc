@@ -152,6 +152,8 @@ Bundle 'majutsushi/tagbar'
 Bundle 'nanotech/jellybeans.vim'
 Bundle 'chriskempson/base16-vim'
 Bundle 'jceb/vim-orgmode'
+"Bundle 'Vim-R-plugin'
+"Bundle 'gerw/vim-latex-suite'
 let g:ctrlp_working_path_mode = 'ra'
 
 " Don't make symbols in latex documents

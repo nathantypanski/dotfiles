@@ -28,7 +28,9 @@ URxvt.depth: 32
 
 !! Cursor size
 Xcursor.size: 16
-
+dzen2.font:       -*-fixed-*-*-*-*-*-*-*-*-*-*-*-*
+dzen2.foreground: #22EE11
+dzen2.background: black
 !! xft
 !Xft.dpi:        121
 Xft.dpi:        96
