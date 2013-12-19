@@ -6,7 +6,6 @@ Requires=xorg.target
 Wants=dwmstatus.service
 
 [Service]
-Environment=DISPLAY=:0
 ExecStart=/usr/bin/dwm
 Restart=always
 RestartSec=10
