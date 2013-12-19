@@ -1,13 +1,10 @@
 [Unit]
 Description=Advanced modern tiling window manager
-Before=mystuff.target
-After=xorg.target
-Requires=xorg.target
 
 [Service]
 Environment=DISPLAY=:0
-ExecStart=/usr/bin/xmonad
-ExecReload=/usr/bin/xmonad --recompile --restart
+ExecStart=/home/nathan/.xmonad/xmonad
+ExecReload=/home/nathan/.xmonad/xmonad --recompile --restart
 Restart=always
 RestartSec=10
  

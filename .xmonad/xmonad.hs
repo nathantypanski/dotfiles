@@ -58,8 +58,7 @@ myNormalBorderColor  = "#282a2e"
 myFocusedBorderColor = "#a54242"
 
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
-    [ ((modm,                 xK_Return), spawn myTerminal)
-    , ((modm .|. shiftMask,   xK_Return), windows W.swapMaster)
+    [ ((modm .|. shiftMask,   xK_Return), windows W.swapMaster)
     , ((modm .|. shiftMask,   xK_r     ), renameWorkspace defaultXPConfig)
     , ((modm .|. shiftMask,   xK_c     ), kill)
     , ((modm,                 xK_space ), sendMessage NextLayout)
@@ -83,7 +82,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm,                 xK_b     ), sendMessage ToggleStruts)
     , ((modm .|. shiftMask,   xK_q     ), io exitSuccess)
     , ((modm,                 xK_q     ), spawn "xmonad --recompile; xmonad --restart")
-    , ((modm,                 xK_p     ), spawn "dmenu_run")
     , ((controlMask,          xK_Print ), spawn "sleep 0.2; scrot -s")
     , ((0,                    xK_Print ), spawn "scrot")
     , ((modm,                 xK_o     ), toggleWS)
