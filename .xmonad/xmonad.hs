@@ -39,7 +39,7 @@ import XMonad.Prompt.Input
 import XMonad.Prompt.Shell
 
 -- Nice workspace bindings
-import XMonad.Actions.CycleWS
+import XMonad.Actions.CycleWS ( toggleWS )
 
 -- control focus
 import qualified XMonad.StackSet as W
