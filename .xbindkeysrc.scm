@@ -8,10 +8,6 @@
 
 ;; Version: 1.8.5
 
-;; If you edit this file, do not forget to uncomment any lines
-;; that you change.
-;; The semicolon(;) symbol may be used anywhere for comments.
-
 ;; To specify a key, you can use 'xbindkeys --key' or
 ;; 'xbindkeys --multikey' and put one of the two lines in this file.
 
@@ -23,7 +19,6 @@
 ;;   Release, Control, Shift, Mod1 (Alt), Mod2 (NumLock),
 ;;   Mod3 (CapsLock), Mod4, Mod5 (Scroll).
 
-
 ;; The release modifier is not a standard X modifier, but you can
 ;; use it if you want to catch release instead of press events
 
@@ -31,7 +26,6 @@
 ;; NumLock, CapsLock and ScrollLock.
 ;; Uncomment the lines below if you want to use them.
 ;; To dissable them, call the functions with #f
-
 
 ;;;;EXTRA FUNCTIONS: Enable numlock, scrolllock or capslock usage
 ;;(set-numlock! #t)
@@ -61,15 +55,9 @@
 ;; (remove-all-keys)
 ;; (debug)
 
-
-;; Examples of commands:
-
-;; (xbindkey '(control shift q) "xbindkeys_show")
-
 ;; Toggle the touchpad
 ;; XF86TouchpadToggle
 (xbindkey '("m:0x0" "c:199") "synclient TouchpadOff=`synclient -l | grep -ce TouchpadOff.*0`")
-
 
 ;; increase volume
 ;; XF86AudioRaiseVolume
@@ -82,6 +70,10 @@
 ;; Toggle mute
 ;; XF86AudioMute
 (xbindkey '("m:0x0" "c:121") "amixer set Master toggle")
+
+(xbindkey '(Mod4 p) "dmenu_run")
+
+(xbindkey '(Mod4 Return) "urxvtc")
    
 ;;;; specify a mouse button
 ;;(xbindkey '(control "b:2") "xterm")
@@ -99,25 +91,25 @@
 
 
 ;; Extra features
-(xbindkey-function '(control a)
-		   (lambda ()
-		     (display "Hello from Scheme!")
-		     (newline)))
+;; (xbindkey-function '(control a)
+;; 		   (lambda ()
+;; 		     (display "Hello from Scheme!")
+;; 		     (newline)))
+;; 
+;; (xbindkey-function '(shift p)
+;; 		   (lambda ()
+;; 		     (run-command "xterm")))
 
-(xbindkey-function '(shift p)
-		   (lambda ()
-		     (run-command "xterm")))
 
-
-;; Double click test
-(xbindkey-function '(control w)
-		   (let ((count 0))
-		     (lambda ()
-		       (set! count (+ count 1))
-		       (if (> count 1)
-			   (begin
-			    (set! count 0)
-			    (run-command "xterm"))))))
+;; ;; Double click test
+;; (xbindkey-function '(control w)
+;; 		   (let ((count 0))
+;; 		     (lambda ()
+;; 		       (set! count (+ count 1))
+;; 		       (if (> count 1)
+;; 			   (begin
+;; 			    (set! count 0)
+;; 			    (run-command "xterm"))))))
 
 ;;;; Time double click test:
 ;;;;  - short double click -> run an xterm
