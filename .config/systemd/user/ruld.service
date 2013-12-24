@@ -8,4 +8,4 @@ Environment=DISPLAY=:0
 ExecStart=/home/nathan/bin/ruld
 
 [Install]
-WantedBy=wm.target
+WantedBy=bspwm.service

@@ -1,8 +1,7 @@
 [Unit]
 Description=set the default mouse pointer
-WantedBy=xorg.target
 Requisite=xorg.target
-After=xorg.target
+After=wm.target
 
 [Service]
 Type=oneshot
