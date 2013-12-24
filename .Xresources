@@ -12,10 +12,7 @@ urxvt*url-select.launcher: /usr/bin/firefox -new-tab
 URxvt.url-select.underline: true
 
 urxvt*font: xft:terminus:size=12
-
-Xft.hinting: true
-Xft.autohint: false
-Xft.lcdfilter: lcddefault
+!urxvt*font: xft:profont:size=9
 
 URxvt.transparent: false
 URxvt.tintColor: white
