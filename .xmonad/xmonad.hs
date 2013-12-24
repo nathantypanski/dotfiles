@@ -4,12 +4,20 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Util.Loggers
 import System.Process
 import Data.Time
+import Data.List (isPrefixOf)
+import XMonad.Actions.CopyWindow (copy)
 import System.Locale
 import System.IO
 import Data.Monoid
 import System.Exit
 import XMonad.Layout.NoBorders
-import XMonad.Actions.WorkspaceNames
+import XMonad.Hooks.ManageHelpers (isFullscreen, doFullFloat, composeOne, (-?>))
+import XMonad.Actions.DynamicWorkspaces ( addWorkspacePrompt
+                                        , removeWorkspace
+                                        , renameWorkspace
+                                        , withWorkspace
+                                        , withNthWorkspace
+                                        , selectWorkspace)
 -- import XMonad.Hooks.EwmhDesktops hiding (fullscreenEventHook)
 import XMonad.Actions.Navigation2D ( Navigation2D
                                    , lineNavigation
@@ -35,7 +43,6 @@ import XMonad.Util.Run
 import XMonad.Layout.LayoutHints
 
 import XMonad.Prompt
-import XMonad.Prompt.Input
 import XMonad.Prompt.Shell
 
 -- Nice workspace bindings
@@ -47,7 +54,6 @@ import qualified XMonad.StackSet as W
 -- key/mouse bindings
 import qualified Data.Map        as M
 
-myTerminal      = "urxvtc"
 myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = False
 myBorderWidth   = 1
@@ -81,10 +87,23 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm,                 xK_period), sendMessage (IncMasterN (-1)))
     , ((modm,                 xK_b     ), sendMessage ToggleStruts)
     , ((modm .|. shiftMask,   xK_q     ), io exitSuccess)
-    , ((modm,                 xK_q     ), spawn "xmonad --recompile; xmonad --restart")
+    , ((modm,                 xK_q     ), spawn "ghc ~/.xmonad/xmonad.hs; userctl restart xmonad")
     , ((controlMask,          xK_Print ), spawn "sleep 0.2; scrot -s")
     , ((0,                    xK_Print ), spawn "scrot")
     , ((modm,                 xK_o     ), toggleWS)
+    , ((modm,                 xK_p     ), shellPrompt myXPConfig)
+
+      -- Prompt for a workspace to switch to
+    , ((modm,                 xK_v     ), selectWorkspace myXPConfig)
+
+      -- Prompt for a workspace and copy all client from the current one there
+    , ((modm .|. controlMask, xK_m     ), withWorkspace myXPConfig (windows . copy))
+
+      -- Remove current workspace (must be empty)
+    , ((modm .|. shiftMask                  , xK_BackSpace  ), removeWorkspace)
+
+    , ((modm .|. shiftMask, xK_a), addWorkspacePrompt myXPConfig)
+
     ]
     ++
 
@@ -165,28 +184,37 @@ myManageHook = manageDocks
         , className =? "Firefox"        --> doShift "3"
         , className =? "Conky"        --> doShift "22"
         ]
+    <+>
+        composeOne [isFullscreen -?> doFullFloat]
 
 myEventHook = mempty
 myLogHook = mempty
 myStartupHook = return ()
 
-promptConfig = defaultXPConfig {
-      font = "-*-terminus-medium-*-*-*-16-*-*-*-*-*-iso8859-*"
-    , promptBorderWidth = 0
-    , historySize = 1
-    , alwaysHighlight = True
-    , bgColor = "#1D1F21"
-    , fgColor = "#C5C8C6"
-    , fgHLight = "#DE935F"
-    , bgHLight = "#373B41"
---  , defaultText = "λ "
-    , position = Top
-    , showCompletionOnTab = False
-    , height = 20
-}
+myXPConfig :: XPConfig
+myXPConfig =
+    XPC { font              = "-*-terminus-medium-r-*-*-*-120-75-75-*-*-iso8859-15"
+        , bgColor           = "grey22"
+        , fgColor           = "grey80"
+        , fgHLight          = "black"
+        , bgHLight          = "grey"
+        , borderColor       = "white"
+        , promptBorderWidth = 0
+        , promptKeymap      = defaultXPKeymap
+        , completionKey     = xK_Tab
+        , changeModeKey     = xK_grave
+        , position          = Top
+        , height            = 18
+        , historySize       = 256
+        , historyFilter     = id
+        , defaultText       = []
+        , autoComplete      = Nothing
+        , showCompletionOnTab = False
+        , searchPredicate   = isPrefixOf
+        , alwaysHighlight   = True
+        }
 
 myConfig = defaultConfig {
-        terminal           = myTerminal,
         focusFollowsMouse  = myFocusFollowsMouse,
         borderWidth        = myBorderWidth,
         modMask            = myModMask,
