@@ -1,5 +1,6 @@
 [Unit]
 Description=set the font directory
+After=wm.target
 Before=fonthash.service
 Wants=fonthash.service
 
