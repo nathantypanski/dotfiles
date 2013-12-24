@@ -1,6 +1,5 @@
 [Unit]
 Description=Window manager target
-Environment=Display=:0
 Wants=xorg.target
 Wants=mystuff.target
 Requires=dbus.socket
