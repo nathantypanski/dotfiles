@@ -1,6 +1,6 @@
 [Unit]
 Description=set the default mouse pointer
-Requisite=xorg.target
+Requires=xorg.target
 After=wm.target
 
 [Service]
