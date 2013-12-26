@@ -10,6 +10,8 @@ urxvt*termName: rxvt-256color
 urxvt*scrollBar: false
 urxvt*url-select.launcher: /usr/bin/firefox -new-tab
 URxvt.url-select.underline: true
+URxvt*jumpScroll: true
+URxvt*lineSpace: 0
 
 urxvt*font: xft:terminus:size=12
 !urxvt*font: xft:profont:size=9
@@ -36,6 +38,7 @@ Xft.antialias: 1
 Xft.rgba: rgb
 !! urxvt
 URxvt*termName: rxvt-unicode
+URxvt*letterSpace: 0
 URxvt*imLocale: en_Us.utf8
 URxvt*depth:                  24
 URxvt*scrollstyle:            plain
@@ -47,7 +50,6 @@ URxvt*override-redirect:      False
 URxvt*geometry:               80x25
 URxvt*internalBorder:         0
 URxvt*externalBorder:         0
-URxvt*lineSpace:              0
 URxvt*borderLess:             False
 URxvt.intensityStyles:        false
 ! Dont know what this does:
