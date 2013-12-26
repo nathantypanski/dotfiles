@@ -7,5 +7,5 @@ setopt PROMPT_SUBST
 
 export PROMPT="%1~%(#.#.$BLUE$)$NO_COLOR "
 source ~/.zsh/git-prompt.zsh
-ZSH_HIGHLIGHT_HIGHLIGHTERS=(main pattern cursor)
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main pattern)
 source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
