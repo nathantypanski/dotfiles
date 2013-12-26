@@ -149,6 +149,7 @@ Bundle 'troydm/easybuffer.vim'
 Bundle 'LaTeX-Box-Team/LaTeX-Box'
 Bundle 'kien/ctrlp.vim'
 Bundle 'majutsushi/tagbar'
+Bundle 'vim-scripts/taglist.vim'
 Bundle 'nanotech/jellybeans.vim'
 Bundle 'chriskempson/base16-vim'
 Bundle 'jceb/vim-orgmode'
@@ -239,6 +240,20 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 " Latex-suite stuff
 " -----------------
 "
+"" CTAGS FOR LATEX
+let tags='./tags'
+let tlist_tex_settings = 'latex;l:labels;s:sections;t:subsections;u:subsubsections'
+let g:tagbar_type_tex = {
+    \ 'ctagstype' : 'latex',
+    \ 'kinds'     : [
+        \ 's:sections',
+        \ 'g:graphics:0:0',
+        \ 'l:labels',
+        \ 'r:refs:1:0',
+        \ 'p:pagerefs:1:0'
+    \ ],
+    \ 'sort'    : 0
+\ }
 " REQUIRED. This makes vim invoke Latex-Suite when you open a tex file.
 filetype plugin on
 
