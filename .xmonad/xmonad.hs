@@ -1,13 +1,7 @@
 import XMonad
-import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
-import XMonad.Util.Loggers
-import System.Process
-import Data.Time
 import Data.List (isPrefixOf)
 import XMonad.Actions.CopyWindow (copy)
-import System.Locale
-import System.IO
 import Data.Monoid
 import System.Exit
 import XMonad.Layout.NoBorders
@@ -32,6 +26,7 @@ import XMonad.Actions.Navigation2D ( Navigation2D
                                    , screenSwap
                                    , Direction2D
                                    )
+import XMonad.Hooks.DynamicLog
 
 -- functions for tagging windows and selecting them by tags
 -- import XMonad.Actions.TagWindows
@@ -180,9 +175,6 @@ myManageHook = manageDocks
         , (className =? "Firefox" <&&> resource =? "Dialog") --> doFloat
         , resource  =? "desktop_window" --> doIgnore
         , resource  =? "kdesktop"       --> doIgnore
-        -- Send things to appropriate workspaces
-        , className =? "Firefox"        --> doShift "3"
-        , className =? "Conky"        --> doShift "22"
         ]
     <+>
         composeOne [isFullscreen -?> doFullFloat]
@@ -230,4 +222,20 @@ myConfig = defaultConfig {
         startupHook        = myStartupHook
     }
 
-main = xmonad myConfig
+main = do
+    h <- spawnPipe "xmobar"
+    xmonad =<< xmobar defaultConfig {
+            focusFollowsMouse  = myFocusFollowsMouse,
+            borderWidth        = myBorderWidth,
+            modMask            = myModMask,
+            workspaces         = myWorkspaces,
+            normalBorderColor  = myNormalBorderColor,
+            focusedBorderColor = myFocusedBorderColor,
+            keys               = myKeys,
+            mouseBindings      = myMouseBindings,
+            layoutHook         = myLayout,
+            manageHook         = myManageHook,
+            handleEventHook    = myEventHook,
+            logHook            = dynamicLogWithPP $ defaultPP { ppOutput = hPutStrLn h },
+            startupHook        = myStartupHook
+        }
