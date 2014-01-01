@@ -1,6 +1,6 @@
 [Unit]
 Description=bind my keys to do things with my keys
-After=wm.target
+Requires=xorg.target
 
 [Service]
 Type=simple
