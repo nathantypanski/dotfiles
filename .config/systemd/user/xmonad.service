@@ -3,8 +3,8 @@ Description=Advanced modern tiling window manager
 
 [Service]
 Environment=DISPLAY=:0
-ExecStart=/home/nathan/.xmonad/xmonad
-ExecReload=/home/nathan/.xmonad/xmonad --recompile --restart
+ExecStart=/home/nathan/.xmonad/xmonad-x86_64-linux
+ExecReload=/home/nathan/.xmonad/xmonad-x86_64-linux --recompile --restart
 Restart=always
 RestartSec=10
  

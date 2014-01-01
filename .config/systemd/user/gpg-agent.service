@@ -1,6 +1,5 @@
 [Unit]
 Description=gpg-agent daemon
-WantedBy=mystuff.target
 
 [Service]
 Type=forking
@@ -8,4 +7,4 @@ ExecStart=/usr/bin/gpg-agent --daemon --write-env-file "${HOME}/.gpg-agent-info"
 Restart=always
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=mystuff.target

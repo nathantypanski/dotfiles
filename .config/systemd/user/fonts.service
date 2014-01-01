@@ -1,6 +1,6 @@
 [Unit]
 Description=set the font directory
-After=wm.target
+Requires=xorg.target
 Before=fonthash.service
 Wants=fonthash.service
 
