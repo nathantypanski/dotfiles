@@ -1,6 +1,6 @@
 [Unit]
-Description=bind my keys to do things with my keys
-After=wm.target
+Description=remap keys
+Requires=xorg.target
 
 [Service]
 Type=simple
