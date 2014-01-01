@@ -222,9 +222,7 @@ myConfig = defaultConfig {
         startupHook        = myStartupHook
     }
 
-main = do
-    h <- spawnPipe "xmobar"
-    xmonad =<< xmobar defaultConfig {
+main = xmonad defaultConfig {
             focusFollowsMouse  = myFocusFollowsMouse,
             borderWidth        = myBorderWidth,
             modMask            = myModMask,
@@ -236,6 +234,6 @@ main = do
             layoutHook         = myLayout,
             manageHook         = myManageHook,
             handleEventHook    = myEventHook,
-            logHook            = dynamicLogWithPP $ defaultPP { ppOutput = hPutStrLn h },
+            logHook            = myLogHook,
             startupHook        = myStartupHook
         }
