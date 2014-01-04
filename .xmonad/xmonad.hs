@@ -96,9 +96,9 @@ terminus :: String
 terminus = "-*-terminus-medium-r-*-*-12-120-*-*-*-*-iso8859-*"
 
 shiftLayout :: X ()
-shiftLayout = do
-    XD.dzenConfig (XD.timeout 0.25) "Hi"
-    sendMessage NextLayout
+shiftLayout = sendMessage NextLayout 
+    >> (dynamicLogString myLayoutDzen 
+        >>= XD.dzenConfig (XD.timeout 0.5))
 
 myKeys :: XConfig Layout -> M.Map (KeyMask, KeySym) (X ())
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
@@ -261,6 +261,26 @@ myXPConfig =
         , alwaysHighlight   = True
         }
 
+myLayoutDzen = defaultPP
+    { ppCurrent = const ""
+    , ppVisible = const ""
+    , ppHidden  = const ""
+    , ppHiddenNoWindows  = const ""
+    , ppUrgent = const ""
+    , ppSep = ""
+    , ppWsSep = ""
+    , ppTitle = const ""
+    , ppLayout = dzenColor colorComment colorBackground .
+                pad . (\ x -> case x of
+                            "Tall" -> "||"
+                            "Mirror Tall" -> "="
+                            "Hinted Full" -> "-H-"
+                            "Hinted Tall" -> "|H|"
+                            "Tabs by Vertical" -> "#"
+                            _ -> x
+                )
+    }
+
 myDzenPP :: PP
 myDzenPP = defaultPP { ppCurrent = dzenColor colorBackground colorGreen . pad
                      , ppVisible = dzenColor colorForeground colorSelection . pad
@@ -281,8 +301,9 @@ myDzenPP = defaultPP { ppCurrent = dzenColor colorBackground colorGreen . pad
                                     pad . (\ x -> case x of
                                               "Tall" -> "||"
                                               "Mirror Tall" -> "="
-                                              "Hinted Full" -> "[H]"
+                                              "Hinted Full" -> "-H-"
                                               "Hinted Tall" -> "|H|"
+                                              "Tabs by Vertical" -> "#"
                                               _ -> x
                                     )
                      , ppTitle = wrap "^ca(2,xdotool key super+shift+c)" "^ca()" . dzenColor "#c5c8c6" "#282a2e" . shorten 40
