@@ -15,6 +15,7 @@
 (xbindkey '("m:0x0" "c:121") "amixer set Master toggle")
 
 (xbindkey '(Mod4 Return) "urxvtc")
+(xbindkey '(Mod4 BackSpace) "dmenu_run")
    
 (define (define-chord-keys key1 key2 cmd-k1 cmd-k2 cmd-k1-k2 cmd-k2-k1)
     "Define chording keys"
