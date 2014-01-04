@@ -73,3 +73,6 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 export BSPWM_TREE=/tmp/bspwm.tree
 export BSPWM_HISTORY=/tmp/bspwm.history
 export BSPWM_STACK=/tmp/bspwm.stack
+
+# fix java fonts
+export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true'
