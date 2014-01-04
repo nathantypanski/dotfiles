@@ -261,7 +261,7 @@ myXPConfig =
         , alwaysHighlight   = True
         }
 
-myLayoutDzen = defaultPP
+myEmptyDzen = defaultPP
     { ppCurrent = const ""
     , ppVisible = const ""
     , ppHidden  = const ""
@@ -270,7 +270,11 @@ myLayoutDzen = defaultPP
     , ppSep = ""
     , ppWsSep = ""
     , ppTitle = const ""
-    , ppLayout = dzenColor colorComment colorBackground .
+    , ppLayout = const ""
+    }
+
+myLayoutDzen = myEmptyDzen
+    { ppLayout = dzenColor colorComment colorBackground .
                 pad . (\ x -> case x of
                             "Tall" -> "||"
                             "Mirror Tall" -> "="
