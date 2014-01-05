@@ -62,8 +62,8 @@ export TERMCMD=urxvt
 export SDL_AUDIODRIVER=alsa
 # Eclipse doesn't seem to play nice by default.
 export ECLIPSE_HOME="/usr/share/eclipse"
-#syncad
 export CCACHE_DIR=$HOME/.ccache
+export CCACHE_LOGFILE=$HOME"/.ccache/logfile.log"
 export CHROOT=$HOME/chroot
 export XDG_CONFIG_HOME='/home/nathan/.config'
 
@@ -75,3 +75,6 @@ export BSPWM_STACK=/tmp/bspwm.stack
 
 # fix java fonts
 export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true'
+
+# gtk style for qt5
+export QT_STYLE_OVERRIDE="gtk"
