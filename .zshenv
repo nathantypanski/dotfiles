@@ -63,7 +63,6 @@ export SDL_AUDIODRIVER=alsa
 # Eclipse doesn't seem to play nice by default.
 export ECLIPSE_HOME="/usr/share/eclipse"
 #syncad
-export SYNCAD_LICENSE_FILE=$HOME/synapticad-17.07d/license.dat
 export CCACHE_DIR=$HOME/.ccache
 export CHROOT=$HOME/chroot
 export XDG_CONFIG_HOME='/home/nathan/.config'
