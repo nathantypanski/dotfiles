@@ -1,7 +1,8 @@
 [Unit]
 Description=Merges in X resources
 After=xorg.target
-Requisite=xorg.target
+Requires=xorg.target
+Before=wm.target
 
 [Service]
 Type=oneshot

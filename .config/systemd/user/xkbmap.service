@@ -1,5 +1,6 @@
 [Unit]
 Description=United States Thinkpad keyboard map
+Requires=xorg.target
 After=wm.target
 
 [Service]

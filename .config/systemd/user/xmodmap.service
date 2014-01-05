@@ -1,6 +1,7 @@
 [Unit]
 Description=remap keys
 Requires=xorg.target
+After=wm.target
 
 [Service]
 Type=simple
