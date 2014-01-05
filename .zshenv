@@ -36,7 +36,7 @@ export PATH="/home/nathan/perl5/bin:$PATH";
 export PATH="$PATH:/usr/bin/vendor_perl";
 # powerline
 #export POWERLINE_CONFIG_PATH="/home/nathan/.config/powerline"
-export HISTFILE=~/.zhistory
+export HISTFILE=$HOME/.zhistory
 # The number of commands stored in memory
 export HISTSIZE=1000
 # The number of commands saved in my history file
@@ -54,17 +54,17 @@ export GREP_COLOR="1;33"
 
 export CLASSPATH="/usr/share/java/junit.jar"
 #export PYTHONPATH=/usr/lib/python2.7/site-packages:/usr/lib/python3.3/site-packages:~/bin/i3-py
-export PYTHONPATH=/usr/lib/python3.3/site-packages:~/bin/i3-py
+export PYTHONPATH=/usr/lib/python3.3/site-packages:$HOME/bin/i3-py
 # scripts in path
-export PATH=$PATH:~/bin:~/.gem/ruby/2.0.0/bin:~/.cabal/bin:/opt/java/jre/bin
+export PATH=$HOME/bin:$PATH:$HOME/.gem/ruby/2.0.0/bin:$HOME/.cabal/bin:/opt/java/jre/bin
 export TERMCMD=urxvt
 # Steam likes this
 export SDL_AUDIODRIVER=alsa
 # Eclipse doesn't seem to play nice by default.
 export ECLIPSE_HOME="/usr/share/eclipse"
 #syncad
-export SYNCAD_LICENSE_FILE=~/synapticad-17.07d/license.dat
-export CCACHE_DIR=~/.ccache
+export SYNCAD_LICENSE_FILE=$HOME/synapticad-17.07d/license.dat
+export CCACHE_DIR=$HOME/.ccache
 export CHROOT=$HOME/chroot
 export XDG_CONFIG_HOME='/home/nathan/.config'
 
