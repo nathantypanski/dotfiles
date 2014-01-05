@@ -61,7 +61,7 @@ man() {
 
 ranger-cd () {
     tempfile='/tmp/chosendir'
-    BUFFER='/usr/bin/ranger --choosedir="$tempfile" "${@:-$(pwd)}"
+    BUFFER='ranger --choosedir="$tempfile" "${@:-$(pwd)}"
     test -f "$tempfile" &&
     if [ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]; then
         cd -- "$(cat "$tempfile")"
