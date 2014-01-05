@@ -63,7 +63,6 @@ export SDL_AUDIODRIVER=alsa
 # Eclipse doesn't seem to play nice by default.
 export ECLIPSE_HOME="/usr/share/eclipse"
 export CCACHE_DIR=$HOME/.ccache
-export CCACHE_LOGFILE=$HOME"/.ccache/logfile.log"
 export CHROOT=$HOME/chroot
 export XDG_CONFIG_HOME='/home/nathan/.config'
 
