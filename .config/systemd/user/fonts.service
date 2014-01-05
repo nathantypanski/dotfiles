@@ -1,6 +1,7 @@
 [Unit]
 Description=set the font directory
 Requires=xorg.target
+After=wm.target
 Before=fonthash.service
 Wants=fonthash.service
 
@@ -11,3 +12,4 @@ ExecStart=/usr/bin/xset +fp /usr/share/fonts/local
 
 [Install]
 WantedBy=wm.target
+WantedBy=fonthash.service
