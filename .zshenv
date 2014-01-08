@@ -77,3 +77,8 @@ export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true'
 
 # gtk style for qt5
 export QT_STYLE_OVERRIDE="gtk"
+# devel root path
+export PATH=$HOME"/box/bin":$PATH
+
+#android
+export PATH=$PATH:/opt/android-sdk/platform-tools
