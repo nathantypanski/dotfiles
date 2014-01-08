@@ -96,7 +96,8 @@ terminus :: String
 terminus = "-*-terminus-medium-r-*-*-12-120-*-*-*-*-iso8859-*"
 
 shiftLayout :: X ()
-shiftLayout = sendMessage NextLayout 
+shiftLayout = 
+    sendMessage NextLayout
     >> (dynamicLogString myLayoutDzen 
         >>= XD.dzenConfig (XD.timeout 0.5))
 
@@ -106,7 +107,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. shiftMask,   xK_r     ), renameWorkspace myXPConfig)
     , ((modm .|. shiftMask,   xK_c     ), kill)
 --    , ((modm,                 xK_space ), sendMessage NextLayout)
-    , ((modm, xK_space                 ), shiftLayout)
+    , ((modm, xK_space                 ), sendMessage NextLayout)
     , ((modm .|. shiftMask,   xK_space ), setLayout $ XMonad.layoutHook conf)
     , ((modm,                 xK_n     ), refresh)
     , ((modm,                 xK_Tab   ), windows W.focusDown)
@@ -221,6 +222,8 @@ myManageHook = manageDocks
         [ className =? "MPlayer"        --> doFloat
         , className =? "Gimp"           --> doFloat
         , className =? "Firefox"        --> doShift "3:web"
+        , stringProperty "WM_NAME" =? "weechat 0.4.2" --> doShift "22"
+        , stringProperty "WM_NAME" =? "Firefox Preferences" --> doFloat
         -- Float Firefox dialog windows
         , (className =? "Firefox" <&&> resource =? "Dialog") --> doFloat
         , resource  =? "desktop_window" --> doIgnore
