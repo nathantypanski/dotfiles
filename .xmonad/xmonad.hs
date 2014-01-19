@@ -294,7 +294,7 @@ myDzenPP = defaultPP { ppCurrent = dzenColor colorBackground colorGreen . pad
                      , ppHidden = dzenColor colorComment colorCurrentLine . pad
                      , ppUrgent = dzenColor colorBackground colorRed . pad
                      , ppExtras = [
-                                      logCmd $ "echo -n '^fg(" ++ colorBlue ++")^i(.dzen/icons/arch_10x10.xbm)^fg()'"
+                                      logCmd $ "echo -n '^fg(" ++ colorBlue ++")^fg()'"
                                     , loadAvg
                                     , logCmd $ "echo -n '^fg(" ++ colorYellow ++ ")^i(.dzen/icons/clock.xbm)^fg()'"
                                     , date "%r"
