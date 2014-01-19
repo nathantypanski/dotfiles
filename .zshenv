@@ -1,5 +1,5 @@
 # android sdk exports
-/etc/profile.d/android-sdk.sh
+#/etc/profile.d/android-sdk.sh
 
 # ensure all terminal emulators use the right shell
 export SHELL='/bin/zsh'
@@ -78,7 +78,7 @@ export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true'
 # gtk style for qt5
 export QT_STYLE_OVERRIDE="gtk"
 # devel root path
-export PATH=$HOME"/box/bin":$PATH
+#export PATH=$HOME"/box/bin":$PATH
 
 #android
-export PATH=$PATH:/opt/android-sdk/platform-tools
+#export PATH=$PATH:/opt/android-sdk/platform-tools
