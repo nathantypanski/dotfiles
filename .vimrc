@@ -164,7 +164,7 @@ let g:tex_conceal = 1
 syntax enable
 set background=dark
 let g:hybrid_use_Xresources = 1
-colorscheme hybrid
+colorscheme Tomorrow-Night-Eighties
 
 " Navigate windows with C-hjkl
 map<C-h> <C-w>h
