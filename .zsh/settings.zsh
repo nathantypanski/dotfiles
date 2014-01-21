@@ -1,5 +1,8 @@
-# Append all history to this file
+# Append all history to history file
 setopt appendhistory
+# share history between terminals
+setopt inc_append_history
+# cd when I just type a directory name
 setopt autocd
 unsetopt beep nomatch notify
 bindkey -v
