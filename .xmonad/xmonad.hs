@@ -1,6 +1,13 @@
 import XMonad
 import XMonad.Layout.NoBorders (smartBorders)
-import XMonad.Layout.Groups.Examples (tallTabs, defaultTiledTabsConfig)
+import XMonad.Layout.Groups.Helpers (moveToGroupUp, moveToGroupDown, swapUp
+                                    ,swapDown, swapMaster, focusGroupUp
+                                    ,focusGroupDown, focusUp, focusDown)
+import XMonad.Layout.Groups.Examples (tallTabs, defaultTiledTabsConfig
+                                     ,rowOfColumns, shrinkMasterGroups
+                                     ,expandMasterGroups
+                                     ,increaseNMasterGroups
+                                     ,decreaseNMasterGroups)
 import XMonad.Layout.LayoutHints (layoutHints)
 import XMonad.Hooks.EwmhDesktops (ewmhDesktopsLogHook)
 import XMonad.Hooks.ManageHelpers (isFullscreen, doFullFloat
@@ -37,7 +44,7 @@ import XMonad.Prompt (XPConfig (..), XPPosition(Top)
                      ,showCompletionOnTab, searchPredicate, alwaysHighlight)
 import XMonad.Prompt.Shell (shellPrompt)
 import XMonad.Prompt.Window (windowPromptGoto)
-import XMonad.StackSet (swapMaster, shiftMaster, focusDown, focusMaster, sink
+import XMonad.StackSet (shiftMaster, focusMaster, sink
                        ,greedyView, shift, view)
 import Data.List (isPrefixOf)
 import Data.Monoid (All, mempty)
@@ -104,7 +111,8 @@ terminus = "-*-terminus-medium-r-*-*-12-120-*-*-*-*-iso8859-*"
 
 restartCommand :: String
 restartCommand =  "if type xmonad;" 
-                        ++ "then xmonad --recompile && xmonad --restart;"
+                        ++ "then xmonad --recompile && "
+                        ++ "xmonad --restart;"
                         ++ "else xmessage xmonad not in \\$PATH: \"$PATH\"; fi"
 
 shiftLayout :: X ()
@@ -115,24 +123,24 @@ shiftLayout =
 
 myKeys :: XConfig Layout -> Map (KeyMask, KeySym) (X ())
 myKeys conf@(XConfig {XMonad.modMask = modm}) = fromList $
-    [ ((modm .|. shiftMask,   xK_Return), windows swapMaster)
-    , ((modm .|. shiftMask,   xK_r     ), renameWorkspace myXPConfig)
+    [
+      ((modm .|. shiftMask,   xK_r     ), renameWorkspace myXPConfig)
     , ((modm .|. shiftMask,   xK_c     ), kill)
     , ((modm, xK_space                 ), shiftLayout)
     , ((modm .|. shiftMask,   xK_space ), setLayout $ XMonad.layoutHook conf)
     , ((modm,                 xK_n     ), refresh)
-    , ((modm,                 xK_Tab   ), windows focusDown)
     , ((modm,                 xK_h     ), windowGo   L False)
+    , ((modm,                 xK_j     ), focusGroupDown)
+    , ((modm,                 xK_k     ), focusGroupUp)
     , ((modm,                 xK_l     ), windowGo   R False)
-    , ((modm,                 xK_k     ), windowGo   U False)
-    , ((modm,                 xK_j     ), windowGo   D False)
-    , ((modm .|. shiftMask,   xK_h     ), windowSwap L False)
-    , ((modm .|. shiftMask,   xK_l     ), windowSwap R False)
-    , ((modm .|. shiftMask,   xK_k     ), windowSwap U False)
-    , ((modm .|. shiftMask,   xK_j     ), windowSwap D False)
-    , ((modm,                 xK_m     ), windows focusMaster)
-    , ((modm .|. controlMask, xK_h     ), sendMessage Shrink)
-    , ((modm .|. controlMask, xK_l     ), sendMessage Expand)
+    , ((modm .|. shiftMask,   xK_h     ), moveToGroupUp False)
+    , ((modm .|. shiftMask,   xK_j     ), focusDown)
+    , ((modm .|. shiftMask,   xK_k     ), focusUp)
+    , ((modm .|. shiftMask,   xK_l     ), moveToGroupDown False)
+    , ((modm .|. controlMask, xK_h     ), shrinkMasterGroups)
+    , ((modm .|. controlMask, xK_j     ), increaseNMasterGroups)
+    , ((modm .|. controlMask, xK_k     ), decreaseNMasterGroups)
+    , ((modm .|. controlMask, xK_l     ), expandMasterGroups)
     , ((modm,                 xK_s     ), goToSelected defaultGSConfig)
     , ((modm,                 xK_f     ), withFocused $ windows . sink)
     , ((modm,                 xK_comma ), sendMessage (IncMasterN 1))
@@ -216,9 +224,10 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = fromList
     ]
 
 myLayout = avoidStruts $
-    smartBorders tiled
+    tallTabs defaultTiledTabsConfig
     ||| Mirror tiled
-    ||| tallTabs defaultTiledTabsConfig
+    ||| smartBorders tiled
+    ||| rowOfColumns
     ||| smartBorders (layoutHints (Tall 1 (99/100) (2/5)))
         where
             -- default tiling algorithm partitions the screen into two panes
