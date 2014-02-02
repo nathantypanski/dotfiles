@@ -1,54 +1,96 @@
 import XMonad
-import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.ManageDocks (Direction2D(L, R, U, D)
+                                ,ToggleStruts(..)
+                                ,manageDocks
+                                ,avoidStruts)
 import Data.List (isPrefixOf)
 import XMonad.Actions.CopyWindow (copy)
-import Data.Monoid
-import System.Exit
-import XMonad.Layout.NoBorders
-import XMonad.Layout.Groups.Examples (tallTabs, defaultTiledTabsConfig)
-import XMonad.Hooks.ManageHelpers (isFullscreen, doFullFloat, composeOne, (-?>))
-import XMonad.Actions.DynamicWorkspaces ( addWorkspacePrompt
-                                        , removeWorkspace
-                                        , renameWorkspace
-                                        , withWorkspace
-                                        , withNthWorkspace
-                                        , selectWorkspace)
+import Data.Monoid (All
+                   ,mempty)
+import System.Exit (exitSuccess)
+import XMonad.Layout.NoBorders (smartBorders)
+import XMonad.Layout.Groups.Examples (tallTabs
+                                     ,defaultTiledTabsConfig)
+import XMonad.Hooks.ManageHelpers (isFullscreen
+                                  ,doFullFloat
+                                  ,composeOne
+                                  ,(-?>))
+import XMonad.Actions.DynamicWorkspaces (addWorkspacePrompt
+                                        ,removeWorkspace
+                                        ,renameWorkspace
+                                        ,withWorkspace
+                                        ,withNthWorkspace
+                                        ,selectWorkspace)
 import XMonad.Hooks.EwmhDesktops (ewmhDesktopsLogHook)
-import XMonad.Actions.Navigation2D ( Navigation2D
-                                   , lineNavigation
-                                   , centerNavigation
-                                   , fullScreenRect
-                                   , singleWindowRect
-                                   , switchLayer
-                                   , windowGo
-                                   , windowSwap
-                                   , windowToScreen
-                                   , screenGo
-                                   , screenSwap
-                                   , Direction2D
-                                   )
-import XMonad.Actions.GridSelect (defaultGSConfig, goToSelected)
-import XMonad.Hooks.DynamicLog
-import XMonad.Actions.TagWindows (addTag, tagDelPrompt, tagPrompt)
-
--- functions for tagging windows and selecting them by tags
--- import XMonad.Actions.TagWindows
-
--- Better ways to spawn apps; safeSpawn and unsafeSpawn
-import XMonad.Util.Run
-
--- dzen
+import XMonad.Actions.Navigation2D (Navigation2D
+                                   ,lineNavigation
+                                   ,centerNavigation
+                                   ,fullScreenRect
+                                   ,singleWindowRect
+                                   ,switchLayer
+                                   ,windowGo
+                                   ,windowSwap
+                                   ,windowToScreen
+                                   ,screenGo
+                                   ,screenSwap
+                                   ,Direction2D)
+import XMonad.Actions.GridSelect (defaultGSConfig,
+                                  goToSelected)
+import XMonad.Hooks.DynamicLog (PP
+                               ,dynamicLogString
+                               ,dynamicLogWithPP
+                               ,pad
+                               ,dzenColor
+                               ,ppTitle
+                               ,ppLayout
+                               ,defaultPP
+                               ,ppCurrent
+                               ,ppVisible
+                               ,ppHidden
+                               ,ppHiddenNoWindows
+                               ,ppUrgent
+                               ,ppSep
+                               ,ppOutput
+                               ,ppWsSep
+                               ,ppExtras
+                               ,wrap
+                               ,shorten)
+import XMonad.Actions.TagWindows (addTag
+                                 ,tagDelPrompt
+                                 ,tagPrompt)
+import XMonad.Util.Run (hPutStrLn)
 import qualified XMonad.Util.Dzen as XD
 import qualified System.Dzen as D
-import XMonad.Util.Loggers ( logCmd, loadAvg, date, battery )
+import XMonad.Util.Loggers (logCmd
+                           ,loadAvg
+                           ,date
+                           ,battery)
 import System.Process (CmdSpec (RawCommand))
-
--- Hints on windows
-import XMonad.Layout.LayoutHints
-
-import XMonad.Prompt
-import XMonad.Prompt.Shell
-import XMonad.Prompt.Window
+import XMonad.Layout.LayoutHints (layoutHints)
+import XMonad.Prompt (XPConfig (..)
+                     ,XPPosition(Top)
+                     ,font
+                     ,bgColor
+                     ,defaultXPKeymap
+                     ,fgColor
+                     ,fgHLight
+                     ,bgHLight
+                     ,borderColor
+                     ,promptBorderWidth
+                     ,promptKeymap
+                     ,completionKey
+                     ,changeModeKey
+                     ,position
+                     ,height
+                     ,historySize
+                     ,historyFilter
+                     ,defaultText
+                     ,autoComplete
+                     ,showCompletionOnTab
+                     ,searchPredicate
+                     ,alwaysHighlight)
+import XMonad.Prompt.Shell (shellPrompt)
+import XMonad.Prompt.Window (windowPromptGoto)
 
 -- Nice workspace bindings
 import XMonad.Actions.CycleWS ( toggleWS )
