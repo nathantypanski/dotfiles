@@ -1,38 +1,34 @@
 import XMonad
+import XMonad.Layout.NoBorders (smartBorders)
+import XMonad.Layout.Groups.Examples (tallTabs, defaultTiledTabsConfig)
+import XMonad.Layout.LayoutHints (layoutHints)
+import XMonad.Hooks.EwmhDesktops (ewmhDesktopsLogHook)
+import XMonad.Hooks.ManageHelpers (isFullscreen, doFullFloat
+                                  ,composeOne, (-?>))
 import XMonad.Hooks.ManageDocks (Direction2D(L, R, U, D)
                                 ,ToggleStruts(..)
                                 ,manageDocks, avoidStruts)
-import Data.List (isPrefixOf)
 import XMonad.Actions.CopyWindow (copy)
-import Data.Monoid (All, mempty)
-import System.Exit (exitSuccess)
-import XMonad.Layout.NoBorders (smartBorders)
-import XMonad.Layout.Groups.Examples (tallTabs, defaultTiledTabsConfig)
-import XMonad.Hooks.ManageHelpers (isFullscreen, doFullFloat
-                                  ,composeOne, (-?>))
 import XMonad.Actions.DynamicWorkspaces (addWorkspacePrompt, removeWorkspace
                                         ,renameWorkspace, withWorkspace
                                         ,withNthWorkspace, selectWorkspace)
-import XMonad.Hooks.EwmhDesktops (ewmhDesktopsLogHook)
 import XMonad.Actions.Navigation2D (Navigation2D, Direction2D
                                    ,lineNavigation, centerNavigation
                                    ,fullScreenRect, singleWindowRect
                                    ,switchLayer, windowGo, windowSwap
                                    ,windowToScreen, screenGo, screenSwap)
-import XMonad.Actions.GridSelect (defaultGSConfig,
-                                  goToSelected)
 import XMonad.Hooks.DynamicLog (PP, dynamicLogString, dynamicLogWithPP
                                ,pad, dzenColor, ppTitle, ppLayout, defaultPP
                                ,ppCurrent, ppVisible, ppHidden
                                ,ppHiddenNoWindows, ppUrgent, ppSep
                                ,ppOutput, ppWsSep, ppExtras, wrap, shorten)
 import XMonad.Actions.TagWindows (addTag, tagDelPrompt, tagPrompt)
+import XMonad.Actions.CycleWS ( toggleWS )
+import XMonad.Actions.GridSelect (defaultGSConfig,
+                                  goToSelected)
 import XMonad.Util.Run (hPutStrLn)
 import XMonad.Util.Dzen (dzenConfig, timeout, font, (>=>))
-import qualified System.Dzen as D
 import XMonad.Util.Loggers (Logger, logCmd, loadAvg, date, battery)
-import System.Process (CmdSpec (RawCommand))
-import XMonad.Layout.LayoutHints (layoutHints)
 import XMonad.Prompt (XPConfig (..), XPPosition(Top)
                      ,font, bgColor, defaultXPKeymap, fgColor, fgHLight
                      ,bgHLight, borderColor, promptBorderWidth, promptKeymap
@@ -41,11 +37,14 @@ import XMonad.Prompt (XPConfig (..), XPPosition(Top)
                      ,showCompletionOnTab, searchPredicate, alwaysHighlight)
 import XMonad.Prompt.Shell (shellPrompt)
 import XMonad.Prompt.Window (windowPromptGoto)
-import XMonad.Actions.CycleWS ( toggleWS )
 import XMonad.StackSet (swapMaster, shiftMaster, focusDown, focusMaster, sink
                        ,greedyView, shift, view)
-
+import Data.List (isPrefixOf)
+import Data.Monoid (All, mempty)
 import Data.Map (Map, fromList)
+import System.Process (CmdSpec (RawCommand))
+import System.Dzen (createDzen')
+import System.Exit (exitSuccess)
 
 colorBackground :: String
 colorBackground = "#1D1F21"
@@ -357,7 +356,7 @@ dzenArgs = ["-ta","l"
 
 main :: IO ()
 main = do
-    dzw <- D.createDzen' dzenPath dzenArgs
+    dzw <- createDzen' dzenPath dzenArgs
     xmonad defaultConfig {
             focusFollowsMouse  = myFocusFollowsMouse,
             borderWidth        = myBorderWidth,
