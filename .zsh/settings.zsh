@@ -1,3 +1,36 @@
+# Title the terminal with the current directory, if the terminal is
+# titleable ($IS_TITLEABLE_TERM is set).
+title-current-dir() {
+    if [[ $IS_TITLEABLE_TERM -eq 1 ]]; then
+        print -Pn "\e]0;%m:%~\a"
+    fi
+}
+
+# Title the terminal with the running program, if the terminal is
+# titleable ($IS_TITLEABLE_TERM is set).
+title-current-prog() {
+    if [[ $IS_TITLEABLE_TERM -eq 1 ]]; then
+        print -Pn "\e]0;$1\a"
+    fi
+}
+
+# Determine whether this terminal is titleable, and set the appropriate
+# environment variables if it is.
+config-titleable () {
+    case $TERM in
+            *rxvt*|*term)
+                IS_TITLEABLE_TERM=1
+            ;;
+    esac
+}
+
+check-set-titles () {
+    if [[ $IS_TITLEABLE_TERM -eq 1 ]]; then
+        add-zsh-hook precmd title-current-dir
+        add-zsh-hook preexec title-current-prog
+    fi
+}
+
 # Append all history to history file
 setopt appendhistory
 # share history between terminals
@@ -6,6 +39,12 @@ setopt inc_append_history
 setopt autocd
 unsetopt beep nomatch notify
 bindkey -v
+
+#use extended regex
+setopt re_match_pcre
+
+# Let me add zsh hooks with a function call
+autoload -Uz add-zsh-hook
 
 bindkey '^R' history-incremental-search-backward
 bindkey '^H' back
@@ -27,3 +66,6 @@ if [ $EUID -ne 0 ] ; then
         export GPG_AGENT_INFO  # the env file does not contain the export statement
     fi
 fi
+
+config-titleable
+check-set-titles
