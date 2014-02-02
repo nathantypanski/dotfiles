@@ -148,7 +148,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [ ((modm .|. shiftMask,   xK_Return), windows W.swapMaster)
     , ((modm .|. shiftMask,   xK_r     ), renameWorkspace myXPConfig)
     , ((modm .|. shiftMask,   xK_c     ), kill)
-    , ((modm, xK_space                 ), sendMessage NextLayout)
+    , ((modm, xK_space                 ), shiftLayout)
     , ((modm .|. shiftMask,   xK_space ), setLayout $ XMonad.layoutHook conf)
     , ((modm,                 xK_n     ), refresh)
     , ((modm,                 xK_Tab   ), windows W.focusDown)
@@ -169,7 +169,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm,                 xK_period), sendMessage (IncMasterN (-1)))
     , ((modm,                 xK_b     ), sendMessage ToggleStruts)
     , ((modm .|. shiftMask,   xK_q     ), io exitSuccess)
-    , ((modm,                 xK_q     ), spawn "ghc ~/.xmonad/xmonad.hs; systemctl --user restart xmonad")
+    , ((modm,                 xK_q     ), spawn "if type xmonad; then xmonad --recompile && xmonad --restart; else xmessage xmonad not in \\$PATH: \"$PATH\"; fi") -- %! Restart xmonad
     , ((controlMask,          xK_Print ), spawn "sleep 0.2; scrot -s")
     , ((0,                    xK_Print ), spawn "scrot")
     , ((modm,                 xK_o     ), toggleWS)
