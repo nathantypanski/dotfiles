@@ -1,7 +1,6 @@
 mktar() { tar cvf "${1%%/}.tar" "${1%%/}/"; }
 mktgz() { tar cvzf "${1%%/}.tar.gz" "${1%%/}/"; }
 mktbz() { tar cvjf "${1%%/}.tar.bz2" "${1%%/}/"; }
-
 # Maps a whole subnet with nmap
 nnet () {
     if [[ -n $1 ]] ; then
@@ -60,6 +59,11 @@ man() {
 }
 
 ranger-cd () {
+    local WAS_TITLEABLE_TERM
+    if [[ $IS_TITLEABLE_TERM -eq 1 ]]; then
+        IS_TITLEABLE_TERM=0
+        WAS_TITLEABLE_TERM=1
+    fi
     tempfile='/tmp/chosendir'
     BUFFER='ranger --choosedir="$tempfile" "${@:-$(pwd)}"
     test -f "$tempfile" &&
@@ -68,6 +72,10 @@ ranger-cd () {
     fi
     rm -f -- "$tempfile"'
     zle accept-line
+    NOPRECMD=0
+    if [[ $WAS_TITLEABLE_TERM -eq 1 ]]; then
+        IS_TITLEABLE_TERM=1
+    fi
 }
 
 # jump to previous directory by number or last visited:
