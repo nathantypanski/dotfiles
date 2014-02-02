@@ -148,7 +148,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [ ((modm .|. shiftMask,   xK_Return), windows W.swapMaster)
     , ((modm .|. shiftMask,   xK_r     ), renameWorkspace myXPConfig)
     , ((modm .|. shiftMask,   xK_c     ), kill)
---    , ((modm,                 xK_space ), sendMessage NextLayout)
     , ((modm, xK_space                 ), sendMessage NextLayout)
     , ((modm .|. shiftMask,   xK_space ), setLayout $ XMonad.layoutHook conf)
     , ((modm,                 xK_n     ), refresh)
