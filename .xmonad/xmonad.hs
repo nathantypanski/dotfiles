@@ -1,13 +1,16 @@
 import XMonad
+import XMonad.Layout.Decoration (Theme (..))
 import XMonad.Layout.NoBorders (smartBorders)
 import XMonad.Layout.Groups.Helpers (moveToGroupUp, moveToGroupDown, swapUp
                                     ,swapDown, swapMaster, focusGroupUp
                                     ,focusGroupDown, focusUp, focusDown)
-import XMonad.Layout.Groups.Examples (tallTabs, defaultTiledTabsConfig
+import XMonad.Layout.Groups.Examples (TiledTabsConfig(..)
+                                     ,tallTabs, defaultTiledTabsConfig
                                      ,rowOfColumns, shrinkMasterGroups
                                      ,expandMasterGroups
                                      ,increaseNMasterGroups
-                                     ,decreaseNMasterGroups)
+                                     ,decreaseNMasterGroups
+                                     ,shrinkText, defaultTheme)
 import XMonad.Layout.LayoutHints (layoutHints)
 import XMonad.Hooks.EwmhDesktops (ewmhDesktopsLogHook)
 import XMonad.Hooks.ManageHelpers (isFullscreen, doFullFloat
@@ -95,7 +98,7 @@ myFocusFollowsMouse = False
 myBorderWidth   = 1
 
 myWorkspaces :: [String]
-myWorkspaces = map show [1..22]
+myWorkspaces = map show [1..10]
 
 myModMask :: KeyMask
 myModMask = mod4Mask
@@ -133,6 +136,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = fromList $
     , ((modm,                 xK_j     ), focusGroupDown)
     , ((modm,                 xK_k     ), focusGroupUp)
     , ((modm,                 xK_l     ), windowGo   R False)
+    , ((modm,                 xK_Tab   ), focusDown)
+    , ((modm .|. shiftMask,   xK_Tab   ), focusUp)
     , ((modm .|. shiftMask,   xK_h     ), moveToGroupUp False)
     , ((modm .|. shiftMask,   xK_j     ), focusDown)
     , ((modm .|. shiftMask,   xK_k     ), focusUp)
@@ -223,32 +228,44 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = fromList
                                       >> windows shiftMaster)
     ]
 
+myTheme :: Theme
+myTheme = defaultTheme { activeColor         = colorCurrentLine
+                       , inactiveColor       = colorBackground
+                       , urgentColor         = colorRed
+                       , activeBorderColor   = colorComment
+                       , inactiveBorderColor = colorBackground
+                       , urgentBorderColor   = colorBackground
+                       , activeTextColor     = colorForeground
+                       , inactiveTextColor   = colorComment
+                       , urgentTextColor     = "#FF0000"
+                       , fontName            = terminus
+                       , decoWidth           = 200
+                       , decoHeight          = 16
+                       , windowTitleAddons   = []
+                       , windowTitleIcons    = []
+                       }
+
 myLayout = avoidStruts $
-    tallTabs defaultTiledTabsConfig
-    ||| Mirror tiled
+    tallTabs (TTC 1 0.5 (3/100) 1 0.5 (3/100) shrinkText myTheme)
     ||| smartBorders tiled
-    ||| rowOfColumns
-    ||| smartBorders (layoutHints (Tall 1 (99/100) (2/5)))
-        where
-            -- default tiling algorithm partitions the screen into two panes
-            tiled   = Tall nmaster delta ratio
+    where
+        -- default tiling algorithm partitions the screen into two panes
+        tiled   = Tall nmaster delta ratio
 
-            -- The default number of windows in the master pane
-            nmaster = 1
+        -- The default number of windows in the master pane
+        nmaster = 1
 
-            -- Default proportion of screen occupied by master pane
-            ratio   = 3/5
+        -- Default proportion of screen occupied by master pane
+        ratio   = 3/5
 
-            -- Percent of screen to increment by when resizing panes
-            delta   = 3/100
+        -- Percent of screen to increment by when resizing panes
+        delta   = 3/100
 
 myManageHook :: ManageHook
 myManageHook = manageDocks
     <+> composeAll
         [ className =? "MPlayer"        --> doFloat
         , className =? "Gimp"           --> doFloat
-        , className =? "Firefox"        --> doShift "3:web"
-        , stringProperty "WM_NAME" =? "weechat 0.4.2" --> doShift "22"
         , stringProperty "WM_NAME" =? "Firefox Preferences" --> doFloat
         -- Float Firefox dialog windows
         , (className =? "Firefox" <&&> resource =? "Dialog") --> doFloat
@@ -333,8 +350,8 @@ myDzenPP = defaultPP { ppCurrent = dzenColorPad colorBackground colorGreen
                                               "Tabs by Vertical" -> "#"
                                               _ -> x
                                     )
-                     , ppTitle = wrap "^ca(2,xdotool key super+shift+c)" 
-                                      "^ca()" 
+                     , ppTitle = wrap "^ca(2,xdotool key super+shift+c)"
+                                      "^ca()"
                                     . dzenColor "#c5c8c6" "#282a2e" . shorten 40
                      }
     where
@@ -342,12 +359,12 @@ myDzenPP = defaultPP { ppCurrent = dzenColorPad colorBackground colorGreen
         dzenColorPad bg fg = dzenColor bg fg . pad
         status :: [XMonad.Util.Loggers.Logger]
         status = [loadAvg
-                ,logCmd $ "echo -n '^fg(" 
-                        ++ colorYellow 
+                ,logCmd $ "echo -n '^fg("
+                        ++ colorYellow
                         ++ ")^i(.dzen/icons/clock.xbm)^fg()'"
                 ,date "%r"
-                ,logCmd $ "echo -n '^fg(" 
-                        ++ colorAqua 
+                ,logCmd $ "echo -n '^fg("
+                        ++ colorAqua
                         ++ ")^i(.dzen/icons/bat_full_01.xbm)^fg()'"
                 ,battery
                 ]
