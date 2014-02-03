@@ -78,6 +78,9 @@ filetype plugin on
 " Autoindent
 filetype indent on
 
+" Makefiles -> Tab characters
+autocmd FileType make setlocal noexpandtab shiftwidth=8 softtabstop=0
+
 " Who doesn't like autoindent?
 set autoindent
 
@@ -153,6 +156,7 @@ Bundle 'vim-scripts/taglist.vim'
 Bundle 'nanotech/jellybeans.vim'
 Bundle 'chriskempson/base16-vim'
 Bundle 'jceb/vim-orgmode'
+Bundle 'wting/rust.vim'
 "Bundle 'Vim-R-plugin'
 "Bundle 'gerw/vim-latex-suite'
 let g:ctrlp_working_path_mode = 'ra'
