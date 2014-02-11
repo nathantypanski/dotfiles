@@ -81,6 +81,8 @@ filetype indent on
 " Makefiles -> Tab characters
 autocmd FileType make setlocal noexpandtab shiftwidth=8 softtabstop=0
 
+au BufNewFile,BufRead *.rs set filetype=rust
+
 " Who doesn't like autoindent?
 set autoindent
 
