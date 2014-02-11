@@ -13,7 +13,8 @@ URxvt.url-select.underline: true
 URxvt*jumpScroll: true
 URxvt*lineSpace: 0
 
-urxvt*font: xft:terminus:size=12
+!urxvt*font: xft:terminus:size=12
+urxvt*font:-*-terminus-medium-*-*-*-16-*-*-*-*-*-iso10646-*
 !urxvt*font: xft:profont:size=9
 
 URxvt.transparent: false
@@ -27,7 +28,8 @@ URxvt.depth: 32
 
 !! Cursor size
 Xcursor.size: 16
-dzen2.font:       -*-fixed-*-*-*-*-*-*-*-*-*-*-*-*
+!dzen2.font: -misc-termsynu-medium-*-normal--13-*-75-75-c-60-iso10646-1 
+dzen2.font: -*-terminus-medium-*-*-*-14-*-*-*-*-*-iso10646-*
 dzen2.foreground: #22EE11
 dzen2.background: black
 !! xft
