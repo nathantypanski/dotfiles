@@ -1,4 +1,4 @@
-#include "/home/nathan/.colors/tomorrow-eighties.xresources"
+#include "/home/nathan/.colors/dotshare.xrdb"
 
 ! Xdefaults file
 !*background: #2c2e2f
@@ -39,6 +39,7 @@ Xft.hintstyle:  hintfull
 Xft.antialias: 1
 Xft.rgba: rgb
 !! urxvt
+URxvt.keysym.M-S-Return: \ urxvt\ &!\012
 URxvt*termName: rxvt-unicode
 URxvt*letterSpace: 0
 URxvt*imLocale: en_Us.utf8
