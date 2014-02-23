@@ -43,6 +43,9 @@ bindkey -v
 #use extended regex
 setopt re_match_pcre
 
+# better globbing, e.g. `rm *~*.tex` to remove all non-.tex files in a dir
+setopt extendedglob
+
 # Let me add zsh hooks with a function call
 autoload -Uz add-zsh-hook
 
