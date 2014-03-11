@@ -45,16 +45,18 @@ if [ -e $RUBYGEMDIR ]; then
     export PATH=$PATH:$RUBYGEMDIR
 fi
 
+# Rust in $PATH
+RUSTBIN=/home/nathan/devel/rust/rust/x86_64-unknown-linux-gnu/stage2/bin
+which rustc &> /dev/null
+if [[ "$?" -eq "1" && -e $RUSTBIN ]]; then
+    export PATH=$PATH:$RUSTBIN
+fi
+
 # cabal!
 CABALPATH=$HOME/.cabal/bin
 which ghc &> /dev/null
-if [[ "$?" -eq "0" && -e $CABALPATH ]]; then
+if [[ "$?" -eq "1" && -e $CABALPATH ]]; then
     export PATH=$PATH:$CABALPATH
-fi
-
-which urxvt &> /dev/null
-if [ "$?" -eq "0" ]; then
-    export TERMCMD=urxvt
 fi
 
 # Steam likes this
@@ -68,18 +70,9 @@ if [ "$?" -eq "0" ]; then
     export CCACHE_DIR=$HOME/.ccache
 fi
 
-# bspwm
-which bspwm &> /dev/null
-if [ "$?" -eq "0" ]; then
-    export PATH=$PATH:$ANDROID_HOME/platform-tools
-    export BSPWM_TREE=/tmp/bspwm.tree
-    export BSPWM_HISTORY=/tmp/bspwm.history
-    export BSPWM_STACK=/tmp/bspwm.stack
-fi
-
 # fix java fonts
 which java &> /dev/null
-if [ "$?" -eq "0" ]; then
+if [ "$?" -eq "1" ]; then
     export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true'
     export CLASSPATH="/usr/share/java/junit.jar"
     export ECLIPSE_HOME="/usr/share/eclipse"
@@ -87,7 +80,7 @@ fi
 
 # Is Chrome installed?
 dpkg-query -l "google-chrome-stable" &> /dev/null
-if [ "$?" -eq "0" ]; then
+if [ "$?" -eq "1" ]; then
     export PATH=$PATH:"/opt/google/chrome"
 fi
 
