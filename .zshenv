@@ -39,13 +39,6 @@ export GREP_COLOR="1;33"
 # gtk style for qt5
 export QT_STYLE_OVERRIDE="gtk"
 
-# Load i3wm scripts, iff binary i3 is in PATH.
-i3SCRIPTDIR="$HOME/bin/i3-py"
-which i3 &> /dev/null
-if [[ "$?" -eq "0" && -e $i3SCRIPDIR ]]; then
-    export PYTHONPATH=$PYTHONPATH:$i3SCRIPTDIR
-fi
-
 # Ruby gems
 RUBYGEMDIR=$HOME"/.gem/ruby/2.0.0/bin"
 if [ -e $RUBYGEMDIR ]; then
