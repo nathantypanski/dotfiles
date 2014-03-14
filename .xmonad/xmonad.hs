@@ -1,11 +1,14 @@
 import XMonad
-import XMonad.Layout.Decoration (Theme (..))
+import XMonad.Layout.Decoration (Theme (..), DefaultShrinker(..))
 import XMonad.Layout.NoBorders (smartBorders)
 import XMonad.Layout.Groups.Helpers (moveToGroupUp, moveToGroupDown, swapUp
                                     ,swapDown, swapMaster, focusGroupUp
                                     ,focusGroupDown, focusUp, focusDown)
+import XMonad.Layout.Tabbed (Shrinker(..), addTabs)
+import XMonad.Layout.Simplest (Simplest(..))
+import XMonad.Layout.Groups (group)
 import XMonad.Layout.Groups.Examples (TiledTabsConfig(..)
-                                     ,tallTabs, defaultTiledTabsConfig
+                                     ,tallTabs
                                      ,rowOfColumns, shrinkMasterGroups
                                      ,expandMasterGroups
                                      ,increaseNMasterGroups
@@ -22,22 +25,24 @@ import XMonad.Actions.CopyWindow (copy)
 import XMonad.Actions.DynamicWorkspaces (addWorkspacePrompt, removeWorkspace
                                         ,renameWorkspace, withWorkspace
                                         ,withNthWorkspace, selectWorkspace)
+import XMonad.Layout.Named (named)
+import XMonad.Layout.Renamed (renamed, Rename(..))
 import XMonad.Actions.Navigation2D (Navigation2D, Direction2D
                                    ,lineNavigation, centerNavigation
                                    ,fullScreenRect, singleWindowRect
                                    ,switchLayer, windowGo, windowSwap
                                    ,windowToScreen, screenGo, screenSwap)
 import XMonad.Hooks.DynamicLog (PP, dynamicLogString, dynamicLogWithPP
-                               ,pad, dzenColor, ppTitle, ppLayout, defaultPP
+                               ,pad, ppTitle, ppLayout, defaultPP
                                ,ppCurrent, ppVisible, ppHidden
                                ,ppHiddenNoWindows, ppUrgent, ppSep
-                               ,ppOutput, ppWsSep, ppExtras, wrap, shorten)
+                               ,ppOutput, ppWsSep, ppExtras, wrap, shorten
+                               ,xmobarColor)
 import XMonad.Actions.TagWindows (addTag, tagDelPrompt, tagPrompt)
 import XMonad.Actions.CycleWS ( toggleWS )
 import XMonad.Actions.GridSelect (defaultGSConfig,
                                   goToSelected)
-import XMonad.Util.Run (hPutStrLn)
-import XMonad.Util.Dzen (dzenConfig, timeout, font, (>=>))
+import XMonad.Util.Run (hPutStrLn, spawnPipe)
 import XMonad.Util.Loggers (Logger, logCmd, loadAvg, date, battery)
 import XMonad.Prompt (XPConfig (..), XPPosition(Top)
                      ,font, bgColor, defaultXPKeymap, fgColor, fgHLight
@@ -53,44 +58,43 @@ import Data.List (isPrefixOf)
 import Data.Monoid (All, mempty)
 import Data.Map (Map, fromList)
 import System.Process (CmdSpec (RawCommand))
-import System.Dzen (createDzen')
 import System.Exit (exitSuccess)
 
 colorBackground :: String
-colorBackground = "#1D1F21"
+colorBackground = "#151515"
 
 colorCurrentLine :: String
-colorCurrentLine = "#282A2E"
+colorCurrentLine = "#FF8939"
 
 colorSelection :: String
-colorSelection = "#373B41"
+colorSelection = "#404040"
 
 colorForeground :: String
-colorForeground = "#C5C8C6"
+colorForeground = "#D7D0C7"
 
 colorComment :: String
-colorComment = "#707880"
+colorComment = "#dddddd"
 
 colorRed :: String
-colorRed = "#CC6666"
+colorRed = "#E84F4F"
 
 colorOrange :: String
-colorOrange = "#DE935F"
+colorOrange = "#F39D21"
 
 colorYellow :: String
-colorYellow = "#F0C674"
+colorYellow = "#E1AA5D"
 
 colorGreen :: String
-colorGreen = "#B5BD68"
+colorGreen = "#B8D6AC"
 
 colorAqua :: String
-colorAqua = "#8ABEB7"
+colorAqua = "#4E9FB1"
 
 colorBlue :: String
-colorBlue = "#81A2BE"
+colorBlue = "#7DC1CF"
 
 colorPurple :: String
-colorPurple = "#B294BB"
+colorPurple = "#9B64FB"
 
 myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = False
@@ -104,7 +108,7 @@ myModMask :: KeyMask
 myModMask = mod4Mask
 
 myNormalBorderColor :: String
-myNormalBorderColor  = colorComment
+myNormalBorderColor = colorComment
 
 myFocusedBorderColor :: String
 myFocusedBorderColor = colorForeground
@@ -113,16 +117,15 @@ terminus :: String
 terminus = "-*-terminus-medium-r-*-*-12-120-*-*-*-*-iso8859-*"
 
 restartCommand :: String
-restartCommand =  "if type xmonad;" 
+restartCommand =  "if type xmonad;"
                         ++ "then xmonad --recompile && "
                         ++ "xmonad --restart;"
                         ++ "else xmessage xmonad not in \\$PATH: \"$PATH\"; fi"
+                        ++ " && killall xmobar"
 
 shiftLayout :: X ()
-shiftLayout = 
+shiftLayout =
     sendMessage NextLayout
-    >> (dynamicLogString myLayoutDzen 
-        >>= dzenConfig (timeout 0.5 >=> XMonad.Util.Dzen.font terminus))
 
 myKeys :: XConfig Layout -> Map (KeyMask, KeySym) (X ())
 myKeys conf@(XConfig {XMonad.modMask = modm}) = fromList $
@@ -306,85 +309,19 @@ myXPConfig =
         , alwaysHighlight   = True
         }
 
-myEmptyDzen :: PP
-myEmptyDzen = defaultPP
-    { ppCurrent = const ""
-    , ppVisible = const ""
-    , ppHidden  = const ""
-    , ppHiddenNoWindows  = const ""
-    , ppUrgent = const ""
-    , ppSep = ""
-    , ppWsSep = ""
-    , ppTitle = const ""
-    , ppLayout = const ""
-    }
-
-myLayoutDzen :: PP
-myLayoutDzen = myEmptyDzen
-    { ppLayout = dzenColor colorComment colorBackground .
-                pad . (\ x -> case x of
-                            "Tall" -> "||"
-                            "Mirror Tall" -> "="
-                            "Hinted Full" -> "-H-"
-                            "Hinted Tall" -> "|H|"
-                            "Tabs by Vertical" -> "#"
-                            _ -> x
-                )
-    }
-
-myDzenPP :: PP
-myDzenPP = defaultPP { ppCurrent = dzenColorPad colorBackground colorGreen
-                     , ppVisible = dzenColorPad colorForeground colorSelection
-                     , ppHidden = dzenColorPad colorComment colorCurrentLine
-                     , ppUrgent = dzenColorPad colorBackground colorRed
-                     , ppExtras = status
-                     , ppHiddenNoWindows = const ""
-                     , ppWsSep = ""
-                     , ppSep = " "
-                     , ppLayout = dzenColor colorComment colorBackground .
-                                    pad . (\ x -> case x of
-                                              "Tall" -> "||"
-                                              "Mirror Tall" -> "="
-                                              "Hinted Full" -> "-H-"
-                                              "Hinted Tall" -> "|H|"
-                                              "Tabs by Vertical" -> "#"
-                                              _ -> x
-                                    )
-                     , ppTitle = wrap "^ca(2,xdotool key super+shift+c)"
-                                      "^ca()"
-                                    . dzenColor "#c5c8c6" "#282a2e" . shorten 40
-                     }
-    where
-        dzenColorPad :: String -> String -> String -> String
-        dzenColorPad bg fg = dzenColor bg fg . pad
-        status :: [XMonad.Util.Loggers.Logger]
-        status = [loadAvg
-                ,logCmd $ "echo -n '^fg("
-                        ++ colorYellow
-                        ++ ")^i(.dzen/icons/clock.xbm)^fg()'"
-                ,date "%r"
-                ,logCmd $ "echo -n '^fg("
-                        ++ colorAqua
-                        ++ ")^i(.dzen/icons/bat_full_01.xbm)^fg()'"
-                ,battery
-                ]
-
-
-dzenPath :: FilePath
-dzenPath = "/usr/bin/dzen2"
-
-dzenArgs :: [String]
-dzenArgs = ["-ta","l"
-           ,"-fg","#eeeeee"
-           ,"-bg","#1D1F21"
-           ,"-w", "1600"
-           ,"-e","button2=;"
-           ,"-fn", terminus
-           ]
+-- | Some nice xmobar defaults.
+mybarPP :: PP
+mybarPP = defaultPP { ppCurrent =
+                         xmobarColor colorBackground colorGreen . wrap "[" "]"
+                    , ppTitle   =
+                         xmobarColor colorGreen  colorSelection . shorten 40
+                    , ppVisible = wrap "(" ")"
+                    , ppUrgent  = xmobarColor colorRed colorYellow
+                    }
 
 main :: IO ()
 main = do
-    dzw <- createDzen' dzenPath dzenArgs
+    h <- spawnPipe "/home/nathan/.xmonad/xmobar/dist/build/xmobar/xmobar" 
     xmonad defaultConfig {
             focusFollowsMouse  = myFocusFollowsMouse,
             borderWidth        = myBorderWidth,
@@ -397,10 +334,7 @@ main = do
             layoutHook         = myLayout,
             manageHook         = myManageHook,
             handleEventHook    = myEventHook,
-            logHook            = ewmhDesktopsLogHook <+>
-                dynamicLogWithPP myDzenPP
-                    {
-                        ppOutput = hPutStrLn dzw
-                    },
+            logHook            = ewmhDesktopsLogHook <+> 
+                    dynamicLogWithPP mybarPP { ppOutput = hPutStrLn h },
             startupHook        = myStartupHook
         }
