@@ -21,6 +21,7 @@ export LESS_TERMCAP_se=$'\E[0m'
 export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
+#export NODE="$(which nodejs)"
 
 # mail (grml)
 export MAIL=${MAIL:-/var/mail/$USER}
@@ -55,6 +56,10 @@ fi
 # cabal!
 CABALPATH=$HOME/.cabal/bin
 which ghc &> /dev/null
+if [[ "$?" -eq "1" && -e $CABALPATH ]]; then
+    export PATH=$PATH:$CABALPATH
+fi
+which cabal &> /dev/null
 if [[ "$?" -eq "1" && -e $CABALPATH ]]; then
     export PATH=$PATH:$CABALPATH
 fi
