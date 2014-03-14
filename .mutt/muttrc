@@ -1,0 +1,220 @@
+##########
+# muttrc #
+##########
+
+# Don't put anything in this file that you don't want on GitHub.
+#
+# Passwords and sensitive information should be sourced below.
+
+source ~/.mutt/profile
+source ~/.mutt/crypto
+source ~/.mutt/passwords
+
+set pgp_mime_signature_filename="signature.asc"
+set pgp_mime_signature_description="my GPG/PGP digital signature"
+
+# Editing -------------------------------------------------
+set editor = 'vim + -c "set expandtab textwidth=70" -c "set wrap"'
+
+# Folders -------------------------------------------------
+set header_cache =~/.mutt/cache/headers
+set message_cachedir =~/.mutt/cache/bodies
+set certificate_file =~/.mutt/certificates
+#set spoolfile = "+INBOX"
+set postponed = "+[GMail]/Drafts"
+# maildir
+set mbox_type=Maildir
+set header_cache=~/.cache/mutt
+set folder      = ~/mail/gmail
+set spoolfile   = "+INBOX"
+set mbox        = "+[Gmail]/All Mail"
+set postponed   = "+[Gmail]/Drafts"
+unset record
+
+mailboxes +INBOX
+
+macro index D \
+    "<save-message>+[Gmail]/Trash<enter>" \
+    "move message to the trash"
+
+macro index S \
+    "<save-message>+[Gmail]/Spam<enter>" \
+    "mark message as spam"
+
+# Mail checking -------------------------------------------
+set mail_check = 120
+set timeout = 300
+set imap_keepalive = 300
+
+# We don't want to move things in a gmail IMAP setup
+set move = no
+set include
+set auto_tag = yes
+set pager_index_lines = 10
+
+# When reading an email, make up and down scroll the message, rather
+# than switch to the next/previous message, and don't automatically
+# move to the next message at the end:
+bind pager <down> next-line
+bind pager <up> previous-line
+set pager_stop=yes
+
+# Show one line of context when scrolling
+set pager_context=1
+
+# Set the title bar for xterms
+set xterm_title=yes
+
+# Speed up folder switch
+set sleep_time = 0
+
+set wait_key = no                           # shut up, mutt
+#set mbox_type = Maildir                     # mailbox type
+unset move                                  # gmail does that
+#set delete                                  # don't ask, just do
+unset confirmappend                         # don't ask, just do!
+set quit                                    # don't ask, just do!!
+unset mark_old                              # read/new is good enough for me
+set pipe_decode                             # strip headers and eval mimes when piping
+set thorough_search                         # strip headers and eval mimes before searching
+
+# make Mutt forward the way I expect
+set forward_format='Fw: %s'
+set sort="threads"
+set strict_threads="yes"
+set sort_browser="reverse-date"
+set sort_aux="last-date-received"
+unset collapse_unread
+set uncollapse_jump                        # don't collapse on an unread message
+
+# defines the order of headers when viewing messages
+hdr_order Date From To Cc
+alternative_order text/plain text/html *
+
+# HTML viewing --------------------------------------------
+set implicit_autoview
+auto_view text/html  application/x-pgp-message
+set mailcap_path="~/.mailcap"
+
+# Binding -------------------------------------------------
+# bind index ^j sidebar-next
+# bind index ^k sidebar-prev
+bind editor <Tab> complete-query
+bind editor ^T complete
+bind editor <space> noop
+
+bind index "^" imap-fetch-mail
+
+# Sidebar Patch -------------------------------------------
+# set sidebar_delim   = ' '
+# set sidebar_visible = yes
+# set sidebar_width   = 24
+# color sidebar_new color221 color233
+
+# Status Bar ----------------------------------------------
+#set status_chars  = " *%A"
+#set status_format = "   [ Folder: %f ]   [%r%m messages%?n? (%n new)?%?d? (%d to delete)?%?t? (%t tagged)? ]   %>─%?p?( %p postponed )?   "
+
+
+# Index View Options --------------------------------------
+set date_format = "%m/%d"
+set index_format = "[%Z]  %D  %-20.20F  %s"
+set sort = threads                         # like gmail
+set sort_aux = reverse-last-date-received  # like gmail
+#set sort_re                                # thread based on regex
+#set reply_regexp = "^(([Rr][Ee]?(\[[0-9]+\])?: *)?(\[[^]]+\] *)?)*"
+
+# Index Key Bindings --------------------------------------
+bind index gg       first-entry
+bind index G        last-entry
+
+bind index R        group-reply
+bind index <tab>    sync-mailbox
+bind index <space>  collapse-thread
+
+#Colors ---------------------------------------------------
+
+## Colours for items in the index
+color index brightcyan black ~N
+color index brightred black ~O
+color index brightyellow black ~F
+color index black green ~T
+color index brightred black ~D
+mono index bold ~N
+mono index bold ~F
+mono index bold ~T
+mono index bold ~D
+
+## Highlights inside the body of a message.
+
+## URLs
+color body brightblue black "(http|https|ftp|news|telnet|finger)://[^ \"\t\r\n]*"
+color body brightblue black "mailto:[-a-z_0-9.]+@[-a-z_0-9.]+"
+mono body bold "(http|ftp|news|telnet|finger)://[^ \"\t\r\n]*"
+mono body bold "mailto:[-a-z_0-9.]+@[-a-z_0-9.]+"
+
+## Email addresses.
+color body brightblue black "[-a-z_0-9.%$]+@[-a-z_0-9.]+\\.[-a-z][-a-z]+"
+
+## Header
+color header brightgreen black "^from:"
+color header green black "^to:"
+color header green black "^cc:"
+color header green black "^date:"
+color header yellow black "^newsgroups:"
+color header yellow black "^reply-to:"
+color header brightcyan black "^subject:"
+color header red black "^x-spam-rule:"
+color header green black "^x-mailer:"
+color header yellow black "^message-id:"
+color header yellow black "^Organization:"
+color header yellow black "^Organisation:"
+color header yellow black "^User-Agent:"
+color header yellow black "^message-id: .*pine"
+color header yellow black "^X-Fnord:"
+color header yellow black "^X-WebTV-Stationery:"
+
+color header red black "^x-spam-rule:"
+color header green black "^x-mailer:"
+color header yellow black "^message-id:"
+color header yellow black "^Organization:"
+color header yellow black "^Organisation:"
+color header yellow black "^User-Agent:"
+color header yellow black "^message-id: .*pine"
+color header yellow black "^X-Fnord:"
+color header yellow black "^X-WebTV-Stationery:"
+color header yellow black "^X-Message-Flag:"
+color header yellow black "^X-Spam-Status:"
+color header yellow black "^X-SpamProbe:"
+color header red black "^X-SpamProbe: SPAM"
+
+## Coloring quoted text - coloring the first 7 levels:
+color quoted cyan black
+color quoted1 yellow black
+color quoted2 red black
+color quoted3 green black
+color quoted4 cyan black
+color quoted5 yellow black
+color quoted6 red black
+color quoted7 green black
+
+## Default color definitions
+color hdrdefault white green
+color signature brightmagenta black
+color indicator black cyan
+color attachment black green
+color error red black
+color message white brightblack
+color search brightwhite magenta
+color status brightblack blue
+color tree brightblue black
+color normal white brightblack
+color tilde green black
+color bold brightyellow black
+#color underline magenta black
+color markers brightcyan black
+
+## Colour definitions when on a mono screen
+mono bold bold
+mono underline underline
+mono indicator reverse
