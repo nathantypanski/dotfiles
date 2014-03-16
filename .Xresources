@@ -60,7 +60,7 @@ URxvt*preeditType:            OffTheSpot
 URxvt*urlLauncher:            firefox
 URxvt*cursorBlink:            True
 URxvt*pointerBlank:           True
-URxvt*savelines:              65535
+URxvt*saveLines:              65535
 URxvt*scrollttykeypress:      true
 ! Colored man pages and other highlighted stuff
 !URxvt.colorIT:                #268bd2
