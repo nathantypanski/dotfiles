@@ -131,6 +131,7 @@ myKeys :: XConfig Layout -> Map (KeyMask, KeySym) (X ())
 myKeys conf@(XConfig {XMonad.modMask = modm}) = fromList $
     [
       ((modm .|. shiftMask,   xK_r     ), renameWorkspace myXPConfig)
+    , ((modm,                 xK_Return), spawn $ "urxvt")
     , ((modm .|. shiftMask,   xK_c     ), kill)
     , ((modm, xK_space                 ), shiftLayout)
     , ((modm .|. shiftMask,   xK_space ), setLayout $ XMonad.layoutHook conf)
@@ -163,9 +164,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = fromList $
     , ((modm,                 xK_o     ), toggleWS)
     , ((modm,                 xK_p     ), shellPrompt myXPConfig)
     , ((modm,                 xK_slash ), windowPromptGoto myXPConfig {
-                                              autoComplete = Just 500000 
+                                              autoComplete = Just 500000
                                           })
-    , ((modm,                 xK_m     ), tagPrompt 
+    , ((modm,                 xK_m     ), tagPrompt
                                             myXPConfig $ withFocused . addTag)
     , ((modm .|. shiftMask,   xK_m     ), tagDelPrompt myXPConfig)
 
@@ -173,7 +174,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = fromList $
     , ((modm,                 xK_v     ), selectWorkspace myXPConfig)
 
       -- Prompt for a workspace and copy all client from the current one there
-    , ((modm .|. controlMask, xK_m     ), withWorkspace 
+    , ((modm .|. controlMask, xK_m     ), withWorkspace
                                             myXPConfig (windows . copy))
 
       -- Remove current workspace (must be empty)
