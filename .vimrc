@@ -154,6 +154,7 @@ Bundle 'LaTeX-Box-Team/LaTeX-Box'
 Bundle 'kien/ctrlp.vim'
 Bundle 'majutsushi/tagbar'
 Bundle 'vim-scripts/taglist.vim'
+Bundle 'DirDiff.vim'
 Bundle 'nanotech/jellybeans.vim'
 Bundle 'chriskempson/base16-vim'
 Bundle 'jceb/vim-orgmode'
@@ -298,6 +299,7 @@ map<leader>b :FufBuffer<C-M>
 augroup indent_settings
     au!
     au BufEnter *.c setl autoindent smartindent tabstop=8 expandtab shiftwidth=8
+    au BufEnter *.rs setl autoindent smartindent tabstop=4 expandtab shiftwidth=4
 
 set colorcolumn=80
 
