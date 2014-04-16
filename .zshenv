@@ -46,6 +46,9 @@ if [ -e $RUBYGEMDIR ]; then
     export PATH=$PATH:$RUBYGEMDIR
 fi
 
+# Rust 0.9 root
+export RUST_ROOT='/home/nathan/devel/rust/rust-0.9/x86_64-unknown-linux-gnu/stage2'
+
 # Rust in $PATH
 RUSTBIN=/home/nathan/devel/rust/rust/x86_64-unknown-linux-gnu/stage2/bin
 which rustc &> /dev/null
@@ -53,12 +56,14 @@ if [[ "$?" -eq "1" && -e $RUSTBIN ]]; then
     export PATH=$PATH:$RUSTBIN
 fi
 
+# ghc
+GHCPATH=$HOME/.ghc/bin
+which ghc &> /dev/null
+if [[ "$?" -eq "1" && -e $GHCPATH ]]; then
+    export PATH=$PATH:$GHCPATH
+fi
 # cabal!
 CABALPATH=$HOME/.cabal/bin
-which ghc &> /dev/null
-if [[ "$?" -eq "1" && -e $CABALPATH ]]; then
-    export PATH=$PATH:$CABALPATH
-fi
 which cabal &> /dev/null
 if [[ "$?" -eq "1" && -e $CABALPATH ]]; then
     export PATH=$PATH:$CABALPATH
