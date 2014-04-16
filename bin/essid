@@ -5,4 +5,10 @@
 #
 # Get the essid of the current wireless network.
 
-wicd-cli -d --wireless | gawk '{ print $2 }' | sed -n 2p
+wired=$(wicd-cli -zl)
+
+if [ -z "$wired" ]; then
+    echo "wired"
+else
+    wicd-cli -d --wireless | gawk '{ print $2 }' | sed -n 2p
+fi
