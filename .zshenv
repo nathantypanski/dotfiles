@@ -1,6 +1,3 @@
-# android sdk exports
-#/etc/profile.d/android-sdk.sh
-
 # ensure all terminal emulators use the right shell
 export SHELL='/bin/zsh'
 
@@ -21,7 +18,6 @@ export LESS_TERMCAP_se=$'\E[0m'
 export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
-#export NODE="$(which nodejs)"
 
 # mail (grml)
 export MAIL=${MAIL:-/var/mail/$USER}
@@ -65,7 +61,6 @@ fi
 CABALPATH=$HOME/.cabal/bin
 echo "$PATH" | grep "\.cabal/bin" &> /dev/null
 if [[ "$?" -eq "1" && -e $CABALPATH ]]; then
-    echo "Sourcing cabal ..."
     export PATH=$CABALPATH:$PATH
 fi
 
@@ -80,15 +75,8 @@ if [ "$?" -eq "0" ]; then
     export CCACHE_DIR=$HOME/.ccache
 fi
 
-# fix java fonts
-which java &> /dev/null
-if [ "$?" -eq "1" ]; then
-    export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true'
-    export CLASSPATH="/usr/share/java/junit.jar"
-    export ECLIPSE_HOME="/usr/share/eclipse"
-fi
-
 # place custom scripts in path, taking precedece over the other binaries
-if [ -e "$HOME/bin" ]; then
+echo $PATH | grep "$HOME/bin" &> /dev/null
+if [[ "$?" -eq "1" && -e "$HOME/bin" ]]; then
     export PATH=$HOME/bin:$PATH
 fi
