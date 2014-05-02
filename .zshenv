@@ -43,11 +43,10 @@ export QT_STYLE_OVERRIDE="gtk"
 # Ruby gems
 RUBYGEMDIR=$HOME"/.gem/ruby/2.0.0/bin"
 if [ -e $RUBYGEMDIR ]; then
+    export GEM_HOME=$HOME/.gem
+    export GEM_PATH=$GEM_PATH:$HOME/.gem
     export PATH=$PATH:$RUBYGEMDIR
 fi
-
-# Rust 0.9 root
-export RUST_ROOT='/home/nathan/devel/rust/rust-0.9/x86_64-unknown-linux-gnu/stage2'
 
 # Rust in $PATH
 RUSTBIN=/home/nathan/devel/rust/rust/x86_64-unknown-linux-gnu/stage2/bin
@@ -64,9 +63,10 @@ if [[ "$?" -eq "1" && -e $GHCPATH ]]; then
 fi
 # cabal!
 CABALPATH=$HOME/.cabal/bin
-which cabal &> /dev/null
+echo "$PATH" | grep "\.cabal/bin" &> /dev/null
 if [[ "$?" -eq "1" && -e $CABALPATH ]]; then
-    export PATH=$PATH:$CABALPATH
+    echo "Sourcing cabal ..."
+    export PATH=$CABALPATH:$PATH
 fi
 
 # Steam likes this
@@ -86,12 +86,6 @@ if [ "$?" -eq "1" ]; then
     export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true'
     export CLASSPATH="/usr/share/java/junit.jar"
     export ECLIPSE_HOME="/usr/share/eclipse"
-fi
-
-# Is Chrome installed?
-dpkg-query -l "google-chrome-stable" &> /dev/null
-if [ "$?" -eq "1" ]; then
-    export PATH=$PATH:"/opt/google/chrome"
 fi
 
 # place custom scripts in path, taking precedece over the other binaries
