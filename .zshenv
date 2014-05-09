@@ -28,6 +28,9 @@ MAILCHECK=30
 # 5 seconds
 REPORTTIME=5
 
+# Export surfraw's conf files since it's too dumb to find them
+export SURFRAW_conf="$XDG_CONFIG_HOME/surfraw/conf"
+
 export EDITOR="$HOME/bin/ec"
 export SUDO_EDITOR="rvim"
 export BROWSER="firefox"
