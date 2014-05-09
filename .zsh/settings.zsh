@@ -86,7 +86,7 @@ done
 if [ $EUID -ne 0 ] ; then
     envfile="$HOME/.gpg-agent-info"
     if [[ -e "$envfile" ]] && kill -0 $(grep GPG_AGENT_INFO "$envfile" | cut -d: -f 2) 2>/dev/null; then
-        eval "$(cat "$envfile")"
+        eval "$(cat '$envfile')"
         export GPG_AGENT_INFO  # the env file does not contain the export statement
     fi
 fi
