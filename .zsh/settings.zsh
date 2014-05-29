@@ -41,12 +41,12 @@ function zle-keymap-select {
   fi
 }
 
-function zle-line-finish {
-  echo -ne "\033]12;6\007"
-}
+#function zle-line-finish {
+#  echo -ne "\033]12;6\007"
+#}
 
 zle -N zle-keymap-select
-zle -N zle-line-finish
+#zle -N zle-line-finish
 
 # Append all history to history file
 setopt appendhistory
@@ -79,9 +79,9 @@ setopt vi
 
 #eval $(keychain --eval --agents ssh -Q --quiet $(cat ~/.keychain/keyfiles))
 
-for sd_cmd in systemctl systemd-analyze systemd-run; do
-    alias $sd_cmd='DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/dbus/user_bus_socket" '$sd_cmd
-done
+# for sd_cmd in systemctl systemd-analyze systemd-run; do
+#     alias $sd_cmd='DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/dbus/user_bus_socket" '$sd_cmd
+# done
 
 if [ $EUID -ne 0 ] ; then
     envfile="$HOME/.gpg-agent-info"
