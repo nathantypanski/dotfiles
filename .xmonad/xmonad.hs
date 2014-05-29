@@ -1,4 +1,6 @@
 import XMonad
+import Data.Default (def)
+import System.Environment (lookupEnv)
 import XMonad.Layout.Decoration (Theme (..), DefaultShrinker(..))
 import XMonad.Layout.NoBorders (smartBorders)
 import XMonad.Layout.Groups.Helpers (moveToGroupUp, moveToGroupDown, swapUp
@@ -13,7 +15,7 @@ import XMonad.Layout.Groups.Examples (TiledTabsConfig(..)
                                      ,expandMasterGroups
                                      ,increaseNMasterGroups
                                      ,decreaseNMasterGroups
-                                     ,shrinkText, defaultTheme)
+                                     ,shrinkText)
 import XMonad.Layout.LayoutHints (layoutHints)
 import XMonad.Hooks.EwmhDesktops (ewmhDesktopsLogHook)
 import XMonad.Hooks.ManageHelpers (isFullscreen, doFullFloat
@@ -33,15 +35,14 @@ import XMonad.Actions.Navigation2D (Navigation2D, Direction2D
                                    ,switchLayer, windowGo, windowSwap
                                    ,windowToScreen, screenGo, screenSwap)
 import XMonad.Hooks.DynamicLog (PP, dynamicLogString, dynamicLogWithPP
-                               ,pad, ppTitle, ppLayout, defaultPP
+                               ,pad, ppTitle, ppLayout
                                ,ppCurrent, ppVisible, ppHidden
                                ,ppHiddenNoWindows, ppUrgent, ppSep
                                ,ppOutput, ppWsSep, ppExtras, wrap, shorten
                                ,xmobarColor)
 import XMonad.Actions.TagWindows (addTag, tagDelPrompt, tagPrompt)
 import XMonad.Actions.CycleWS ( toggleWS )
-import XMonad.Actions.GridSelect (defaultGSConfig,
-                                  goToSelected)
+import XMonad.Actions.GridSelect (goToSelected)
 import XMonad.Util.Run (hPutStrLn, spawnPipe)
 import XMonad.Util.Loggers (Logger, logCmd, loadAvg, date, battery)
 import XMonad.Prompt (XPConfig (..), XPPosition(Top)
@@ -117,11 +118,11 @@ terminus :: String
 terminus = "-*-terminus-medium-r-*-*-12-120-*-*-*-*-iso8859-*"
 
 restartCommand :: String
-restartCommand =  "if type xmonad;"
-                        ++ "then xmonad --recompile && "
-                        ++ "xmonad --restart;"
-                        ++ "else xmessage xmonad not in \\$PATH: \"$PATH\"; fi"
-                        ++ " && killall xmobar"
+restartCommand = "cd ~/.xmonad &&"
+                    ++ "cabal build &&"
+                    ++ "cd ~/ &&"
+--                    ++ "killall xmobar &&"
+                    ++ "~/.xmonad/xmonad --replace"
 
 shiftLayout :: X ()
 shiftLayout =
@@ -150,7 +151,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = fromList $
     , ((modm .|. controlMask, xK_j     ), increaseNMasterGroups)
     , ((modm .|. controlMask, xK_k     ), decreaseNMasterGroups)
     , ((modm .|. controlMask, xK_l     ), expandMasterGroups)
-    , ((modm,                 xK_s     ), goToSelected defaultGSConfig)
+    , ((modm,                 xK_s     ), goToSelected def)
     , ((modm,                 xK_f     ), withFocused $ windows . sink)
     , ((modm,                 xK_comma ), sendMessage (IncMasterN 1))
     , ((modm,                 xK_period), sendMessage (IncMasterN (-1)))
@@ -218,7 +219,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = fromList $
 
     where workspaceKeys = [xK_1 .. xK_9] ++ [xK_0] ++ [xK_F1 .. xK_F12]
 
-myMouseBindings :: XConfig t -> Map (KeyMask, Button) (Window -> X ()) 
+myMouseBindings :: XConfig t -> Map (KeyMask, Button) (Window -> X ())
 myMouseBindings (XConfig {XMonad.modMask = modm}) = fromList
     -- mod-button1, Set the window to floating mode and move by dragging
     [ ((modm, button1), \w -> focus w >> mouseMoveWindow w
@@ -233,21 +234,21 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = fromList
     ]
 
 myTheme :: Theme
-myTheme = defaultTheme { activeColor         = colorCurrentLine
-                       , inactiveColor       = colorBackground
-                       , urgentColor         = colorRed
-                       , activeBorderColor   = colorComment
-                       , inactiveBorderColor = colorBackground
-                       , urgentBorderColor   = colorBackground
-                       , activeTextColor     = colorForeground
-                       , inactiveTextColor   = colorComment
-                       , urgentTextColor     = "#FF0000"
-                       , fontName            = terminus
-                       , decoWidth           = 200
-                       , decoHeight          = 16
-                       , windowTitleAddons   = []
-                       , windowTitleIcons    = []
-                       }
+myTheme = def { activeColor         = colorCurrentLine
+              , inactiveColor       = colorBackground
+              , urgentColor         = colorRed
+              , activeBorderColor   = colorComment
+              , inactiveBorderColor = colorBackground
+              , urgentBorderColor   = colorBackground
+              , activeTextColor     = colorForeground
+              , inactiveTextColor   = colorComment
+              , urgentTextColor     = "#FF0000"
+              , fontName            = terminus
+              , decoWidth           = 200
+              , decoHeight          = 16
+             , windowTitleAddons   = []
+              , windowTitleIcons    = []
+              }
 
 myLayout = avoidStruts $
     tallTabs (TTC 1 0.5 (3/100) 1 0.5 (3/100) shrinkText myTheme)
@@ -288,31 +289,32 @@ myStartupHook :: X ()
 myStartupHook = return ()
 
 myXPConfig :: XPConfig
-myXPConfig =
-    XPC { XMonad.Prompt.font = terminus
-        , bgColor           = colorBackground
-        , fgColor           = colorForeground
-        , fgHLight          = colorForeground
-        , bgHLight          = colorSelection
-        , borderColor       = colorComment
-        , promptBorderWidth = 0
-        , promptKeymap      = defaultXPKeymap
-        , completionKey     = xK_Tab
-        , changeModeKey     = xK_grave
-        , position          = Top
-        , height            = 14
-        , historySize       = 256
-        , historyFilter     = id
-        , defaultText       = []
-        , autoComplete      = Nothing
+myXPConfig = XPC {
+          XMonad.Prompt.font = terminus
+        , bgColor            = colorBackground
+        , fgColor            = colorForeground
+        , fgHLight           = colorForeground
+        , bgHLight           = colorSelection
+        , borderColor        = colorComment
+        , promptBorderWidth  = 0
+        , promptKeymap       = defaultXPKeymap
+        , completionKey      = xK_Tab
+        , changeModeKey      = xK_grave
+        , maxComplRows       = Just 10
+        , position           = Top
+        , height             = 14
+        , historySize        = 256
+        , historyFilter      = id
+        , defaultText        = []
+        , autoComplete       = Nothing
         , showCompletionOnTab = False
-        , searchPredicate   = isPrefixOf
-        , alwaysHighlight   = True
+        , searchPredicate    = isPrefixOf
+        , alwaysHighlight    = True
         }
 
 -- | Some nice xmobar defaults.
 mybarPP :: PP
-mybarPP = defaultPP { ppCurrent =
+mybarPP = def { ppCurrent =
                          xmobarColor colorBackground colorGreen . wrap "[" "]"
                     , ppTitle   =
                          xmobarColor colorGreen  colorSelection . shorten 40
@@ -323,7 +325,7 @@ mybarPP = defaultPP { ppCurrent =
 main :: IO ()
 main = do
     h <- spawnPipe "/home/nathan/.xmonad/xmobar/dist/build/xmobar/xmobar" 
-    xmonad defaultConfig {
+    xmonad def {
             focusFollowsMouse  = myFocusFollowsMouse,
             borderWidth        = myBorderWidth,
             modMask            = myModMask,
