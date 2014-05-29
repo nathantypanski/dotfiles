@@ -7,23 +7,23 @@ WALLPAPER="/home/nathan/pics/Wallpapers/TNY264GN-HD.jpg"
 #fi
 
 pidof emacs &> /dev/null
-if [ "$?" != "0" ]; then
-    /usr/bin/emacs --daemon &
+if [ "$?" -ne "0" ]; then
+    /usr/bin/emacs --daemon
 fi
 
 pidof urxvtd &> /dev/null
-if [ "$?" != "0" ]; then
+if [ "$?" -ne "0" ]; then
     /usr/bin/urxvtd -q -f
 fi
 
 pidof xbindkeys &> /dev/null
-if [ "$?" != "0" ]; then
-    /usr/bin/xbindkeys -n &
+if [ "$?" -ne "0" ]; then
+    /usr/bin/xbindkeys -n
 fi
 
 pidof xmodmap &> /dev/null
-if [ "$?" != "0" ]; then
-    /usr/bin/xmodmap /home/nathan/.xmodmap &
+if [ "$?" -ne "0" ]; then
+    /usr/bin/xmodmap /home/nathan/.xmodmap
 fi
 
 /usr/bin/xrdb -merge /home/nathan/.Xdefaults
@@ -32,7 +32,10 @@ fi
 /usr/bin/xset +fp /usr/share/fonts/local
 /usr/bin/xset fp rehash 
 /usr/bin/xset r rate 200 30 
+/usr/bin/xinput --set-prop 13 'Device Accel Profile' 6
+#/usr/bin/feh --bg-fill $WALLPAPER &
 #/usr/bin/hsetroot -cover $WALLPAPER 
 #xmonad="/home/nathan/.xmonad/dist/build/my-xmonad/my-xmonad"
 xmonad="/home/nathan/.xmonad/xmonad"
-exec dbus-launch --exit-with-session ck-launch-session $xmonad
+#exec dbus-launch --exit-with-session ck-launch-session $xmonad
+exec xmonad
