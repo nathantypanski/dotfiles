@@ -1,6 +1,0 @@
-[Unit]
-Description=Default user target
-Wants=wm.target
-
-[Install]
-Alias=default.target
