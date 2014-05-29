@@ -99,7 +99,7 @@ alias userctl="systemctl --user"
 # tmux
 alias xls="tmux list-sessions"
 alias xat="tmux attach -t"
-alias x="tmuxinator"
+alias x="tmux"
 
 # vim is v
 alias v="vim"
