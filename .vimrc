@@ -135,7 +135,7 @@ Bundle 'gmarik/vundle'
 Bundle 'sjl/gundo.vim'
 Bundle 'jcrocholl/pep8'
 Bundle 'tpope/vim-fugitive'
-Bundle 'scrooloose/syntastic'
+"Bundle 'scrooloose/syntastic'
 Bundle 'ervandew/supertab'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'fs111/pydoc.vim'
@@ -150,7 +150,7 @@ Bundle 'jalvesaq/VimCom'
 Bundle 'bling/vim-airline'
 Bundle 'Yggdroot/indentLine'
 Bundle 'troydm/easybuffer.vim'
-Bundle 'LaTeX-Box-Team/LaTeX-Box'
+"Bundle 'LaTeX-Box-Team/LaTeX-Box'
 Bundle 'kien/ctrlp.vim'
 Bundle 'majutsushi/tagbar'
 Bundle 'vim-scripts/taglist.vim'
@@ -272,7 +272,7 @@ set grepprg=grep\ -nH\ $*
 " OPTIONAL: Starting with Vim 7, the filetype of empty .tex files defaults to
 " 'plaintex' instead of 'tex', which results in vim-latex not being loaded.
 " The following changes the default filetype back to 'tex':
-let g:tex_flavor='latex'
+let g:tex_flavor='tex'
 let g:Tex_DefaultTargetFormat='pdf'
 
 " latex-search for synctex
