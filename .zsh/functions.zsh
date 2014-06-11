@@ -105,3 +105,8 @@ function ghc-pkg-reset() {
 }
 
 alias cabalupgrades="cabal list --installed  | egrep -iv '(synopsis|homepage|license)'"
+
+function ccython () {
+    cython3 "$1.pyx"
+    gcc $(pkg-config --libs --cflags python3) -c "$1.c" -o "$1.o"
+}
