@@ -109,10 +109,10 @@ myModMask :: KeyMask
 myModMask = mod4Mask
 
 myNormalBorderColor :: String
-myNormalBorderColor = colorComment
+myNormalBorderColor = colorBackground
 
 myFocusedBorderColor :: String
-myFocusedBorderColor = colorForeground
+myFocusedBorderColor = colorSelection
 
 terminus :: String
 terminus = "-*-terminus-medium-r-*-*-12-120-*-*-*-*-iso8859-*"
@@ -234,13 +234,13 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = fromList
     ]
 
 myTheme :: Theme
-myTheme = def { activeColor         = colorCurrentLine
+myTheme = def { activeColor         = colorSelection
               , inactiveColor       = colorBackground
               , urgentColor         = colorRed
-              , activeBorderColor   = colorComment
+              , activeBorderColor   = colorSelection
               , inactiveBorderColor = colorBackground
               , urgentBorderColor   = colorBackground
-              , activeTextColor     = colorForeground
+              , activeTextColor     = colorGreen
               , inactiveTextColor   = colorComment
               , urgentTextColor     = "#FF0000"
               , fontName            = terminus
