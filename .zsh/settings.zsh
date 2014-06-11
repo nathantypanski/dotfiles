@@ -76,6 +76,7 @@ zle -N open-urxvt-here
 bindkey '^J' open-urxvt-here
 
 setopt vi
+setopt transient_rprompt
 
 #eval $(keychain --eval --agents ssh -Q --quiet $(cat ~/.keychain/keyfiles))
 
