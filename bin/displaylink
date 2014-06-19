@@ -22,42 +22,50 @@ mainheight=$(echo $mainstatus | sed 's/'$SEARCHLINE'/\2/g')
 mainx=$(echo $mainstatus | sed 's/'$SEARCHLINE'/\3/g')
 mainy=$(echo $mainstatus | sed 's/'$SEARCHLINE'/\4/g')
 
-tput setaf 6; tput bold;
-printf ">> DisplayLink Mode: "
-tput sgr0;
+# Prints something in blue. Creative, huh?
+function blueprint() {
+    tput setaf 6; tput bold;
+    for var in $@; do
+        printf "$var "
+    done
+    tput sgr0;
+}
+
+blueprint ">> DisplayLink Mode: "
 echo $modeline
 
-tput setaf 6; tput bold;
-printf ">> DisplayLink Provider: "
-tput sgr0;
+blueprint ">> DisplayLink Provider: "
 echo $dlprovider
 
-tput setaf 6; tput bold;
-printf ">> DisplayLink Mode name: "
-tput sgr0;
+blueprint ">> DisplayLink Mode name: "
 echo $dlmodename
 
-if ! xrandr | grep DVI; then
-    xrandr --setprovideroutputsource $dlprovider $MAINPROVIDER
-fi
+if [ "$dlprovider" ]; then
+    if ! xrandr | grep DVI; then
+        xrandr --setprovideroutputsource $dlprovider $MAINPROVIDER
+    fi
 
-if ! xrandr | grep $dlmodename; then
+    if ! xrandr | grep $dlmodename; then
+        tput setaf 6; tput bold;
+        printf ">> Desired DisplayLink mode "
+        tput sgr0;
+        printf $dlmodename
+        tput setaf 6; tput bold;
+        printf " does not exist! Creating new mode ...\n"
+        xrandr --newmode $modeline
+    fi
+
     tput setaf 6; tput bold;
-    printf ">> Desired DisplayLink mode "
+    printf ">> DisplayLink output: "
     tput sgr0;
-    printf $dlmodename
-    tput setaf 6; tput bold;
-    printf " does not exist! Creating new mode ...\n"
-    xrandr --newmode $modeline
+    dloutput=$(xrandr | grep DVI | cut -d ' ' -f 1)
+    echo $dloutput
+
+    xrandr --addmode $dloutput $dlmodename
+    xrandr --output $MAINOUTPUT --mode "$mainwidth"x"$mainheight" --pos "$mainx"x"$mainy" --rotate normal \
+        --output $dloutput --mode $dlmodename --pos "$mainwidth"x"$mainy" --rotate normal \
+        --output VGA1 --off
+else
+    blueprint "<< No displaylink providers found, bailing! >>"
+    echo ""
 fi
-
-tput setaf 6; tput bold;
-printf ">> DisplayLink output: "
-tput sgr0;
-dloutput=$(xrandr | grep DVI | cut -d ' ' -f 1)
-echo $dloutput
-
-xrandr --addmode $dloutput $dlmodename
-xrandr --output $MAINOUTPUT --mode "$mainwidth"x"$mainheight" --pos "$mainx"x"$mainy" --rotate normal \
-       --output $dloutput --mode $dlmodename --pos "$mainwidth"x"$mainy" --rotate normal \
-       --output VGA1 --off
