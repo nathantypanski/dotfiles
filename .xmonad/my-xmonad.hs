@@ -132,7 +132,7 @@ myKeys :: XConfig Layout -> Map (KeyMask, KeySym) (X ())
 myKeys conf@(XConfig {XMonad.modMask = modm}) = fromList $
     [
       ((modm .|. shiftMask,   xK_r     ), renameWorkspace myXPConfig)
-    , ((modm,                 xK_Return), spawn $ "urxvt")
+    , ((modm,                 xK_Return), spawn "urxvt")
     , ((modm .|. shiftMask,   xK_c     ), kill)
     , ((modm, xK_space                 ), shiftLayout)
     , ((modm .|. shiftMask,   xK_space ), setLayout $ XMonad.layoutHook conf)
