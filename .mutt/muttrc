@@ -9,28 +9,39 @@
 source ~/.mutt/profile
 source ~/.mutt/crypto
 source ~/.mutt/passwords
+source ~/.mutt/colors
+
+# Appended to my emails. The pipe means it's read as a command.
+#set signature="echo '        Nathan'|"
+#set sig_dashes=no
 
 set pgp_mime_signature_filename="signature.asc"
 set pgp_mime_signature_description="my GPG/PGP digital signature"
-
 # Editing -------------------------------------------------
-# set editor = 'vim + -c "set expandtab textwidth=70" -c "set wrap"'
-set editor=ec
+set editor = 'vim + -c "set expandtab textwidth=70" -c "set wrap"'
+#set editor=ec
 #set pager=ec
+
+# Allow collapsing of unread messages?
+set collapse_unread=yes
+# Jump to next unread when uncollapsing?
+set uncollapse_jump=yes
+set narrow_tree # narrow threading trees
+set pager_stop # don't go to next message at end of message
+set arrow_cursor=no
 
 # Folders -------------------------------------------------
 set header_cache =~/.mutt/cache/headers
 set message_cachedir =~/.mutt/cache/bodies
 set certificate_file =~/.mutt/certificates
-#set spoolfile = "+INBOX"
 set postponed = "+[GMail]/Drafts"
 # maildir
 set mbox_type=Maildir
 set header_cache=~/.cache/mutt
 set folder      = ~/mail/gmail
 set spoolfile   = "+INBOX"
-set mbox        = "+[Gmail]/All Mail"
-set postponed   = "+[Gmail]/Drafts"
+set mbox        = "+archive"
+#set postponed   = "+[Gmail]/Drafts"
 unset record
 
 mailboxes +INBOX
@@ -54,15 +65,13 @@ set include
 set auto_tag = yes
 set pager_index_lines = 10
 
-# When reading an email, make up and down scroll the message, rather
-# than switch to the next/previous message, and don't automatically
-# move to the next message at the end:
-bind pager <down> next-line
-bind pager <up> previous-line
-set pager_stop=yes
+bind pager j next-line
+bind pager k previous-line
+bind index,pager . next-unread
+macro index,pager A "<save-message>=archive<enter>" "Archive Message"
 
-# Show one line of context when scrolling
-set pager_context=1
+# number of context lines when scrolling
+set pager_context=2
 
 # Set the title bar for xterms
 set xterm_title=yes
@@ -71,9 +80,9 @@ set xterm_title=yes
 set sleep_time = 0
 
 set wait_key = no                           # shut up, mutt
-#set mbox_type = Maildir                     # mailbox type
+#set mbox_type = Maildir                    # mailbox type
 unset move                                  # gmail does that
-#set delete                                  # don't ask, just do
+#set delete                                 # don't ask, just do
 unset confirmappend                         # don't ask, just do!
 set quit                                    # don't ask, just do!!
 unset mark_old                              # read/new is good enough for me
@@ -86,8 +95,6 @@ set sort="threads"
 set strict_threads="yes"
 set sort_browser="reverse-date"
 set sort_aux="last-date-received"
-unset collapse_unread
-set uncollapse_jump                        # don't collapse on an unread message
 
 # defines the order of headers when viewing messages
 hdr_order Date From To Cc
@@ -107,20 +114,124 @@ bind editor <space> noop
 
 bind index "^" imap-fetch-mail
 
-# Sidebar Patch -------------------------------------------
-# set sidebar_delim   = ' '
-# set sidebar_visible = yes
-# set sidebar_width   = 24
-# color sidebar_new color221 color233
+## Sidebar Patch -------------------------------------------
+#set sidebar_delim   = ' '
+#set sidebar_visible = yes
+#set sidebar_width   = 24
+#color sidebar_new color221 color233
 
 # Status Bar ----------------------------------------------
-#set status_chars  = " *%A"
-#set status_format = "   [ Folder: %f ]   [%r%m messages%?n? (%n new)?%?d? (%d to delete)?%?t? (%t tagged)? ]   %>─%?p?( %p postponed )?   "
+set status_chars  = " *%A"
+set status_format = "   [ Folder: %f ]   [%r%m messages%?n? (%n new)?%?d? (%d to delete)?%?t? (%t tagged)? ]   %>─%?p?( %p postponed )?   "
+
+# This variable is a colon-separated list of character encoding
+# schemes for messages without character encoding indication.
+# Header field values and message body content without character encoding
+# indication would be assumed that they are written in one of this list.
+# By default, all the header fields and message body without any charset
+# indication are assumed to be in ``us-ascii''.
+set assumed_charset="utf-8"
 
 
 # Index View Options --------------------------------------
+
+# set index_format="%4C %Z %{%b %d} %-15.15L (%?l?%4l&%4c?) %s"
+#
+# Name: index_format
+# Type: string
+# Default: "%4C %Z %{%b %d} %-15.15L (%?l?%4l&%4c?) %s"
+# 
+# 
+# This variable allows you to customize the message index display to
+# your personal taste.
+# 
+# ``Format strings'' are similar to the strings used in the C
+# function printf(3) to format output (see the man page for more details).
+# The following sequences are defined in Mutt:
+# %a      address of the author
+# %A      reply-to address (if present; otherwise: address of author)
+# %b      filename of the original message folder (think mailbox)
+# %B      the list to which the letter was sent, or else the folder name (%b).
+# %c      number of characters (bytes) in the message
+# %C      current message number
+# %d      date and time of the message in the format specified by
+# $date_format         converted to sender's time zone
+# %D      date and time of the message in the format specified by
+# $date_format         converted to the local time zone
+# %e      current message number in thread
+# %E      number of messages in current thread
+# %f      sender (address + real name), either From: or Return-Path:
+# %F      author name, or recipient name if the message is from you
+# %H      spam attribute(s) of this message
+# %i      message-id of the current message
+# %l      number of lines in the message (does not work with maildir,
+#         mh, and possibly IMAP folders)
+# %L      If an address in the ``To:'' or ``Cc:'' header field matches an address
+#         defined by the users ``subscribe'' command, this displays
+#         "To <list-name>", otherwise the same as %F.
+# %m      total number of message in the mailbox
+# %M      number of hidden messages if the thread is collapsed.
+# %N      message score
+# %n      author's real name (or address if missing)
+# %O      original save folder where mutt would formerly have
+#         stashed the message: list name or recipient name
+#         if not sent to a list
+# %P      progress indicator for the built-in pager (how much of the file has been displayed)
+# %s      subject of the message
+# %S      status of the message (``N''/``D''/``d''/``!''/``r''/*)
+# %t      ``To:'' field (recipients)
+# %T      the appropriate character from the $to_chars string
+# %u      user (login) name of the author
+# %v      first name of the author, or the recipient if the message is from you
+# %X      number of attachments
+#         (please see the ``attachments'' section for possible speed effects)
+# %y      ``X-Label:'' field, if present
+# %Y      ``X-Label:'' field, if present, and (1) not at part of a thread tree,
+#         (2) at the top of a thread, or (3) ``X-Label:'' is different from
+#         preceding message's ``X-Label:''.
+# %Z      message status flags
+# %{fmt}  the date and time of the message is converted to sender's
+#         time zone, and ``fmt'' is expanded by the library function
+#         strftime(3); a leading bang disables locales
+# %[fmt]  the date and time of the message is converted to the local
+#         time zone, and ``fmt'' is expanded by the library function
+#         strftime(3); a leading bang disables locales
+# %(fmt)  the local date and time when the message was received.
+#         ``fmt'' is expanded by the library function strftime(3);
+#         a leading bang disables locales
+# %<fmt>  the current local time. ``fmt'' is expanded by the library
+#         function strftime(3); a leading bang disables locales.
+# %>X     right justify the rest of the string and pad with character ``X''
+# %|X     pad to the end of the line with character ``X''
+# %*X     soft-fill with character ``X'' as pad
+# 
+# 
+# ``Soft-fill'' deserves some explanation: Normal right-justification
+# will print everything to the left of the ``%>'', displaying padding and
+# whatever lies to the right only if there's room. By contrast,
+# soft-fill gives priority to the right-hand side, guaranteeing space
+# to display it and showing padding only if there's still room. If
+# necessary, soft-fill will eat text leftwards to make room for
+# rightward text.
+# 
+# Note that these expandos are supported in
+# ``save-hook'', ``fcc-hook'' and ``fcc-save-hook'', too.
+set index_format = "[%Z] %-20.20F %s (%e/%E)%> (%?l?%4l&%4c?) %D"
+
+# Default: "!%a, %b %d, %Y at %I:%M:%S%p %Z"
+#       This variable controls the format of the date printed by the ``%d''
+#       sequence in $index_format.  This is passed to the strftime(3)
+#       function to process the date, see the man page for the proper syntax.
+#       
+#       Unless the first character in the string is a bang (``!''), the month
+#       and week day names are expanded according to the locale specified in
+#       the variable $locale. If the first character in the string is a
+#       bang, the bang is discarded, and the month and week day names in the
+#       rest of the string are expanded in the C locale (that is in US
+#       English).
 set date_format = "%m/%d"
-set index_format = "[%Z]  %D  %-20.20F  %s"
+# set date_format="!%a, %b %d, %Y at %I:%M:%S%p %Z"
+
 set sort = threads                         # like gmail
 set sort_aux = reverse-last-date-received  # like gmail
 #set sort_re                                # thread based on regex
@@ -129,94 +240,10 @@ set sort_aux = reverse-last-date-received  # like gmail
 # Index Key Bindings --------------------------------------
 bind index gg       first-entry
 bind index G        last-entry
-
 bind index R        group-reply
 bind index <tab>    sync-mailbox
-bind index <space>  collapse-thread
+bind index - collapse-thread
+bind index _ collapse-all
 
-#Colors ---------------------------------------------------
-
-## Colours for items in the index
-color index brightcyan black ~N
-color index brightred black ~O
-color index brightyellow black ~F
-color index black green ~T
-color index brightred black ~D
-mono index bold ~N
-mono index bold ~F
-mono index bold ~T
-mono index bold ~D
-
-## Highlights inside the body of a message.
-
-## URLs
-color body brightblue black "(http|https|ftp|news|telnet|finger)://[^ \"\t\r\n]*"
-color body brightblue black "mailto:[-a-z_0-9.]+@[-a-z_0-9.]+"
-mono body bold "(http|ftp|news|telnet|finger)://[^ \"\t\r\n]*"
-mono body bold "mailto:[-a-z_0-9.]+@[-a-z_0-9.]+"
-
-## Email addresses.
-color body brightblue black "[-a-z_0-9.%$]+@[-a-z_0-9.]+\\.[-a-z][-a-z]+"
-
-## Header
-color header brightgreen black "^from:"
-color header green black "^to:"
-color header green black "^cc:"
-color header green black "^date:"
-color header yellow black "^newsgroups:"
-color header yellow black "^reply-to:"
-color header brightcyan black "^subject:"
-color header red black "^x-spam-rule:"
-color header green black "^x-mailer:"
-color header yellow black "^message-id:"
-color header yellow black "^Organization:"
-color header yellow black "^Organisation:"
-color header yellow black "^User-Agent:"
-color header yellow black "^message-id: .*pine"
-color header yellow black "^X-Fnord:"
-color header yellow black "^X-WebTV-Stationery:"
-
-color header red black "^x-spam-rule:"
-color header green black "^x-mailer:"
-color header yellow black "^message-id:"
-color header yellow black "^Organization:"
-color header yellow black "^Organisation:"
-color header yellow black "^User-Agent:"
-color header yellow black "^message-id: .*pine"
-color header yellow black "^X-Fnord:"
-color header yellow black "^X-WebTV-Stationery:"
-color header yellow black "^X-Message-Flag:"
-color header yellow black "^X-Spam-Status:"
-color header yellow black "^X-SpamProbe:"
-color header red black "^X-SpamProbe: SPAM"
-
-## Coloring quoted text - coloring the first 7 levels:
-color quoted cyan black
-color quoted1 yellow black
-color quoted2 red black
-color quoted3 green black
-color quoted4 cyan black
-color quoted5 yellow black
-color quoted6 red black
-color quoted7 green black
-
-## Default color definitions
-color hdrdefault white green
-color signature brightmagenta black
-color indicator black cyan
-color attachment black green
-color error red black
-color message white brightblack
-color search brightwhite magenta
-color status brightblack blue
-color tree brightblue black
-color normal white brightblack
-color tilde green black
-color bold brightyellow black
-#color underline magenta black
-color markers brightcyan black
-
-## Colour definitions when on a mono screen
-mono bold bold
-mono underline underline
-mono indicator reverse
+# Don't verify signed messages unless I say so (downloading takes too long).
+set crypt_verify_sig=no
