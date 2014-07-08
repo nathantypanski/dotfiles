@@ -39,16 +39,19 @@ export GREP_COLOR="1;33"
 # gtk style for qt5
 export QT_STYLE_OVERRIDE="gtk"
 
+# Regular ruby executables ... rails?
+RUBYBINDIR=$HOME"/.gem/bin"
 # Ruby gems
 RUBYGEMDIR=$HOME"/.gem/ruby/2.0.0/bin"
 if [ -e $RUBYGEMDIR ]; then
     export GEM_HOME=$HOME/.gem
     export GEM_PATH=$GEM_PATH:$HOME/.gem
     export PATH=$PATH:$RUBYGEMDIR
+    export PATH=$PATH:$RUBYBINDIR
 fi
 
 # Rust in $PATH
-RUSTBIN=/home/nathan/devel/rust/rust/x86_64-unknown-linux-gnu/stage2/bin
+RUSTBIN=/home/nathan/devel/rust/rust/build/stage2/bin
 which rustc &> /dev/null
 if [[ "$?" -eq "1" && -e $RUSTBIN ]]; then
     export PATH=$PATH:$RUSTBIN
@@ -71,6 +74,18 @@ fi
 export SDL_AUDIODRIVER=alsa
 
 export XDG_CONFIG_HOME='/home/nathan/.config'
+
+CARGOPATH="$HOME/devel/rust/cargo/target"
+echo "$PATH" | grep "rust/cargo/target" &> /dev/null
+if [[ "$?" -eq "1" && -e $CARGOPATH ]]; then
+    export PATH=$PATH:$CARGOPATH
+fi
+
+NODEBIN="$HOME/node_modules/.bin"
+echo "$PATH" | grep "$NODEBIN" &> /dev/null
+if [[ "$?" -eq "1" && -e $NODEBIN ]]; then
+    export PATH=$PATH:$NODEBIN
+fi
 
 # ccache
 dpkg-query -l "ccache" &> /dev/null
