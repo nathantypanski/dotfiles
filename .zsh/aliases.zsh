@@ -109,3 +109,6 @@ alias ssh='eval $(/usr/bin/keychain --eval --agents ssh -Q --quiet ~/.ssh/id_rsa
 
 # vim like quit
 alias ":q"="exit"
+
+# "newsbeuter" takes too long to type
+alias news="newsbeuter"

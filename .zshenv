@@ -1,3 +1,6 @@
+typeset -U path
+
+export RBENV_VERSION=2.1.2
 # ensure all terminal emulators use the right shell
 export SHELL='/bin/zsh'
 
@@ -19,6 +22,8 @@ export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
+export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+
 # mail (grml)
 export MAIL=${MAIL:-/var/mail/$USER}
 # mailchecks (grml)
@@ -39,29 +44,22 @@ export GREP_COLOR="1;33"
 # gtk style for qt5
 export QT_STYLE_OVERRIDE="gtk"
 
-# Regular ruby executables ... rails?
-RUBYBINDIR=$HOME"/.gem/bin"
-# Ruby gems
-RUBYGEMDIR=$HOME"/.gem/ruby/2.0.0/bin"
-if [ -e $RUBYGEMDIR ]; then
-    export GEM_HOME=$HOME/.gem
-    export GEM_PATH=$GEM_PATH:$HOME/.gem
-    export PATH=$PATH:$RUBYGEMDIR
-    export PATH=$PATH:$RUBYBINDIR
-fi
-
+export PATH="$HOME/.rbenv/bin:$PATH"
 # Rust in $PATH
-RUSTBIN=/home/nathan/devel/rust/rust/build/stage2/bin
+RUSTBIN=/home/nathan/devel/rust/rust/x86_64-unknown-linux-gnu/stage2/bin
 which rustc &> /dev/null
-if [[ "$?" -eq "1" && -e $RUSTBIN ]]; then
-    export PATH=$PATH:$RUSTBIN
+if [[ -e $RUSTBIN ]]; then
+    path+=($RUSTBIN)
+    if [[ -z $(echo $LD_LIBRARY_PATH | grep "rust/x86_64-unknown-linux-gnu") ]]; then
+        export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"$HOME/devel/rust/rust/x86_64-unknown-linux-gnu/stage2/lib"
+    fi
 fi
 
 # ghc
 GHCPATH=$HOME/.ghc/bin
 which ghc &> /dev/null
-if [[ "$?" -eq "1" && -e $GHCPATH ]]; then
-    export PATH=$PATH:$GHCPATH
+if [[ -e $GHCPATH ]]; then
+    path+=($GHCPATH)
 fi
 # cabal!
 CABALPATH=$HOME/.cabal/bin
@@ -98,3 +96,7 @@ echo $PATH | grep "$HOME/bin" &> /dev/null
 if [[ "$?" -eq "1" && -e "$HOME/bin" ]]; then
     export PATH=$HOME/bin:$PATH
 fi
+
+# Fixes swing stuff in xmonad
+export _JAVA_AWT_WM_NONREPARENTING=1
+path+=(/home/nathan/devel/java/android-sdk-linux/tools)
