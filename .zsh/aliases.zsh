@@ -1,9 +1,6 @@
 # irc
 alias irc=weechat-curses
 
-# Run urxvt via my script.
-alias urxvt="/home/nathan/bin/urxvt.sh"
-
 alias hc='herbstclient'
 
 # less is more.
