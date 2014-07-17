@@ -110,3 +110,8 @@ function ccython () {
     cython3 "$1.pyx"
     gcc $(pkg-config --libs --cflags python3) -c "$1.c" -o "$1.o"
 }
+
+# from http://www.blaenkdenum.com/posts/dots/#functions
+function manf() {
+  man -P "less -p \"^ +$2\"" $1
+}
