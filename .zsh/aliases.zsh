@@ -15,9 +15,6 @@ alias ls='ls --color=auto'
 # abbreviated listing
 alias la='ls -a --color=auto'
 
-# verbose listing
-alias ll='ls -l --color=auto'
-
 # sort by extension
 alias lx='ll -BX --color=auto'
 
