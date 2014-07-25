@@ -45,6 +45,7 @@ export GREP_COLOR="1;33"
 export QT_STYLE_OVERRIDE="gtk"
 
 export PATH="$HOME/.rbenv/bin:$PATH"
+export PATH="$HOME/bin:$PATH"
 # Rust in $PATH
 RUSTBIN=/home/nathan/devel/rust/rust/x86_64-unknown-linux-gnu/stage2/bin
 which rustc &> /dev/null
@@ -55,12 +56,6 @@ if [[ -e $RUSTBIN ]]; then
     fi
 fi
 
-# ghc
-GHCPATH=$HOME/.ghc/bin
-which ghc &> /dev/null
-if [[ -e $GHCPATH ]]; then
-    path+=($GHCPATH)
-fi
 # cabal!
 CABALPATH=$HOME/.cabal/bin
 echo "$PATH" | grep "\.cabal/bin" &> /dev/null
@@ -92,10 +87,7 @@ if [ "$?" -eq "0" ]; then
 fi
 
 # place custom scripts in path, taking precedece over the other binaries
-echo $PATH | grep "$HOME/bin" &> /dev/null
-if [[ "$?" -eq "1" && -e "$HOME/bin" ]]; then
-    export PATH=$HOME/bin:$PATH
-fi
+#path+=("/home/nathan/bin")
 
 # Fixes swing stuff in xmonad
 export _JAVA_AWT_WM_NONREPARENTING=1
