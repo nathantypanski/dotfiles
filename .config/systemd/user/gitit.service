@@ -1,0 +1,11 @@
+[Unit]
+Description=Start my personal wiki
+ 
+[Service]
+Type=simple
+WorkingDirectory=%h/.gitit
+ExecStart=/home/nathan/.cabal/bin/gitit -f %h/.gitit/my.conf
+Restart=no
+ 
+[Install]
+WantedBy=console.target
