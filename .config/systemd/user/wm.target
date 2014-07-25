@@ -1,0 +1,7 @@
+[Unit]
+Description=Window manager target -- xinitrc stuff
+Wants=graphical.target
+Requires=dbus.socket
+
+[Install]
+Alias=default.target
