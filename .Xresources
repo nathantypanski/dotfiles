@@ -1,10 +1,5 @@
 #include "/home/nathan/.colors/dotshare.xrdb"
 
-! Xdefaults file
-!*background: #2c2e2f
-!urxvt*background: [95]#2c2e2f
-!urxvt*foreground: #edeff2
-!*cursorColor: #edeff2
 urxvt*internalBorder: 4
 urxvt*termName: rxvt-256color
 urxvt*scrollBar: false
@@ -13,32 +8,16 @@ URxvt.url-select.underline: true
 URxvt*jumpScroll: true
 URxvt*lineSpace: 0
 
-!urxvt*font: xft:terminus:size=12
-urxvt*font:-*-terminus-medium-*-*-*-16-*-*-*-*-*-iso10646-*
-!urxvt*font: xft:profont:size=9
+*font:-*-terminus-medium-*-*-*-16-*-*-*-*-*-iso10646-*
 
 URxvt.transparent: false
 URxvt.tintColor: white
 URxvt.depth: 32
 
-!! Font for everything
-!*font: -*-terminus-medium-r-*-*-*-120-75-75-*-*-iso8859-15
-!URxvt*font: -*-terminus-medium-r-*-*-*-120-75-75-*-*-iso8859-15
-!!*font: -*-terminus-medium-r-normal-*-16-*-*-*-*-*-iso8859-* 
-
-!! Cursor size
 Xcursor.size: 16
-!dzen2.font: -misc-termsynu-medium-*-normal--13-*-75-75-c-60-iso10646-1 
-dzen2.font: -*-terminus-medium-*-*-*-14-*-*-*-*-*-iso10646-*
-dzen2.foreground: #22EE11
-dzen2.background: black
-!! xft
-!Xft.dpi:        121
-!Xft.dpi:        96
 Xft.hintstyle:  hintfull
 Xft.antialias: 1
 Xft.rgba: rgb
-!! urxvt
 URxvt.keysym.M-S-Return: \ urxvt\ &!\012
 URxvt*termName: rxvt-unicode
 URxvt*letterSpace: 0
@@ -48,22 +27,15 @@ URxvt*scrollstyle:            plain
 URxvt*scrollBar:              False
 URxvt*scrollBar_right:        True
 URxvt*scrollBar_align:        top
-! Makes urxvt invisible to window managers. Or not when its false.
 URxvt*override-redirect:      False
 URxvt*geometry:               80x25
 URxvt*internalBorder:         0
 URxvt*externalBorder:         0
 URxvt*borderLess:             False
 URxvt.intensityStyles:        false
-! Dont know what this does:
 URxvt*preeditType:            OffTheSpot
 URxvt*urlLauncher:            firefox
 URxvt*cursorBlink:            True
 URxvt*pointerBlank:           True
 URxvt*saveLines:              65535
 URxvt*scrollttykeypress:      true
-! Colored man pages and other highlighted stuff
-!URxvt.colorIT:                #268bd2
-!URxvt.colorBD:                #dc322f
-!URxvt.colorUL:                #859900
-! URxvt*print-pipe:       cat > $(echo urxvt.dump.`date +'%Y%M%d%H%m%S'`)
