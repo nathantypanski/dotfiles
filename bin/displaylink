@@ -4,18 +4,28 @@
 # Fill in MAINOUTPUT, MAINPROVIDER, WIDTH, HEIGHT, and REFRESH with your own
 # values before use.
 
-MAINOUTPUT="LVDS1" # Obtained from xrandr --current
+MAINOUTPUT="LVDS2" # Obtained from xrandr --current
 MAINPROVIDER="0"   # Obtained from xrandr --listproviders
 WIDTH="1366"       # Width of DisplayLink monitor in pixels
 HEIGHT="768"       # Height of DisplayLink monitor in pixels
 REFRESH="59.9"     # Refresh rate of DisplayLink monitor
 
-modeline=$(gtf $WIDTH $HEIGHT $REFRESH | grep -E "Modeline" | cut -d ' ' -f 4- |
-           sed -e 's/"//g')
+modeline=$(\
+    gtf $WIDTH $HEIGHT $REFRESH | \
+    grep -E "Modeline" | \
+    cut -d ' ' -f 4- | \
+    sed -e 's/"//g' \
+)
 dlmodename=$(echo $modeline | cut -d ' ' -f 1)
-dlprovider=$(xrandr --listproviders | grep modesetting | cut -d ' ' -f 2 | 
-              sed -e 's/://g')
+dlprovider=$( \
+    xrandr --listproviders | \
+    grep modesetting | \
+    cut -d ' ' -f 2 | \
+    sed -e 's/://g' \
+)
 mainstatus=$(xrandr --current | grep $MAINOUTPUT | cut -d ' ' -f 3)
+
+# Get attributes from the main provider.
 SEARCHLINE='\([0-9]\+\)x\([0-9]\+\)+\([0-9]\+\)+\([0-9]\+\)'
 mainwidth=$(echo $mainstatus | sed 's/'$SEARCHLINE'/\1/g')
 mainheight=$(echo $mainstatus | sed 's/'$SEARCHLINE'/\2/g')
@@ -68,4 +78,5 @@ if [ "$dlprovider" ]; then
 else
     blueprint "<< No displaylink providers found, bailing! >>"
     echo ""
+    exit 1
 fi
