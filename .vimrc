@@ -9,6 +9,9 @@ set noswapfile
 " Automatically cd into file directory.
 set autochdir
 
+
+set foldlevelstart=999
+
 " Remove any trailing whitespace
 " autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
 
@@ -73,7 +76,6 @@ set showcmd
 ":autocmd BufEnter * let b:did_ftplugin = 1
 " Needed for Syntax Highlighting and stuff
 filetype on
-filetype plugin on
 
 " Autoindent
 filetype indent on
@@ -122,46 +124,46 @@ set hlsearch
 " Since I use linux, I want this
 let g:clipbrdDefaultReg = '+'
 
-" VUNDLE {{{
-let s:bundle_path=$HOME."/.vim/bundle/"
-execute "set rtp+=".s:bundle_path."vundle/"
-call vundle#rc()
-
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
 " let Vundle manage Vundle
 " required! 
-Bundle 'gmarik/vundle'
+Plugin 'gmarik/Vundle.vim'
 " }}}
 
-Bundle 'sjl/gundo.vim'
-Bundle 'jcrocholl/pep8'
-Bundle 'tpope/vim-fugitive'
-Bundle 'scrooloose/syntastic'
-Bundle 'ervandew/supertab'
-Bundle 'altercation/vim-colors-solarized'
-Bundle 'fs111/pydoc.vim'
-Bundle 'davidhalter/jedi-vim'
-Bundle 'w0ng/vim-hybrid'
-Bundle 'scrooloose/nerdtree'
-Bundle 'tpope/vim-fugitive'
-Bundle 'vim-pandoc/vim-pandoc'
-Bundle 'vim-scripts/mail.vim'
-Bundle 'FuzzyFinder'
-Bundle 'jalvesaq/VimCom'
-Bundle 'bling/vim-airline'
-Bundle 'Yggdroot/indentLine'
-Bundle 'troydm/easybuffer.vim'
-Bundle 'LaTeX-Box-Team/LaTeX-Box'
-Bundle 'kien/ctrlp.vim'
-Bundle 'majutsushi/tagbar'
-Bundle 'vim-scripts/taglist.vim'
-Bundle 'DirDiff.vim'
-Bundle 'nanotech/jellybeans.vim'
-Bundle 'chriskempson/base16-vim'
-Bundle 'jceb/vim-orgmode'
-Bundle 'wting/rust.vim'
-Bundle 'tpope/vim-surround'
+Plugin 'sjl/gundo.vim'
+Plugin 'jcrocholl/pep8'
+Plugin 'scrooloose/syntastic'
+Plugin 'ervandew/supertab'
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'fs111/pydoc.vim'
+"Plugin 'davidhalter/jedi-vim'
+Plugin 'w0ng/vim-hybrid'
+Plugin 'scrooloose/nerdtree'
+Plugin 'tpope/vim-fugitive'
+Plugin 'vim-pandoc/vim-pandoc'
+Plugin 'vim-scripts/mail.vim'
+Plugin 'FuzzyFinder'
+Plugin 'jalvesaq/VimCom'
+Plugin 'bling/vim-airline'
+Plugin 'Yggdroot/indentLine'
+Plugin 'troydm/easybuffer.vim'
+Plugin 'LaTeX-Box-Team/LaTeX-Box'
+Plugin 'kien/ctrlp.vim'
+Plugin 'majutsushi/tagbar'
+Plugin 'vim-scripts/taglist.vim'
+Plugin 'DirDiff.vim'
+Plugin 'nanotech/jellybeans.vim'
+Plugin 'chriskempson/base16-vim'
+Plugin 'jceb/vim-orgmode'
+Plugin 'wting/rust.vim'
+Plugin 'tpope/vim-surround'
 "Bundle 'Vim-R-plugin'
 "Bundle 'gerw/vim-latex-suite'
+call vundle#end()
+filetype plugin on
+filetype plugin indent on
+
 let g:ctrlp_working_path_mode = 'ra'
 
 " Don't make symbols in latex documents
@@ -261,8 +263,6 @@ let g:tagbar_type_tex = {
     \ ],
     \ 'sort'    : 0
 \ }
-" REQUIRED. This makes vim invoke Latex-Suite when you open a tex file.
-filetype plugin on
 
 " IMPORTANT: grep will sometimes skip displaying the file name if you
 " search in a singe file. This will confuse Latex-Suite. Set your grep
