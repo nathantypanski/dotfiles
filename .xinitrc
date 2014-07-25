@@ -31,11 +31,11 @@ fi
 /usr/bin/xsetroot -cursor_name left_ptr 
 /usr/bin/xset +fp /usr/share/fonts/local
 /usr/bin/xset fp rehash 
-/usr/bin/xset r rate 200 30 
+/usr/bin/xset r rate 200 50
 /usr/bin/xinput --set-prop 13 'Device Accel Profile' 6
 #/usr/bin/feh --bg-fill $WALLPAPER &
 #/usr/bin/hsetroot -cover $WALLPAPER 
 #xmonad="/home/nathan/.xmonad/dist/build/my-xmonad/my-xmonad"
 xmonad="/home/nathan/.xmonad/xmonad"
 #exec dbus-launch --exit-with-session ck-launch-session $xmonad
-exec xmonad
+exec $xmonad
