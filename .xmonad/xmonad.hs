@@ -10,7 +10,6 @@ import XMonad.Layout.Tabbed (Shrinker(..), addTabs)
 import XMonad.Layout.Simplest (Simplest(..))
 import XMonad.Layout.Groups (group)
 import XMonad.Layout.Groups.Examples (TiledTabsConfig(..)
-                                     ,tallTabs
                                      ,rowOfColumns, shrinkMasterGroups
                                      ,expandMasterGroups
                                      ,increaseNMasterGroups
@@ -249,6 +248,10 @@ myTheme = def { activeColor         = colorSelection
              , windowTitleAddons   = []
               , windowTitleIcons    = []
               }
+
+tallTabs c = G.group (_tab c _tabs)
+_tab (TTC s t) = renamed [CutWordsLeft 1] . addTabs s t
+_tabs = named "Tabs" Simplest
 
 myLayout = avoidStruts $
     tallTabs (TTC 1 0.5 (3/100) 1 0.5 (3/100) shrinkText myTheme)
