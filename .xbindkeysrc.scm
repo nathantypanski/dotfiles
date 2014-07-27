@@ -5,8 +5,6 @@
 ;; (remove-all-keys)
 (debug)
 
-
-
 ;; Toggle the touchpad
 ;; XF86TouchpadToggle
 (xbindkey '("m:0x0" "c:199") "synclient TouchpadOff=`synclient -l | grep -ce TouchpadOff.*0`")
