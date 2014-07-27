@@ -10,7 +10,6 @@ import XMonad.Layout.Tabbed (Shrinker(..), addTabs)
 import XMonad.Layout.Simplest (Simplest(..))
 import XMonad.Layout.Groups (group)
 import XMonad.Layout.Groups.Examples (TiledTabsConfig(..)
-                                     ,tallTabs
                                      ,rowOfColumns, shrinkMasterGroups
                                      ,expandMasterGroups
                                      ,increaseNMasterGroups
@@ -132,7 +131,7 @@ myKeys :: XConfig Layout -> Map (KeyMask, KeySym) (X ())
 myKeys conf@(XConfig {XMonad.modMask = modm}) = fromList $
     [
       ((modm .|. shiftMask,   xK_r     ), renameWorkspace myXPConfig)
-    , ((modm,                 xK_Return), spawn "urxvt")
+    , ((modm,                 xK_Return), spawn $ "urxvt")
     , ((modm .|. shiftMask,   xK_c     ), kill)
     , ((modm, xK_space                 ), shiftLayout)
     , ((modm .|. shiftMask,   xK_space ), setLayout $ XMonad.layoutHook conf)
@@ -249,6 +248,10 @@ myTheme = def { activeColor         = colorSelection
              , windowTitleAddons   = []
               , windowTitleIcons    = []
               }
+
+tallTabs c = G.group (_tab c _tabs)
+_tab (TTC s t) = renamed [CutWordsLeft 1] . addTabs s t
+_tabs = named "Tabs" Simplest
 
 myLayout = avoidStruts $
     tallTabs (TTC 1 0.5 (3/100) 1 0.5 (3/100) shrinkText myTheme)
