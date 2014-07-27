@@ -25,13 +25,7 @@ alias lt='ll -rt --color=auto'
 alias ..="cd .."
 alias ...="cd ../.."
 
-# git
-alias gitps="git push origin master"
-alias gitp="git pull"
-alias gitc="git commit -a"
-alias gitm="git commit "
-alias giti="git init"
-alias dotfiles='git --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME'
+alias dots='git --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME'
 
 # chown
 alias chown='chown --preserve-root'
@@ -97,7 +91,6 @@ alias x="tmux"
 
 # vim is v
 alias v="vim"
-alias e="~/bin/ec"
 
 alias ssh='eval $(/usr/bin/keychain --eval --agents ssh -Q --quiet ~/.ssh/id_rsa ~/.ssh/id_rsa_athen@ephesus) && ssh'
 
@@ -106,3 +99,4 @@ alias ":q"="exit"
 
 # "newsbeuter" takes too long to type
 alias news="newsbeuter"
+alias emacs="~/bin/emc"
