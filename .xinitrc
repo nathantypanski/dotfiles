@@ -35,7 +35,7 @@ fi
 /usr/bin/xinput --set-prop 13 'Device Accel Profile' 6
 #/usr/bin/feh --bg-fill $WALLPAPER &
 #/usr/bin/hsetroot -cover $WALLPAPER 
-#xmonad="/home/nathan/.xmonad/dist/build/my-xmonad/my-xmonad"
-xmonad="/home/nathan/.xmonad/xmonad"
+xmonad="/home/nathan/.xmonad/dist/build/my-xmonad/my-xmonad"
+#xmonad="/home/nathan/.xmonad/xmonad"
 #exec dbus-launch --exit-with-session ck-launch-session $xmonad
 exec $xmonad
