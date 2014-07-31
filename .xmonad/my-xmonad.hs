@@ -258,7 +258,7 @@ myLayout = avoidStruts $
     ||| smartBorders tiled
     where
         -- default tiling algorithm partitions the screen into two panes
-        tiled   = Tall nmaster delta ratio
+        tiled   = TallTabs nmaster delta ratio
 
         -- The default number of windows in the master pane
         nmaster = 1
@@ -340,7 +340,7 @@ main = do
             layoutHook         = myLayout,
             manageHook         = myManageHook,
             handleEventHook    = myEventHook,
-            logHook            = ewmhDesktopsLogHook <+> 
+            logHook            = ewmhDesktopsLogHook <+>
                     dynamicLogWithPP mybarPP { ppOutput = hPutStrLn h },
             startupHook        = myStartupHook
         }
