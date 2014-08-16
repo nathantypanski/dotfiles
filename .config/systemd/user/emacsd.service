@@ -1,0 +1,14 @@
+[Unit]
+Description=Emacs daemon
+After=keychain.service
+
+[Service]
+Type=forking
+EnvironmentFile=%h/.keychain/my_env
+Restart=on-failure
+WorkingDirectory=%h
+ExecStart=/usr/bin/emacs --daemon
+Restart=no
+
+[Install]
+WantedBy=console.target
