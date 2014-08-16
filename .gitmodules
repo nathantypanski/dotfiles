@@ -1,9 +1,6 @@
-[submodule ".xmonad/xmobar"]
-	path = .xmonad/xmobar
-	url = git@github.com:nathantypanski/xmobar.git
 [submodule ".emacs.d"]
 	path = .emacs.d
 	url = git@github.com:nathantypanski/emacs.d
 [submodule ".xmonad"]
 	path = .xmonad
-	url = /home/nathan/.xmonad
+	url = git@github.com:nathantypanski/my-xmonad
