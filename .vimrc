@@ -171,7 +171,7 @@ let g:ctrlp_working_path_mode = 'ra'
 let g:tex_conceal = 1
 
 " color settings
-syntax enable
+syntax off
 set background=dark
 let g:hybrid_use_Xresources = 1
 colorscheme Tomorrow-Night-Eighties
