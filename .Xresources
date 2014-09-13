@@ -8,7 +8,7 @@ URxvt.url-select.underline: true
 URxvt*jumpScroll: true
 URxvt*lineSpace: 0
 
-*font:-*-terminus-medium-*-*-*-16-*-*-*-*-*-iso10646-*
+*font:-*-gohufont-medium-*-*-*-14-*-*-*-*-*-iso10646-1
 
 URxvt.transparent: false
 URxvt.tintColor: white
@@ -39,3 +39,4 @@ URxvt*cursorBlink:            True
 URxvt*pointerBlank:           True
 URxvt*saveLines:              65535
 URxvt*scrollttykeypress:      true
+
