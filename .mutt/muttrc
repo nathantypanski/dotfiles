@@ -15,8 +15,10 @@ source ~/.mutt/colors
 #set signature="echo '        Nathan'|"
 #set sig_dashes=no
 
-set pgp_mime_signature_filename="signature.asc"
-set pgp_mime_signature_description="my GPG/PGP digital signature"
+## BROKEN ON ARCH
+#set pgp_mime_signature_filename="signature.asc"
+#set pgp_mime_signature_description="my GPG/PGP digital signature"
+
 # Editing -------------------------------------------------
 set editor = 'vim + -c "set expandtab textwidth=70" -c "set wrap"'
 #set editor=ec
@@ -32,8 +34,8 @@ set arrow_cursor=no
 
 # Folders -------------------------------------------------
 set header_cache =~/.mutt/cache/headers
-set message_cachedir =~/.mutt/cache/bodies
-set certificate_file =~/.mutt/certificates
+set message_cachedir = ~/.mutt/cache/bodies
+set certificate_file = ~/.mutt/certificates
 set postponed = "+[GMail]/Drafts"
 # maildir
 set mbox_type=Maildir
@@ -73,8 +75,9 @@ macro index,pager A "<save-message>=archive<enter>" "Archive Message"
 # number of context lines when scrolling
 set pager_context=2
 
-# Set the title bar for xterms
-set xterm_title=yes
+### BROKEN ON ARCH
+# # Set the title bar for xterms
+# # set xterm_title=yes
 
 # Speed up folder switch
 set sleep_time = 0
@@ -134,101 +137,6 @@ set assumed_charset="utf-8"
 
 
 # Index View Options --------------------------------------
-
-# set index_format="%4C %Z %{%b %d} %-15.15L (%?l?%4l&%4c?) %s"
-#
-# Name: index_format
-# Type: string
-# Default: "%4C %Z %{%b %d} %-15.15L (%?l?%4l&%4c?) %s"
-# 
-# 
-# This variable allows you to customize the message index display to
-# your personal taste.
-# 
-# ``Format strings'' are similar to the strings used in the C
-# function printf(3) to format output (see the man page for more details).
-# The following sequences are defined in Mutt:
-# %a      address of the author
-# %A      reply-to address (if present; otherwise: address of author)
-# %b      filename of the original message folder (think mailbox)
-# %B      the list to which the letter was sent, or else the folder name (%b).
-# %c      number of characters (bytes) in the message
-# %C      current message number
-# %d      date and time of the message in the format specified by
-# $date_format         converted to sender's time zone
-# %D      date and time of the message in the format specified by
-# $date_format         converted to the local time zone
-# %e      current message number in thread
-# %E      number of messages in current thread
-# %f      sender (address + real name), either From: or Return-Path:
-# %F      author name, or recipient name if the message is from you
-# %H      spam attribute(s) of this message
-# %i      message-id of the current message
-# %l      number of lines in the message (does not work with maildir,
-#         mh, and possibly IMAP folders)
-# %L      If an address in the ``To:'' or ``Cc:'' header field matches an address
-#         defined by the users ``subscribe'' command, this displays
-#         "To <list-name>", otherwise the same as %F.
-# %m      total number of message in the mailbox
-# %M      number of hidden messages if the thread is collapsed.
-# %N      message score
-# %n      author's real name (or address if missing)
-# %O      original save folder where mutt would formerly have
-#         stashed the message: list name or recipient name
-#         if not sent to a list
-# %P      progress indicator for the built-in pager (how much of the file has been displayed)
-# %s      subject of the message
-# %S      status of the message (``N''/``D''/``d''/``!''/``r''/*)
-# %t      ``To:'' field (recipients)
-# %T      the appropriate character from the $to_chars string
-# %u      user (login) name of the author
-# %v      first name of the author, or the recipient if the message is from you
-# %X      number of attachments
-#         (please see the ``attachments'' section for possible speed effects)
-# %y      ``X-Label:'' field, if present
-# %Y      ``X-Label:'' field, if present, and (1) not at part of a thread tree,
-#         (2) at the top of a thread, or (3) ``X-Label:'' is different from
-#         preceding message's ``X-Label:''.
-# %Z      message status flags
-# %{fmt}  the date and time of the message is converted to sender's
-#         time zone, and ``fmt'' is expanded by the library function
-#         strftime(3); a leading bang disables locales
-# %[fmt]  the date and time of the message is converted to the local
-#         time zone, and ``fmt'' is expanded by the library function
-#         strftime(3); a leading bang disables locales
-# %(fmt)  the local date and time when the message was received.
-#         ``fmt'' is expanded by the library function strftime(3);
-#         a leading bang disables locales
-# %<fmt>  the current local time. ``fmt'' is expanded by the library
-#         function strftime(3); a leading bang disables locales.
-# %>X     right justify the rest of the string and pad with character ``X''
-# %|X     pad to the end of the line with character ``X''
-# %*X     soft-fill with character ``X'' as pad
-# 
-# 
-# ``Soft-fill'' deserves some explanation: Normal right-justification
-# will print everything to the left of the ``%>'', displaying padding and
-# whatever lies to the right only if there's room. By contrast,
-# soft-fill gives priority to the right-hand side, guaranteeing space
-# to display it and showing padding only if there's still room. If
-# necessary, soft-fill will eat text leftwards to make room for
-# rightward text.
-# 
-# Note that these expandos are supported in
-# ``save-hook'', ``fcc-hook'' and ``fcc-save-hook'', too.
-set index_format = "[%Z] %-20.20F %s (%e/%E)%> (%?l?%4l&%4c?) %D"
-
-# Default: "!%a, %b %d, %Y at %I:%M:%S%p %Z"
-#       This variable controls the format of the date printed by the ``%d''
-#       sequence in $index_format.  This is passed to the strftime(3)
-#       function to process the date, see the man page for the proper syntax.
-#       
-#       Unless the first character in the string is a bang (``!''), the month
-#       and week day names are expanded according to the locale specified in
-#       the variable $locale. If the first character in the string is a
-#       bang, the bang is discarded, and the month and week day names in the
-#       rest of the string are expanded in the C locale (that is in US
-#       English).
 set date_format = "%m/%d"
 # set date_format="!%a, %b %d, %Y at %I:%M:%S%p %Z"
 
@@ -238,12 +146,22 @@ set sort_aux = reverse-last-date-received  # like gmail
 #set reply_regexp = "^(([Rr][Ee]?(\[[0-9]+\])?: *)?(\[[^]]+\] *)?)*"
 
 # Index Key Bindings --------------------------------------
-bind index gg       first-entry
-bind index G        last-entry
-bind index R        group-reply
-bind index <tab>    sync-mailbox
-bind index - collapse-thread
-bind index _ collapse-all
+bind  index "gg"       first-entry
+bind  index "G"        last-entry
+bind  index "R"        group-reply
+bind  index "<tab>"    sync-mailbox
+bind  index "-"        collapse-thread
+bind  index "_"        collapse-all
+bind  index "N"        search-opposite
+macro index "h"        "c?"
+
+# Pager Key Bindings --------------------------------------
+bind  pager "R"        group-reply
+bind  pager "N"        search-opposite
+bind  pager "<ESC>R"   recall-message
+
+# Browser Key Bindings ------------------------------------
+bind browser "l" select-entry
 
 # Don't verify signed messages unless I say so (downloading takes too long).
 set crypt_verify_sig=no
