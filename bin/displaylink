@@ -4,7 +4,7 @@
 # Fill in MAINOUTPUT, MAINPROVIDER, WIDTH, HEIGHT, and REFRESH with your own
 # values before use.
 
-MAINOUTPUT="LVDS2" # Obtained from xrandr --current
+MAINOUTPUT="LVDS1" # Obtained from xrandr --current
 MAINPROVIDER="0"   # Obtained from xrandr --listproviders
 WIDTH="1366"       # Width of DisplayLink monitor in pixels
 HEIGHT="768"       # Height of DisplayLink monitor in pixels
@@ -41,6 +41,14 @@ function blueprint() {
     tput sgr0;
 }
 
+function fail() {
+    tput setaf 1; tput bold;
+    echo
+    echo $1
+    tput sgr0
+    exit 1
+}
+
 blueprint ">> DisplayLink Mode: "
 echo $modeline
 
@@ -52,23 +60,21 @@ echo $dlmodename
 
 if [ "$dlprovider" ]; then
     if ! xrandr | grep DVI; then
-        xrandr --setprovideroutputsource $dlprovider $MAINPROVIDER
+        [[ $(xrandr --setprovideroutputsource "$dlprovider" "$MAINPROVIDER") -eq 0 ]] \
+            || fail "Could not set Displayink provider."
     fi
 
     if ! xrandr | grep $dlmodename; then
-        tput setaf 6; tput bold;
-        printf ">> Desired DisplayLink mode "
-        tput sgr0;
+        blueprint ">> Desired DisplayLink mode "
         printf $dlmodename
-        tput setaf 6; tput bold;
-        printf " does not exist! Creating new mode ...\n"
+        blueprint " does not exist! Creating new mode ...\n"
         xrandr --newmode $modeline
     fi
 
-    tput setaf 6; tput bold;
-    printf ">> DisplayLink output: "
-    tput sgr0;
+    blueprint ">> DisplayLink output: "
     dloutput=$(xrandr | grep DVI | cut -d ' ' -f 1)
+
+    [ "$dloutput" ] || fail "No displaylink provider found! Dying";
     echo $dloutput
 
     xrandr --addmode $dloutput $dlmodename
