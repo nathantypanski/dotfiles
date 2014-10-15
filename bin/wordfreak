@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+#
+# wordfreak 
+#
+# Count the frequency of words sent to standard input.
+
+
+tr '[:blank:]+' '\n' | \
+    sort | \
+    egrep -v '^\s*$' | \
+    uniq -c | \
+    sort -rn | \
+    sed -r 's/\s*([0-9]+)\s+(\S+)/\2: \1/g' 
