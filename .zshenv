@@ -47,10 +47,13 @@ export QT_STYLE_OVERRIDE="gtk"
 export SDL_AUDIODRIVER=alsa
 
 export XDG_CONFIG_HOME='/home/nathan/.config'
-export GOPATH=$HOME/devel/go
+export GOPATH="$HOME"/devel/go
+export GOBIN="$GOPATH"/bin
+
+export RUST_ROOT="$HOME"/prj/rust/rust/stage2
 
 path+=("$HOME"/.rbenv/bin)
-path+=("$HOME"/devel/rust/rust/x86_64-unknown-linux-gnu/stage2/bin)
+path+=("$RUST_ROOT"/bin)
 path+=("$HOME"/devel/java/android-sdk-linux/tools)
 path+=("$HOME"/.cabal/bin)
 path+=("$HOME"/devel/rust/cargo/target)
@@ -59,9 +62,18 @@ path+=("$HOME"/devel/go/bin)
 path+=("$HOME"/bin)
 
 # ccache
-export CCACHE_DIR=$HOME/.ccache
+#export CCACHE_DIR=$HOME/.ccache
 
 # Fixes swing stuff in xmonad
 export _JAVA_AWT_WM_NONREPARENTING=1
 
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+if [ -n "$PYTHONPATH" ]; then
+    export PYTHONPATH="$PYTHONPATH":"$HOME"/prj/ndtpy/src
+else
+    export PYTHONPATH="$HOME"/prj/ndtpy/src
+fi
+
+path=(/usr/lib/ccache/bin/ "$path[@]")
+path+=("/opt/android-sdk/platform-tools")
+path+=("/home/nathan/.xmonad/.cabal-sandbox/bin")
