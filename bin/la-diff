@@ -1,0 +1,52 @@
+#!/usr/bin/python3
+#
+# The MIT License (MIT)
+# 
+# Copyright (c) 2014 Nathan Typanski <http://nathantypanski.com/contact.html>
+# 
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
+import argparse
+import difflib
+import os
+
+def parse_args():
+    args_parser = argparse.ArgumentParser('Diff directories')
+    args_parser.add_argument('d_from',
+                             type=str,
+                             metavar='FROM',
+                             help='the original directory')
+    args_parser.add_argument('d_to',
+                             type=str,
+                             metavar='TO',
+                             help='the new directory')
+    return args_parser.parse_args()
+
+def main():
+    args = parse_args()
+    d_from = os.listdir(args.d_from)
+    d_to = os.listdir(args.d_to)
+    d_from.sort()
+    d_to.sort()
+    for diff in difflib.unified_diff(d_from, d_to,
+                                     args.d_from, args.d_to):
+        print(diff)
+
+if __name__ == '__main__':
+    main()
