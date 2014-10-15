@@ -91,5 +91,5 @@ if [ $EUID -ne 0 ] ; then
     fi
 fi
 
-config-titleable
-check-set-titles
+#config-titleable
+#check-set-titles

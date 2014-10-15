@@ -101,5 +101,5 @@ alias ":q"="exit"
 alias news="newsbeuter"
 alias xm='GHC_PACKAGE_PATH="/home/nathan/.xmonad/.cabal-sandbox/x86_64-linux-ghc-7.8.3-packages.conf.d/":"/home/nathan/.ghc/x86_64-linux-7.8.3/package.conf.d/" /home/nathan/.xmonad/.cabal-sandbox/bin/xmonad'
 
-# searching files
-alias fgrep="find | egrep -i"
+alias ipy='ipython'
+alias pysh='ipython --profile=pysh'
