@@ -1,4 +1,4 @@
-#include "/home/nathan/.colors/dotshare.xrdb"
+#include "/home/nathan/.colors/my-zenburn.xresources"
 
 urxvt*internalBorder: 4
 urxvt*termName: rxvt-256color
