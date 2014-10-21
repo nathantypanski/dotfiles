@@ -172,10 +172,10 @@ let g:ctrlp_working_path_mode = 'ra'
 let g:tex_conceal = 1
 
 " color settings
-syntax off
+syntax on
 set background=dark
 let g:hybrid_use_Xresources = 1
-colorscheme Tomorrow-Night-Eighties
+colorscheme zenburn
 
 " Navigate windows with C-hjkl
 map<C-h> <C-w>h
