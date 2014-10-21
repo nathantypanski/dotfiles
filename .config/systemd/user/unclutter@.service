@@ -1,0 +1,10 @@
+[Unit]
+Description=hide the mouse cursor when not in use
+
+[Service]
+Type=simple
+Environment=DISPLAY=:%i
+ExecStart=/usr/bin/unclutter
+
+[Install]
+WantedBy=wm@.target

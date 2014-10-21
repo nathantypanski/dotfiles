@@ -1,0 +1,10 @@
+[Unit]
+Description=bind my keys to do things with my keys
+
+[Service]
+Type=simple
+Environment=DISPLAY=:%i
+ExecStart=/usr/bin/xbindkeys -n
+
+[Install]
+WantedBy=wm@.target

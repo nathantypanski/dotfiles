@@ -1,0 +1,8 @@
+[Unit]
+Description=Checking my mail
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h
+TimeoutStartSec=1min30s
+ExecStart=/usr/bin/mbsync gmail
