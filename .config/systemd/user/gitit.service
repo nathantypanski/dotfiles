@@ -5,7 +5,7 @@ Description=my personal wiki
 Type=simple
 WorkingDirectory=%h/.gitit
 Environment=CABAL_SANDBOX_CONFIG=%h/.gitit/cabal.sandbox.config
-ExecStart=/usr/bin/cabal exec %h/.gitit/start.sh
+ExecStart=/usr/bin/cabal exec /home/nathan/.gitit/start.sh
 Restart=no
 
 [Install]
