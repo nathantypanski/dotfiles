@@ -47,8 +47,9 @@ export QT_STYLE_OVERRIDE="gtk"
 export SDL_AUDIODRIVER=alsa
 
 export XDG_CONFIG_HOME='/home/nathan/.config'
-export GOPATH="$HOME"/devel/go
+export GOPATH="$HOME"/prj/go
 export GOBIN="$GOPATH"/bin
+path+=("$GOBIN")
 
 export RUST_ROOT="$HOME"/prj/rust/rust/stage2
 
