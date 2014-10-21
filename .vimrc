@@ -301,6 +301,7 @@ map<leader>b :FufBuffer<C-M>
 augroup indent_settings
     au!
     au BufEnter *.c setl autoindent smartindent tabstop=8 expandtab shiftwidth=8
+    au BufEnter *.h setl autoindent smartindent tabstop=8 expandtab shiftwidth=8
     au BufEnter *.rs setl autoindent smartindent tabstop=4 expandtab shiftwidth=4
 
 set colorcolumn=80
