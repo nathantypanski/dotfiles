@@ -1,0 +1,9 @@
+[Unit]
+Description=Music Player Daemon Sockets
+
+[Socket]
+ListenStream=127.0.0.1
+ListenStream=6606
+
+[Install]
+WantedBy=console.target

@@ -1,0 +1,9 @@
+[Unit]
+Description=Mbsync on a schedule
+
+[Timer]
+OnCalendar=*:*:0/30
+Unit=mbsync.service
+
+[Install]
+WantedBy=default.target

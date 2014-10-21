@@ -1,0 +1,9 @@
+[Unit]
+Description=Set the Xorg VT number environment variable
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/systemctl --user set-environment XDG_VTNR=1
+
+[Install]
+WantedBy=default.target

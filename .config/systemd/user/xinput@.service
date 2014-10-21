@@ -1,0 +1,10 @@
+[Unit]
+Description=set manageable input rate limits
+
+[Service]
+Type=simple
+Environment=DISPLAY=:%i
+ExecStart=/usr/bin/xinput --set-prop 13 'Device Accel Profile' 6
+
+[Install]
+WantedBy=wm@.target
