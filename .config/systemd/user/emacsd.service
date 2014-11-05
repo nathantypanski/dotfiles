@@ -5,7 +5,7 @@ After=keychain.service
 [Service]
 Type=forking
 EnvironmentFile=%h/.keychain/my_env
-Restart=on-failure
+Restart=on-abnormal
 WorkingDirectory=%h
 ExecStart=/usr/bin/emacs --daemon
 Restart=no
