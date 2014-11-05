@@ -1,0 +1,9 @@
+[Unit]
+Description=binary space partitioning window manager
+
+[Service]
+Environment=DISPLAY=:%i
+ExecStart=/usr/bin/bspwm
+
+[Install]
+WantedBy=wm@.target
