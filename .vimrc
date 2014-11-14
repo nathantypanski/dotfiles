@@ -9,6 +9,8 @@ set noswapfile
 " Automatically cd into file directory.
 set autochdir
 
+" Limit syntax highlighting (for speed)
+set synmaxcol=120
 
 set foldlevelstart=999
 
