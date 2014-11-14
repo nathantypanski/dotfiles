@@ -4,15 +4,15 @@
 
 
 # Modify the colors and symbols in these variables as desired.
-GIT_PROMPT_SYMBOL="%{$fg[blue]%}±"
-GIT_PROMPT_PREFIX="%{$fg[green]%}[%{$reset_color%}"
-GIT_PROMPT_SUFFIX="%{$fg[green]%}]%{$reset_color%}"
-GIT_PROMPT_AHEAD="%{$fg[red]%}ANUM%{$reset_color%}"
-GIT_PROMPT_BEHIND="%{$fg[cyan]%}BNUM%{$reset_color%}"
-GIT_PROMPT_MERGING="%{$fg_bold[magenta]%}⚡︎%{$reset_color%}"
-GIT_PROMPT_UNTRACKED="%{$fg_bold[red]%}●%{$reset_color%}"
-GIT_PROMPT_MODIFIED="%{$fg_bold[yellow]%}●%{$reset_color%}"
-GIT_PROMPT_STAGED="%{$fg_bold[green]%}●%{$reset_color%}"
+GIT_PROMPT_SYMBOL=""
+GIT_PROMPT_PREFIX=""
+GIT_PROMPT_SUFFIX="%{$reset_color%}"
+GIT_PROMPT_AHEAD="%{$fg[red]%}+ANUM%{$reset_color%}"
+GIT_PROMPT_BEHIND="%{$fg[cyan]%}-BNUM%{$reset_color%}"
+GIT_PROMPT_MERGING="%{$fg_bold[magenta]%}m%{$reset_color%}"
+GIT_PROMPT_UNTRACKED="%{$fg_bold[red]%}_%{$reset_color%}"
+GIT_PROMPT_MODIFIED="%{$fg_bold[yellow]%}*%{$reset_color%}"
+GIT_PROMPT_STAGED="%{$fg_bold[green]%}s%{$reset_color%}"
 
 # Show Git branch/tag, or name-rev if on detached head
 parse_git_branch() {
@@ -61,7 +61,7 @@ parse_git_state() {
 # If inside a Git repository, print its branch and state
 git_prompt_string() {
   local git_where="$(parse_git_branch)"
-  [ -n "$git_where" ] && echo "$GIT_PROMPT_SYMBOL$(parse_git_state)$GIT_PROMPT_PREFIX%{$fg[yellow]%}${git_where#(refs/heads/|tags/)}$GIT_PROMPT_SUFFIX"
+  [ -n "$git_where" ] && echo "$GIT_PROMPT_SYMBOL$(parse_git_state)$GIT_PROMPT_PREFIX%{$fg[yellow]%} ${git_where#(refs/heads/|tags/)}$GIT_PROMPT_SUFFIX"
 }
 
 # Set the right-hand prompt
