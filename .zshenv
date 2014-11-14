@@ -64,7 +64,7 @@ path+=("$HOME"/devel/go/bin)
 path+=("$HOME"/bin)
 
 # ccache
-#export CCACHE_DIR=$HOME/.ccache
+export CCACHE_DIR=$HOME/.ccache
 
 # Fixes swing stuff in xmonad
 export _JAVA_AWT_WM_NONREPARENTING=1
