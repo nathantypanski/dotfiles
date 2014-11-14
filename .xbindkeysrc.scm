@@ -15,14 +15,18 @@
 
 ;; decrase volume
 ;; XF86AudioLowerVolume
-(xbindkey '("m:0x0" "c:122") "pamixer --decrease 5")
+(bindkey '("m:0x0" "c:122") "pamixer --decrease 5")
 
 ;; Toggle mute
 ;; XF86AudioMute
 (xbindkey '("m:0x0" "c:121") "pamixer --toggle-mute")
 
 ;;(xbindkey '(Mod4 Return) "urxvt")
-(xbindkey '(Mod4 BackSpace) "dmenu_run")
+(xbindkey '(Mod4 p) "dmenu_run")
+
+(xbindkey '(Mod4 Return) "urxvt")
+
+;; (xbindkey '(Mod4 Shift grave) "~/bin/emc")
 
 (define (define-chord-keys key1 key2 cmd-k1 cmd-k2 cmd-k1-k2 cmd-k2-k1)
     "Define chording keys"
@@ -41,6 +45,7 @@
 			     (run-command cmd-k2-k1)
 			     (if k2 (run-command cmd-k2)))
 			 (set! k1 #f) (set! k2 #f)))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Start of xbindkeys guile configuration ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
