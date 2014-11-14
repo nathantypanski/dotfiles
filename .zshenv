@@ -53,6 +53,7 @@ path+=("$GOBIN")
 
 export RUST_ROOT="$HOME"/prj/rust/rust/stage2
 
+path+=("$HOME"/.local/bin)
 path+=("$HOME"/.rbenv/bin)
 path+=("$RUST_ROOT"/bin)
 path+=("$HOME"/devel/java/android-sdk-linux/tools)
