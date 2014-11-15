@@ -1,8 +1,0 @@
----
-
-- name: Build my Xresources
-  template:
-    src='Xresources.j2'
-    dest="{{ home }}/.Xresources"
-    owner="{{ user }}"
-  notify: refresh xrdb

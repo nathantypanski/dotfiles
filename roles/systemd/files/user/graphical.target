@@ -1,9 +1,0 @@
-[Unit]
-Description=Graphical interface target
-Wants=xorg@%i.target
-Wants=wm.target
-Requires=dbus.socket
-AllowIsolate=true
-
-[Install]
-#Alias=default.target
