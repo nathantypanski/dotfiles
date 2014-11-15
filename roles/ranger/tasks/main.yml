@@ -1,0 +1,24 @@
+---
+- name: commands
+  copy:
+    src="commands.py"
+    dest="{{ xdg_config_home }}/ranger/commands.py"
+    owner="{{ user }}"
+
+- name: rc
+  copy:
+    src="rc.conf"
+    dest="{{ xdg_config_home }}/ranger/rc.conf"
+    owner="{{ user }}"
+
+- name: rifle
+  copy:
+    src="rifle.conf"
+    dest="{{ xdg_config_home }}/ranger/rifle.conf"
+    owner="{{ user }}"
+
+- name: scope
+  copy:
+    src="scope.sh"
+    dest="{{ xdg_config_home }}/ranger/scope.sh"
+    owner="{{ user }}"

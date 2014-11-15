@@ -1,0 +1,9 @@
+---
+- name: Copy zshenv
+  copy: src="zshenv" dest="/home/{{ user }}/.zshenv" owner="{{ user }}"
+
+- name: Copy zshrc
+  copy: src="zshrc" dest="/home/{{ user }}/.zshrc" owner="{{ user }}"
+
+- name: Copy zsh config files
+  copy: src="config/" dest="{{ xdg_config_home }}/zsh/" owner="{{ user }}"

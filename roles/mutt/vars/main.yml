@@ -1,0 +1,5 @@
+muttdir: "{{ home }}/.mutt"
+cryptofile: "{{ muttdir }}/crypto"
+passwordfile: "{{ muttdir }}/passwords"
+colorfile: "{{ muttdir }}/colors"
+profilefile: "{{ muttdir }}/profile"
