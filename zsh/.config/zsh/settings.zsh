@@ -31,22 +31,6 @@ check-set-titles () {
     fi
 }
 
-function zle-keymap-select {
-  zle reset-prompt
-
-  if [[ $KEYMAP = "vicmd" ]]; then
-    echo -ne "\033]12;10\007"
-  else
-    echo -ne "\033]12;6\007"
-  fi
-}
-
-#function zle-line-finish {
-#  echo -ne "\033]12;6\007"
-#}
-
-zle -N zle-keymap-select
-#zle -N zle-line-finish
 
 # Append all history to history file
 setopt appendhistory
