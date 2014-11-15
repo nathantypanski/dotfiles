@@ -1,0 +1,211 @@
+# i3 config file (v4)
+#
+# Please see http://i3wm.org/docs/userguide.html for a complete reference!
+
+default_orientation auto
+new_float 1pixel
+new_window pixel 2
+focus_follows_mouse no
+popup_during_fullscreen smart
+workspace_auto_back_and_forth yes
+force_display_urgency_hint 500 ms
+force_focus_wrapping no
+force_xinerama yes
+
+# Solarized
+# class                 border  backgr. text    indicator
+client.focused          #a54242 #a54242 #c5c8c6 #b5bd68
+client.focused_inactive #282a2e #282a2e #c5c8c6 #8abeb7
+client.unfocused        #1d1f21 #1d1f21 #707880 #8abeb7
+client.urgent           #5f819d #5f819d #002b36 #85678f
+
+set $mod Mod4
+
+# Font for window titles. Will also be used by the bar unless a different font
+# is used in the bar {} block below. ISO 10646 = Unicode
+font -*-terminus-medium-*-*-*-16-*-*-*-*-*-iso8859-*
+#font pango:Terminus 10
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# start a terminal
+bindsym $mod+Shift+Return exec termite
+bindsym $mod+grave exec termite
+
+# lock --- broken!?
+# bindsym $mod+o exec 'i3lock -c 004354'
+
+# kill focused window
+bindsym $mod+Shift+c kill
+
+# start dmenu (a program launcher)
+bindsym $mod+p exec 'bin/dmenu/dmenu_run.sh' -p '$ '
+# There also is the (new) i3-dmenu-desktop which only displays applications
+# shipping a .desktop file. It is a wrapper around dmenu, so you need that
+# installed.
+bindsym $mod+Shift+d exec --no-startup-id i3-dmenu-desktop
+
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+bindsym $mod+Shift+apostrophe split v
+bindsym $mod+apostrophe split h
+
+bindsym $mod+f fullscreen
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# focus the parent container
+bindsym $mod+bracketleft focus parent
+
+# focus the child container
+bindsym $mod+bracketright focus child
+
+bindsym $mod+equal exec "~/bin/i3/winmenu.py"
+
+# switch to workspace
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+bindsym $mod+5 workspace 5
+bindsym $mod+6 workspace 6
+bindsym $mod+7 workspace 7
+bindsym $mod+8 workspace 8
+bindsym $mod+9 workspace 9
+bindsym $mod+0 workspace 10
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace 1
+bindsym $mod+Shift+2 move container to workspace 2
+bindsym $mod+Shift+3 move container to workspace 3
+bindsym $mod+Shift+4 move container to workspace 4
+bindsym $mod+Shift+5 move container to workspace 5
+bindsym $mod+Shift+6 move container to workspace 6
+bindsym $mod+Shift+7 move container to workspace 7
+bindsym $mod+Shift+8 move container to workspace 8
+bindsym $mod+Shift+9 move container to workspace 9
+bindsym $mod+Shift+0 move container to workspace 10
+
+# Reload the configuration file.
+# bindsym $mod+Shift+c reload
+
+# Restart i3 inplace (preserves your layout/session, can be used to upgrade i3).
+bindsym $mod+Shift+r restart
+
+# dzen customization keybindings
+# bindcode 133 exec --no-startup-id "bin/dzen/dz.sh"
+# bindcode --release 133 exec --no-startup-id "killall dzen2 conky dz.sh"
+# bindsym --release $mod exec --no-startup-id "killall dzen2 conky dz.sh"
+# bindsym $mod+F1 exec --no-startup-id "bin/dzen/dz.sh"
+bindsym $mod+F2 exec --no-startup-id "killall dzen2 conky gcpubar dz.sh trayer"
+
+bindsym $mod+o exec "dwb"
+
+# exit i3 (logs you out of your X session)
+bindsym $mod+Shift+q exec "i3-nagbar -t warning -m 'Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'killall dz.sh; i3-msg exit'"
+
+# resize window (you can also use the mouse for that)
+mode "resize" {
+        # These bindings trigger as soon as you enter the resize mode
+        bindsym $mod+h resize shrink width 10 px or 5 ppt
+        bindsym $mod+j resize grow height 10 px or 5 ppt
+        bindsym $mod+k resize shrink height 10 px or 5 ppt
+        bindsym $mod+l resize grow width 10 px or 5 ppt
+
+        # back to normal: Enter or Escape
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+mode "move" {
+        # back to normal: Enter or Escape
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+# for_window [class="Firefox"] {
+# }
+
+for_window [title="TeX Text"] floating enable
+assign [class="dwb"] 3
+
+bindsym $mod+r mode "resize"
+
+# Start i3bar to display a workspace bar (plus the system information i3status
+# finds out, if available)
+bar {
+    status_command i3bar
+    tray_output primary
+    workspace_buttons yes
+
+    colors {
+        background #00141a
+        statusline #839496
+        separator #586e75
+        focused_workspace #268bd2 #268bd2 #00141a
+        inactive_workspace #073642 #00141a #839496
+    }
+}
+
+# Hide vertical borders at screen edges
+# hide_edge_borders both
+
+# Make the currently focused window a scratchpad
+bindsym $mod+Shift+minus move scratchpad
+
+# Show the first scratchpad window
+bindsym $mod+minus scratchpad show
+
+# search for a a program by name
+bindsym $mod+n exec python ~/bin/i3-wm-scripts/nextfind.py
+
+# mark a window
+bindsym $mod+m exec ~/bin/i3-wm-scripts/mark
+
+# unmark a window
+bindsym $mod+u exec ~/bin/i3-wm-scripts/unmark
+
+# use dmenu to jump back to a mark
+bindsym $mod+g exec ~/bin/i3-wm-scripts/goto
+
+# go to my web browser
+bindsym $mod+b exec python ~/bin/i3-wm-scripts/nextmatch.py '(chromium|firefox)'
+
+# open ranger
+bindsym $mod+d exec "termite -e ranger"
+
+# Use compositing
+# exec --no-startup-id compton -I .04 -O .04 -b -f -D 5 &
+
+exec --no-startup-id 'dwb'
+
+#exec --no-startup-id i3-msg 'workspace 9; exec bin/urxvt.sh -e irssi; workspace 1'
+exec --no-startup-id 'unclutter'
+# exec --no-startup-id 'bin/dzen/dz.sh'
+
+# The IPC interface allows programs like an external workspace bar
+# (i3-wsbar) or i3-msg (can be used to "remote-control" i3) to work.
+ipc-socket ~/.i3/ipc.sock

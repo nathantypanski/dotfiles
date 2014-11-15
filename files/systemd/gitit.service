@@ -1,0 +1,12 @@
+[Unit]
+Description=my personal wiki
+
+[Service]
+Type=simple
+WorkingDirectory=%h/.gitit
+Environment=CABAL_SANDBOX_CONFIG=%h/.gitit/cabal.sandbox.config
+ExecStart=/usr/bin/cabal exec /home/nathan/.gitit/start.sh
+Restart=no
+
+[Install]
+WantedBy=console.target

@@ -1,0 +1,10 @@
+[Unit]
+Description=a pretty little bar
+
+[Service]
+Type=simple
+Environment=DISPLAY=:%i
+ExecStart=/home/nathan/.config/bspwm/run_bar.sh
+
+[Install]
+WantedBy=wm@.target
