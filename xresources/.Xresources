@@ -8,7 +8,7 @@ URxvt.url-select.underline: true
 URxvt*jumpScroll: true
 URxvt*lineSpace: 0
 
-*font: {{ font }}
+*font: '-*-gohufont-medium-*-*-*-14-*-*-*-*-*-iso10646-1'
 
 URxvt.transparent: false
 URxvt.tintColor: white
