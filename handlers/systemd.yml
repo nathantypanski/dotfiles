@@ -1,3 +1,0 @@
----
-- name: reload systemd user config
-  command: /usr/sbin/systemctl --user daemon-reload

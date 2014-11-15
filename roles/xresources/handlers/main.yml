@@ -1,3 +1,0 @@
----
-- name: refresh xrdb
-  command: /usr/bin/xrdb {{ home }}/.Xresources

@@ -1,6 +1,0 @@
----
-# file: roles/xresources/vars/main.yml
-# Xresources color scheme selection
-
-colorscheme: 'my-zenburn'
-font: '-*-gohufont-medium-*-*-*-14-*-*-*-*-*-iso10646-1'
