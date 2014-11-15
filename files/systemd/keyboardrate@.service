@@ -1,0 +1,12 @@
+[Unit]
+Description=set keyboard input rates
+
+[Service]
+Type=simple
+Environment=DISPLAY=:%i
+ExecStart=/usr/bin/xset r rate 200 50
+
+[Install]
+WantedBy=wm@.target
+Requisite=wm@.target
+After=wm@.target

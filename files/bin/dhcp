@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+#
+# dhcp
+#
+# A simple script to release and renew DHCP leases on an interface
+# Author: Nathan Typanski
+
+help () {
+    echo "dhcp -r [interface]    release and renew IP lease for [interface]";
+}
+
+case "$1" in
+    -r )
+        tput setaf 6; tput bold;
+        echo '>> Releasing' $2 '...'; tput sgr0; 
+        if (sudo dhcpcd -k $2); then
+            tput setaf 2; tput bold;
+            echo '>>' $2 'released.'
+            tput setaf 6; tput bold;
+            echo '>> Renewing' $2; tput sgr0;
+            tput sgr0;
+        else
+            tput setaf 1; tput bold;
+            echo '>> Releasing' $2 'failed!'
+            tput setaf 6;
+            echo '>> Attempting to get a lease on' $2 '...'
+            tput sgr0;
+        fi
+        if (sudo dhcpcd $2); then
+            tput setaf 2; tput bold;
+            echo '>> Got a lease on' $2 '.'
+            tput sgr0;
+        else
+            tput setaf 1; tput bold;
+            echo '>> Could not get a lease on' $2 '.'
+            tput sgr0;
+        fi 
+        ;;
+    * )
+        help;;
+esac

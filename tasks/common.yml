@@ -1,0 +1,19 @@
+---
+- name: Ensure ~/bin exists
+  file:
+    path="{{ home }}/bin"
+    state="directory"
+    owner="{{ user }}"
+
+- name: Copy my scripts
+  copy:
+    src="{{ item }}"
+    dest="{{ bindir }}"
+    owner="{{ user }}"
+  with_fileglob: 'bin/*'
+
+- name: Ensure ~/prj exists
+  file:
+    path="{{ home }}/prj"
+    state="directory"
+    owner="{{ user }}"

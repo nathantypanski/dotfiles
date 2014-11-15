@@ -1,0 +1,72 @@
+[options]
+resize_grip = false
+scroll_on_output = false
+scroll_on_keystroke = true
+audible_bell = false
+visible_bell = true
+mouse_autohide = false
+allow_bold = true
+font = Terminus 12
+dynamic_title = true
+urgent_on_bell = true
+clickable_url = true
+scrollback_lines = 10000
+search_wrap = true
+#icon_name = terminal
+#geometry = 640x480
+term = xterm-256color
+
+# 0.0: opaque, 1.0: transparent
+transparency = 0.0
+pseudo_transparency = false
+
+# "system", "on" or "off"
+cursor_blink = on
+
+# "block", "underline" or "ibeam"
+cursor_shape = block
+
+# $BROWSER is used by default
+browser = firefox
+
+# word characters used for word selection
+# (default if unset: all graphic non-punctuation/space characters)
+#word_chars = -A-Za-z0-9,./?%&#:_=+@~
+
+[colors]
+foreground = #d0d0d0
+#foreground_bold = #f5f5f5
+#foreground_dim = #b0b0b0
+background = #151515
+cursor = #505050
+
+# if unset, will reverse foreground and background
+#highlight = #2f2f2f
+
+# colors from color0 to color254 can be set
+
+color0 =  #151515
+color1 =  #ac4142
+color2 =  #90a959
+color3 =  #f4bf75
+color4 =  #6a9fb5
+color5 =  #aa759f
+color6 =  #75b5aa
+color7 =  #d0d0d0
+color8 =  #505050
+color9 =  #d28445
+color10 =  #202020
+color11 =  #303030
+color12 =  #b0b0b0
+color13 =  #e0e0e0
+color14 =  #8f5536
+color15 =  #f5f5f5
+
+[hints]
+font = Terminus (TTF) 12
+foreground = #d0d0d0
+background = #151515
+padding = 2
+border = #3f3f3f
+border_width = 8
+#roundness = 2.0
