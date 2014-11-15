@@ -1,0 +1,10 @@
+---
+- name: Copy colorschemes
+  copy: src="colors/" dest="{{ xdg_config_home }}/Xresources/" owner="{{ user }}"
+
+- name: Build my Xresources
+  template:
+    src='Xresources.j2'
+    dest="{{ home }}/.Xresources"
+    owner="{{ user }}"
+  notify: refresh xrdb
