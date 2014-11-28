@@ -4,9 +4,9 @@ if [ -n "$XDG_CONFIG_HOME" ]; then
     XDG_CONFIG_HOME="$HOME"'/.config'
 fi
 
+stow -v --target="$XDG_CONFIG_HOME" systemd
 stow -v --no-folding --target="$XDG_CONFIG_HOME/ranger" ranger
 stow -v --no-folding --target="$XDG_CONFIG_HOME" i3
-stow -v --no-folding --target="$XDG_CONFIG_HOME" systemd
 stow -v --no-folding --target="$XDG_CONFIG_HOME" herbstluftwm
 stow -v --no-folding --target="$HOME/bin" bin
 stow -v --no-folding --target="$HOME" mutt
