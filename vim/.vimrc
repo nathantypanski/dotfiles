@@ -43,7 +43,7 @@ augroup JumpCursorOnEdit
             \ endif
 augroup END
 
-" Necesary  for lots of cool vim things
+" Necesary for lots of cool vim things
 set nocompatible
 
 " Modelines are neat, but they're a security hole.
