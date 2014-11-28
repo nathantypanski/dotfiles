@@ -218,21 +218,6 @@ map<leader>g :GundoToggle<CR>
 let g:pep8_map='<leader>8'
 nnoremap <leader>h :NERDTree<CR>
 
-" Omnifunc tab completion
-"au FileType python set omnifunc=pythoncomplete#Complete
-"let g:SuperTabDefaultCompletionType = "context"
-"set completeopt=menuone,longest,preview
-
-"Ropevim is also a great tool that will allow you to navigate around your code.
-"It supports automatically inserting import statements, goto definition, refactoring, and code completion.
-"You'll really want to read up on everything it does, but the two big things I use it for is to jump to function or class definitions quickly and to rename things (including all their references).
-"
-"For instance, if you are using django and you place your cursor over the class models.
-"Model you reference and then called :RopeGotoDefintion, it would jump you straight to the django library to that class definition.
-"We already have it installed in our bundles, so we bind it to a key to use it:
-map<leader>j :RopeGotoDefinition<CR>
-map<leader>r :RopeRename<CR>
-
 " Spellbad background color is UGLY!
 hi clear SpellBad
 "
