@@ -8,6 +8,10 @@ export HISTSIZE=1000
 # The number of commands saved in my history file
 export SAVEHIST=1000
 
+
+export XDG_CONFIG_HOME='/home/nathan/.config'
+export XDG_DATA_HOME="$HOME"'/.local/share'
+
 # pager settings (grml)
 export PAGER=${PAGER:-less}
 export LESS="-R"
