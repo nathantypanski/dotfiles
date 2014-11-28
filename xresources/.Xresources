@@ -1,4 +1,4 @@
-#include "/home/nathan/.config/xresources/my-zenburn.xresouces"
+#include "/home/nathan/dotfiles/xresources/.config/xresources/my-zenburn.xresources"
 
 urxvt*internalBorder: 4
 urxvt*termName: rxvt-256color
