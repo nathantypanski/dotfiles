@@ -216,6 +216,7 @@ map<leader>g :GundoToggle<CR>
 
 " pep8
 let g:pep8_map='<leader>8'
+nnoremap <leader>h :NERDTree<CR>
 
 " Omnifunc tab completion
 "au FileType python set omnifunc=pythoncomplete#Complete
