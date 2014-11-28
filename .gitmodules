@@ -1,6 +1,6 @@
 [submodule ".emacs.d"]
-	path = .emacs.d
+	path = emacs/.emacs.d
 	url = git@github.com:nathantypanski/emacs.d
 [submodule ".xmonad"]
-	path = .xmonad
+	path = xmonad/.xmonad
 	url = git@github.com:nathantypanski/my-xmonad
