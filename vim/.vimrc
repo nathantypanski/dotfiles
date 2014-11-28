@@ -210,13 +210,13 @@ map;; ;
 
 " NERDTree toggle
 map<C-n> :NERDTreeToggle<CR>
+nnoremap <leader>h :NERDTree<CR>
 
 " USE GUNDO
 map<leader>g :GundoToggle<CR>
 
 " pep8
 let g:pep8_map='<leader>8'
-nnoremap <leader>h :NERDTree<CR>
 
 " Spellbad background color is UGLY!
 hi clear SpellBad
@@ -316,10 +316,6 @@ inoremap <c-d> <esc>ddi
 nnoremap <c-d> dd
 inoremap <c-u> <esc>lbvwUi
 nnoremap <c-u> bvwU
-nnoremap <leader><leader> <C-w><C-w>
-nnoremap <leader>\ :vsplit<CR>
-nnoremap <leader>- :split<CR>
-
 nnoremap - dd
 map <leader>c :Gcommit<CR>
 map <leader>s :Gstatus<CR>
@@ -329,6 +325,10 @@ map<leader>w :w<CR>
 map<leader>W :wq<CR>
 " quit
 map<leader>q :q<CR>
+nnoremap <leader><leader> <C-w><C-w>
+nnoremap <leader>\ :vsplit<CR>
+nnoremap <leader>- :split<CR>
+
 "unmap <leader>ww
 
 map <f9> :make<CR>
