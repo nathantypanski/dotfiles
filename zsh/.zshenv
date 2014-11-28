@@ -25,6 +25,9 @@ export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
+# gtags
+export GTAGSLIBPATH="$XDG_DATA_HOME"'/gtags'
+
 # mail (grml)
 export MAIL=${MAIL:-/var/mail/$USER}
 # mailchecks (grml)
