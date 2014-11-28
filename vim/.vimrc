@@ -17,9 +17,6 @@ set synmaxcol=120
 
 set foldlevelstart=999
 
-" Remove any trailing whitespace
-" autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
-
 " Restore cursor position to where it was before
 augroup JumpCursorOnEdit
    au!
