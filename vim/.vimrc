@@ -6,6 +6,9 @@ set nobackup
 set nowb
 set noswapfile
 
+" Comma is my <leader>.
+let mapleader=","
+
 " Automatically cd into file directory.
 set autochdir
 
