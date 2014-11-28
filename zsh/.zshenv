@@ -57,7 +57,7 @@ export GOPATH="$HOME"/prj/go
 export GOBIN="$GOPATH"/bin
 path+=("$GOBIN")
 
-export RUST_ROOT="$HOME"/prj/rust/rust/stage2
+#export RUST_ROOT="$HOME"/prj/rust/rust/stage2
 
 path+=("$HOME"/.local/bin)
 path+=("$HOME"/.rbenv/bin)
