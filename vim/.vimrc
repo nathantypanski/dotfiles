@@ -161,6 +161,12 @@ Plugin 'chriskempson/base16-vim'
 Plugin 'jceb/vim-orgmode'
 Plugin 'chrisbra/csv.vim'
 Plugin 'wting/rust.vim'
+Plugin 'haya14busa/incsearch.vim'
+map /  <Plug>(incsearch-forward)
+map ?  <Plug>(incsearch-backward)
+map g/ <Plug>(incsearch-stay)
+
+
 Plugin 'tpope/vim-surround'
 "Bundle 'Vim-R-plugin'
 "Bundle 'gerw/vim-latex-suite'
