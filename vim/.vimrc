@@ -235,8 +235,6 @@ map<leader>r :RopeRename<CR>
 
 " Spellbad background color is UGLY!
 hi clear SpellBad
-"hi SpellBad cterm=underline
-"highlight SpellBad term=reverse ctermbg=1
 "
 " Disable comment continuing (hopefully)
 au FileType c,cpp setlocal comments-=:// comments+=f://
