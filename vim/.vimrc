@@ -331,6 +331,10 @@ inoremap <c-d> <esc>ddi
 nnoremap <c-d> dd
 inoremap <c-u> <esc>lbvwUi
 nnoremap <c-u> bvwU
+nnoremap <leader><leader> <C-w><C-w>
+nnoremap <leader>\ :vsplit<CR>
+nnoremap <leader>- :split<CR>
+
 nnoremap - dd
 map <leader>c :Gcommit<CR>
 map <leader>s :Gstatus<CR>
