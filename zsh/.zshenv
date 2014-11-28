@@ -50,7 +50,6 @@ export QT_STYLE_OVERRIDE="gtk"
 # Steam likes this
 export SDL_AUDIODRIVER=alsa
 
-export XDG_CONFIG_HOME='/home/nathan/.config'
 export GOPATH="$HOME"/prj/go
 export GOBIN="$GOPATH"/bin
 path+=("$GOBIN")
