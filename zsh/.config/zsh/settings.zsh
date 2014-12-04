@@ -43,6 +43,9 @@ setopt auto_pushd
 unsetopt beep nomatch notify
 bindkey -v
 
+# Don't try to correct me.
+unsetopt correct
+
 #use extended regex
 setopt re_match_pcre
 
