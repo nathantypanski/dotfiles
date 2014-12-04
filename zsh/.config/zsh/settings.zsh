@@ -36,8 +36,10 @@ check-set-titles () {
 setopt appendhistory
 # share history between terminals
 setopt inc_append_history
-# cd when I just type a directory name
-setopt autocd
+
+# automatically pushd when cd'ing
+setopt auto_pushd
+
 unsetopt beep nomatch notify
 bindkey -v
 
