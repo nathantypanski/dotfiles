@@ -1,3 +1,5 @@
+zmodload zsh/computil
+zmodload zsh/complist
 autoload -U compinit
 compinit
 
