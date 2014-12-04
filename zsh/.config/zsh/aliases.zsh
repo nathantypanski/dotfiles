@@ -10,7 +10,7 @@ alias more='less'
 alias ls='ls --color=auto'
 
 # abbreviated listing
-alias la='ls -a --color=auto'
+alias la='ls -A --color=auto'
 
 # sort by extension
 alias lx='ll -BX --color=auto'
