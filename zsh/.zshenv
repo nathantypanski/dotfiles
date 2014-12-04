@@ -25,6 +25,10 @@ export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
+# My default switches for ls
+export LS_LL_DEFAULT_SWITCHES='-lhkF'
+export LS_DEFAULT_SWITCHES='--color=auto'
+
 # gtags
 export GTAGSLIBPATH="$XDG_DATA_HOME"'/gtags'
 

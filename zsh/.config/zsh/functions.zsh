@@ -116,12 +116,6 @@ function manf() {
   man -P "less -p \"^ +$2\"" $1
 }
 
-function ll() {
-  command ls -lh --color=always $@ |\
-    awk '{k=0;for(i=0;i<=8;i++)k+=((substr($1,i+2,1)~/[rwx]/)\
-         *2^(8-i));if(k)printf("%0o ",k);print}'
-}
-
 function use_gpu() { 
     # https://bbs.archlinux.org/viewtopic.php?id=184571
     xrandr --setprovideroffloadsink nouveau modesetting
