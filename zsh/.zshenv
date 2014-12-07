@@ -2,12 +2,11 @@ typeset -U path
 
 export RBENV_VERSION=2.1.2
 export SHELL='/bin/zsh'
-export HISTFILE=$HOME/.zhistory
+export HISTFILE=$HOME'/.zhistory'
 # The number of commands stored in memory
 export HISTSIZE=1000
 # The number of commands saved in my history file
 export SAVEHIST=1000
-
 
 export XDG_CONFIG_HOME='/home/nathan/.config'
 export XDG_DATA_HOME="$HOME"'/.local/share'
@@ -52,26 +51,8 @@ export GREP_COLOR="1;33"
 # gtk style for qt5
 export QT_STYLE_OVERRIDE="gtk"
 
-
-# cabal!
 # Steam likes this
 export SDL_AUDIODRIVER=alsa
-
-export GOPATH="$HOME"/prj/go
-export GOBIN="$GOPATH"/bin
-path+=("$GOBIN")
-
-#export RUST_ROOT="$HOME"/prj/rust/rust/stage2
-
-path+=("$HOME"/.local/bin)
-path+=("$HOME"/.rbenv/bin)
-path+=("$RUST_ROOT"/bin)
-path+=("$HOME"/devel/java/android-sdk-linux/tools)
-path+=("$HOME"/.cabal/bin)
-path+=("$HOME"/devel/rust/cargo/target)
-path+=("$HOME"/node_modules/.bin)
-path+=("$HOME"/devel/go/bin)
-path+=("$HOME"/bin)
 
 # ccache
 export CCACHE_DIR=$HOME/.ccache
@@ -79,13 +60,25 @@ export CCACHE_DIR=$HOME/.ccache
 # Fixes swing stuff in xmonad
 export _JAVA_AWT_WM_NONREPARENTING=1
 
-export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
-if [ -n "$PYTHONPATH" ]; then
-    export PYTHONPATH="$PYTHONPATH":"$HOME"/prj/ndtpy/src
-else
-    export PYTHONPATH="$HOME"/prj/ndtpy/src
-fi
+export VIRTUALENVWRAPPER_PYTHON='/usr/bin/python3'
 
-path=(/usr/lib/ccache/bin/ "$path[@]")
-path+=("/opt/android-sdk/platform-tools")
-path+=("/home/nathan/.xmonad/.cabal-sandbox/bin")
+typeset -TUx pythonpath PYTHONPATH
+PYTHONPATH+=("$HOME"'/prj/ndtpy/src')
+
+# golang
+export GOPATH="$HOME"/prj/go
+export GOBIN="$GOPATH"/bin
+path=("$GOBIN" "$path[@]")
+
+path=("$HOME"'/.local/bin'                         "$path[@]")
+path=("$HOME"'/.rbenv/bin'                         "$path[@]")
+path=("$RUST_ROOT"'/bin'                           "$path[@]")
+path=("$HOME"'/devel/java/android-sdk-linux/tools' "$path[@]")
+path=("$HOME"'/.cabal/bin'                         "$path[@]")
+path=("$HOME"'/devel/rust/cargo/target'            "$path[@]")
+path=("$HOME"'/node_modules/.bin'                  "$path[@]")
+path=("$HOME"'/devel/go/bin'                       "$path[@]")
+path=("$HOME"'/bin'                                "$path[@]")
+path=('/usr/lib/ccache/bin'                      "$path[@]")
+path=('/opt/android-sdk/platform-tools'         "$path[@]")
+path=('/home/nathan/.xmonad/.cabal-sandbox/bin' "$path[@]")
