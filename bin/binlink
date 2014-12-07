@@ -1,0 +1,50 @@
+#!/usr/bin/python3
+
+import argparse
+import os
+from pathlib import Path
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(description='Link executables into ~/bin')
+    parser.add_argument('path', metavar='PATH', type=Path, nargs='+',
+                        help='Symlink PATH into ~/bin')
+    parser.add_argument('-f', action='store_true',
+                        help='Force overwrite an existing path')
+    return parser.parse_args()
+
+def exists(target):
+    return os.path.exists(str(target))
+
+def has_execute(target):
+    return os.access(str(target), os.X_OK)
+
+def link(target, link_name, force=None):
+    """ Symlink target to link_name """
+    target = str(target)
+    link_name = str(link_name)
+    try:
+        os.symlink(target, link_name)
+        print('`{}` -> `{}`'.format(target, link_name))
+    except FileExistsError as err:
+        if force:
+            os.unlink(link_name)
+            print('Replacing old link to `{}` ...'.format(link_name))
+            link(target, link_name)
+        else:
+            raise err
+
+def main():
+    bindir = (os.environ['HOME'] / Path('bin')).resolve()
+    args = parse_args()
+    for path in args.path:
+        link_name = bindir / path.name
+        target = path.resolve()
+        if exists(target) and has_execute(target):
+            link(target, link_name, args.f)
+        else:
+            print('Target path `{}` does not exist!'.format(path))
+            exit(1)
+
+if __name__ == '__main__':
+    main()
