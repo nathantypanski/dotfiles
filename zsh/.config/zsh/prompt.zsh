@@ -12,9 +12,10 @@ vim_nml_mode="%{$fg[green]%}"
 vim_mode=$vim_ins_mode
 
 function zle-keymap-select {
-  vim_mode="${${KEYMAP/vicmd/${vim_nml_mode}}/(main|viins)/${vim_ins_mode}}"
-  zle reset-prompt
+    vim_mode="${${KEYMAP/vicmd/${vim_nml_mode}}/(main|viins)/${vim_ins_mode}}"
+    zle reset-prompt
 }
+
 zle -N zle-keymap-select
 
 function zle-line-finish {
@@ -23,7 +24,7 @@ function zle-line-finish {
 zle -N zle-line-finish
 
 
-source ~/.zsh/git-prompt.zsh
+source "$XDG_CONFIG_HOME"'/zsh/git-prompt.zsh'
 
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main pattern)
 
@@ -33,4 +34,5 @@ PROMPT='%~/ %{$reset_color%}%{$terminfo[bold]%}${vim_mode}» %{$reset_color%}'
 if [[ "$(whoami)" == "root" ]]; then
     PROMPT='%~/ %{$reset_color%}%{$terminfo[bold]%}${vim_mode}# %{$reset_color%}'
 fi
+
 export PROMPT
