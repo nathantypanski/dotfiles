@@ -15,7 +15,6 @@ function zle-keymap-select {
     vim_mode="${${KEYMAP/vicmd/${vim_nml_mode}}/(main|viins)/${vim_ins_mode}}"
     zle reset-prompt
 }
-
 zle -N zle-keymap-select
 
 function zle-line-finish {
