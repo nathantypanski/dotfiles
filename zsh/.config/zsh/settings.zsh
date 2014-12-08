@@ -67,16 +67,9 @@ bindkey '^J' open-urxvt-here
 setopt vi
 setopt transient_rprompt
 
-# for sd_cmd in systemctl systemd-analyze systemd-run; do
-#     alias $sd_cmd='DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/dbus/user_bus_socket" '$sd_cmd
-# done
-
 if [ $EUID -ne 0 ] ; then
     envfile="$HOME/.gpg-agent-info"
     if [[ -e "$envfile" ]] && kill -0 $(grep GPG_AGENT_INFO "$envfile" | cut -d: -f 2) 2>/dev/null; then
         export $(cat $envfile)
     fi
 fi
-
-#config-titleable
-#check-set-titles
