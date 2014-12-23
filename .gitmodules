@@ -4,3 +4,9 @@
 [submodule ".xmonad"]
 	path = xmonad/.xmonad
 	url = git@github.com:nathantypanski/my-xmonad
+[submodule "displaylink.sh"]
+	path = displaylink.sh
+	url = git@github.com:nathantypanski/displaylink.sh.git
+[submodule "cabver"]
+	path = cabver
+	url = git@github.com:nathantypanski/cabver.git
