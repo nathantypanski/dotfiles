@@ -12,7 +12,7 @@ export XDG_CONFIG_HOME='/home/nathan/.config'
 export XDG_DATA_HOME="$HOME"'/.local/share'
 
 # pager settings (grml)
-export PAGER=${PAGER:-less}
+export PAGER='less'
 export LESS="-R"
 
 # support colors in less (grml)
@@ -62,8 +62,14 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 
 export VIRTUALENVWRAPPER_PYTHON='/usr/bin/python3'
 
-typeset -TUx pythonpath PYTHONPATH
-PYTHONPATH+=("$HOME"'/prj/ndtpy/src')
+typeset -TUx PYTHONPATH pythonpath 
+pythonpath+=("$HOME"'/prj/ndtpy/src')
+
+export RUST_ROOT="$HOME"'/prj/rust/rust/x86_64-unknown-linux-gnu/stage2'
+
+typeset -TUg LD_LIBRARY_PATH ld_library_path 
+ld_library_path+=("$RUST_ROOT"'/lib')
+export LD_LIBRARY_PATH
 
 # golang
 export GOPATH="$HOME"/prj/go
@@ -72,13 +78,13 @@ path=("$GOBIN" "$path[@]")
 
 path=("$HOME"'/.local/bin'                         "$path[@]")
 path=("$HOME"'/.rbenv/bin'                         "$path[@]")
-path=("$RUST_ROOT"'/bin'                           "$path[@]")
 path=("$HOME"'/devel/java/android-sdk-linux/tools' "$path[@]")
 path=("$HOME"'/.cabal/bin'                         "$path[@]")
-path=("$HOME"'/devel/rust/cargo/target'            "$path[@]")
 path=("$HOME"'/node_modules/.bin'                  "$path[@]")
 path=("$HOME"'/devel/go/bin'                       "$path[@]")
 path=("$HOME"'/bin'                                "$path[@]")
+path=("$HOME"'/.xmonad/.cabal-sandbox/bin' "$path[@]")
+path=("$RUST_ROOT"'/bin' "$path[@]")
 path=('/usr/lib/ccache/bin'                      "$path[@]")
 path=('/opt/android-sdk/platform-tools'         "$path[@]")
-path=('/home/nathan/.xmonad/.cabal-sandbox/bin' "$path[@]")
+
