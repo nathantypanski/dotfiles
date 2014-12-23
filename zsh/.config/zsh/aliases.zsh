@@ -103,3 +103,5 @@ alias xm='GHC_PACKAGE_PATH="/home/nathan/.xmonad/.cabal-sandbox/x86_64-linux-ghc
 
 alias ipy='ipython'
 alias pysh='ipython --profile=pysh'
+
+alias arbtt-lately='arbtt-stats --dump-samples'
