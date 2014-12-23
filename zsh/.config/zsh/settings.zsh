@@ -6,8 +6,6 @@ title-current-dir() {
     fi
 }
 
-# Title the terminal with the running program, if the terminal is
-# titleable ($IS_TITLEABLE_TERM is set).
 title-current-prog() {
     if [[ $IS_TITLEABLE_TERM -eq 1 ]]; then
         print -Pn "\e]0;$1\a"
