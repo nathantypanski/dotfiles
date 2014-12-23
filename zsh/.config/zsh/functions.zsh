@@ -116,10 +116,51 @@ function manf() {
   man -P "less -p \"^ +$2\"" $1
 }
 
-function use_gpu() { 
+function use_gpu() {
     # https://bbs.archlinux.org/viewtopic.php?id=184571
     xrandr --setprovideroffloadsink nouveau modesetting
     xcompmgr -c &
     DRI_PRIME=1 $@
     killall xcompmgr
+}
+
+function remove-spaces {
+    tr -d ' '
+}
+
+function git-ahead {
+    git log \
+        --oneline \
+        '@{u}..' \
+    2> /dev/null | \
+        wc -l | \
+        tr -d ' '
+}
+
+function git-behind {
+    git log \
+        --oneline \
+        '..@{u}' \
+    2> /dev/null | \
+        wc -l | \
+        tr -d ' '
+}
+
+function git-dir {
+    git rev-parse \
+        --git-dir \
+    2> /dev/null
+}
+
+function git-modified {
+    git ls-files \
+        --modified \
+    2> /dev/null
+}
+
+function git-untracked {
+    git ls-files \
+        --other \
+        --exclude-standard \
+    2> /dev/null
 }
