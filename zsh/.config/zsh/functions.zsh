@@ -59,24 +59,18 @@ man() {
 }
 
 ranger-cd () {
-    local WAS_TITLEABLE_TERM
-    if [[ $IS_TITLEABLE_TERM -eq 1 ]]; then
-        IS_TITLEABLE_TERM=0
-        WAS_TITLEABLE_TERM=1
-    fi
-    tempfile='/tmp/chosendir'
-    BUFFER='ranger --choosedir="$tempfile" "${@:-$(pwd)}"
+    # https://gist.github.com/dbohdan/6257642
+    tempfile=$(mktemp)
+    ranger --choosedir="$tempfile" "${@:-$(pwd)}" < $TTY
     test -f "$tempfile" &&
     if [ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]; then
-        cd -- "$(cat "$tempfile")"
+    cd -- "$(cat "$tempfile")"
     fi
-    rm -f -- "$tempfile"'
+    rm -f -- "$tempfile"
     zle accept-line
-    NOPRECMD=0
-    if [[ $WAS_TITLEABLE_TERM -eq 1 ]]; then
-        IS_TITLEABLE_TERM=1
-    fi
 }
+
+zle -N ranger-cd
 
 function open-urxvt-here () { urxvt &! }
 
