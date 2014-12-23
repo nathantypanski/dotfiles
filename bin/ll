@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-ls "$LS_DEFAULT_SWITCHES" "$LS_LL_DEFAULT_SWITCHES" $@ | \
+ls "$LS_DEFAULT_SWITCHES" "$LS_LL_DEFAULT_SWITCHES" --color=always $@ | \
   awk '{
       # Thanks goes out to Blaenk Denum for this awk bit: \
       # <http://www.blaenkdenum.com/posts/dots/> \
