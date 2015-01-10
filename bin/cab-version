@@ -1,0 +1,104 @@
+#!/usr/bin/env python3
+
+import argparse
+from distutils.version import LooseVersion
+import collections
+import subprocess
+import sys
+
+def build_args():
+    args = argparse.ArgumentParser()
+    args.add_argument('-i', '--installed',
+                      help='list installed versions',
+                      type=str,
+                      nargs='*')
+    old_help = '''Operate only on old versions of packages.
+                  for example, when used with --installed,
+                  this will list only old versions of installed
+                  packages.'''
+    args.add_argument('-o', '--old',
+                      help='operate on old versions of packages',
+                      action='store_true', default=False)
+    args.add_argument('-f', '--fmt',
+                      help='formatter. valid options: id',
+                      type=str)
+    return args
+
+def get_package_list():
+    """Get a list of installed packages and their versions from Cabal.
+
+    The output will be a list of the form [[package, version]].
+    """
+    cabal_args = ['cabal', 'list', '--installed', '--simple-output']
+    cabal = subprocess.check_output(cabal_args, universal_newlines=True)
+
+    package_list = [pkg.split(' ') for pkg in cabal.strip('\n').split('\n')]
+    package_map = collections.defaultdict(list)
+    for name, version in package_list:
+        package_map[name].append(version)
+    package_list = [(name, versions) for name, versions in package_map.items()]
+    package_list.sort(key=lambda x: x[0])
+    return package_list
+
+def display_package_list(packages, fmt=None):
+    """Prints to STDOUT a list of package names and their versions.
+    
+    Args:
+        packages: a list [name, [versions]], where versions will be converted
+            into strings before printing, and name is a single string.
+    """
+    if packages:
+        if fmt == 'id':
+            for name, versions in packages:
+                for version in versions:
+                    print(name, end='-')
+                    print(version)
+        else:
+            for name, versions in packages:
+                print(name, end=' ')
+                print(', '.join(str(ver) for ver in versions))
+    else:
+        print('Nothing to show.', file=sys.stderr)
+
+def old(packages):
+    """Convert a collated list of packages into a list of only old packages."""
+    old_packages = []
+    for name, versions in packages:
+        if len(versions) > 1:
+            old_packages.append((name, versions[:-1]))
+    return old_packages
+
+def filter_packages(packages, names):
+    """Filter the packages to only those ones contained in names."""
+    names = set(names)
+    return [(pkg, ver) for pkg, ver in packages if pkg in names]
+
+def show_installed_versions(packages=None, names=None, fmt=None):
+    """List the installed versions packages alphabetically.
+
+    If a names are provided, then only those packages will be shown.
+    """
+    if packages is None:
+        packages = get_package_list()
+    if names:
+        display_package_list(filter_packages(packages, names), fmt=fmt)
+    else:
+        display_package_list(packages, fmt=fmt)
+
+def main():
+    args_parser = build_args()
+    args = args_parser.parse_args()
+    if args.installed is not None:
+        if args.old:
+            packages = get_package_list()
+            show_installed_versions(packages=old(packages),
+                                    names=args.installed,
+                                    fmt=args.fmt)
+        else:
+            show_installed_versions(names=args.installed,
+                                    fmt=args.fmt)
+    else:
+        args_parser.print_help()
+
+if __name__ == '__main__':
+    main()
