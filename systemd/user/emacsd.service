@@ -11,4 +11,4 @@ ExecStart=/usr/bin/emacs --daemon
 Restart=no
 
 [Install]
-WantedBy=console.target
+WantedBy=wm@.target
