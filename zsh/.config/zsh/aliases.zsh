@@ -84,14 +84,6 @@ alias -s conf=vim
 # systemd users
 alias userctl="systemctl --user"
 
-# tmux
-alias xls="tmux list-sessions"
-alias xat="tmux attach -t"
-alias x="tmux"
-
-# vim is v
-alias v="vim"
-
 alias ssh='eval $(/usr/bin/keychain --eval --agents ssh -Q --quiet ~/.ssh/id_rsa ~/.ssh/id_rsa_athen@ephesus) && ssh'
 
 # vim like quit
@@ -100,6 +92,8 @@ alias ":q"="exit"
 # "newsbeuter" takes too long to type
 alias news="newsbeuter"
 alias xm='GHC_PACKAGE_PATH="/home/nathan/.xmonad/.cabal-sandbox/x86_64-linux-ghc-7.8.3-packages.conf.d/":"/home/nathan/.ghc/x86_64-linux-7.8.3/package.conf.d/" /home/nathan/.xmonad/.cabal-sandbox/bin/xmonad'
+
+alias x='tmux'
 
 alias ipy='ipython'
 alias pysh='ipython --profile=pysh'
