@@ -87,4 +87,5 @@ path=("$HOME"'/.xmonad/.cabal-sandbox/bin' "$path[@]")
 path=("$RUST_ROOT"'/bin' "$path[@]")
 path=('/usr/lib/ccache/bin'                      "$path[@]")
 path=('/opt/android-sdk/platform-tools'         "$path[@]")
-
+path=('/home/nathan/prj/rust/rust/x86_64-unknown-linux-gnu/stage2/bin'
+      "$path[@]")
