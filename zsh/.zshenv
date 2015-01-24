@@ -1,6 +1,6 @@
 typeset -U path
 
-export RBENV_VERSION=2.1.2
+export RBENV_VERSION=2.1.5
 export SHELL='/bin/zsh'
 export HISTFILE=$HOME'/.zhistory'
 # The number of commands stored in memory
