@@ -1,0 +1,4 @@
+#!/usr/bin/sh
+
+systemctl --user start keyboardrate@1
+systemctl --user start setxkbmap@1
