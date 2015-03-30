@@ -1,0 +1,112 @@
+#!/usr/bin/env python3
+
+import subprocess
+import shlex
+import itertools
+import sys
+import time
+
+def spawn(line):
+    proc = subprocess.Popen(shlex.split(line), stdout=subprocess.PIPE)
+    for line in proc.stdout:
+        yield line.decode('utf-8').rstrip()
+
+class Query(object):
+    def windows():
+        return [w for w in spawn('bspc query --windows')]
+    def desktops():
+        return [w for w in spawn('bspc query --desktops')]
+    def monitors():
+        return [w for w in spawn('bspc query --monitors')]
+    def stack():
+        return [w for w in spawn('bspc query --stack')]
+
+class Desktop(object):
+    def __init__(self, name, occupied=False, focused=False, urgent=False):
+        self.name = name
+        self.occupied = occupied
+        self.focused = focused
+        self.urgent = urgent
+
+    def __repr__(self):
+        return '{}'.format(self)
+
+    def __str__(self):
+        if self.focused:
+            return '[{}]'.format(self.name)
+        else:
+            return self.name
+
+class Control(object):
+    def adopt_orphans():
+        spawn('bspc control --adopt-orphans')
+
+    def toggle_visibility():
+        spawn('bspc control --toggle-visibility')
+
+    def get_status():
+        for f in spawn('bspc control --get-status'):
+            yield Control._format_status(f)
+
+    def _format_status(status):
+        def _filter_info(xs, c):
+            return [x[1:] for x in xs if x.startswith(c)]
+        info = status[1:].split(':')
+        desktops = []
+        for d in info:
+            if d.startswith('O'):
+                desktops.append(Desktop(d[1:], occupied=True, focused=True))
+            elif d.startswith('o'):
+                desktops.append(Desktop(d[1:], occupied=True))
+            elif d.startswith('F'):
+                desktops.append(Desktop(d[1:], focused=True))
+            elif d.startswith('f'):
+                desktops.append(Desktop(d[1:]))
+            elif d.startswith('U'):
+                desktops.append(Desktop(d[1:], focused=True, urgent=True))
+            elif d.startswith('u'):
+                desktops.append(Desktop(d[1:], urgent=True))
+        return {
+            'layout': _filter_info(info, 'L'),
+            'monitors': {
+                'focused': _filter_info(info, 'M'),
+                'unfocused': _filter_info(info, 'm'),
+            },
+            'desktops': desktops,
+        }
+
+    def subscribe():
+        for status in spawn('bspc control --subscribe'):
+            yield Control._format_status(status)
+
+class Format(object):
+    def time():
+        return time.strftime('%d %b %H:%M:%S', time.localtime())
+
+    def battery():
+        return list(spawn('acpi'))[0]
+
+    def desktops(status):
+        return ' '.join([str(d) for d in status['desktops']])
+
+    def right_align():
+        return '%{r}'
+
+    def left_align():
+        return '%{l}'
+
+def print_bar(status):
+    print(Format.left_align(), end='')
+    print(Format.desktops(status), end='')
+    print(Format.right_align(), end='')
+    print(Format.time(), end=' | ')
+    print(Format.battery(), end='')
+    print()
+
+def main():
+    for status in Control.subscribe():
+        print_bar(status)
+        sys.stdout.flush()
+
+if __name__ == '__main__':
+    main()
