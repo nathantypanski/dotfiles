@@ -65,12 +65,6 @@ export VIRTUALENVWRAPPER_PYTHON='/usr/bin/python3'
 typeset -TUx PYTHONPATH pythonpath 
 pythonpath+=("$HOME"'/prj/ndtpy/src')
 
-export RUST_ROOT="$HOME"'/prj/rust/rust/x86_64-unknown-linux-gnu/stage2'
-
-typeset -TUg LD_LIBRARY_PATH ld_library_path 
-ld_library_path+=("$RUST_ROOT"'/lib')
-export LD_LIBRARY_PATH
-
 # golang
 export GOPATH="$HOME"/prj/go
 export GOBIN="$GOPATH"/bin
@@ -84,8 +78,5 @@ path=("$HOME"'/node_modules/.bin'                  "$path[@]")
 path=("$HOME"'/devel/go/bin'                       "$path[@]")
 path=("$HOME"'/bin'                                "$path[@]")
 path=("$HOME"'/.xmonad/.cabal-sandbox/bin' "$path[@]")
-path=("$RUST_ROOT"'/bin' "$path[@]")
 path=('/usr/lib/ccache/bin'                      "$path[@]")
 path=('/opt/android-sdk/platform-tools'         "$path[@]")
-path=('/home/nathan/prj/rust/rust/x86_64-unknown-linux-gnu/stage2/bin'
-      "$path[@]")
