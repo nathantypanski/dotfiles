@@ -158,3 +158,13 @@ function git-untracked {
         --exclude-standard \
     2> /dev/null
 }
+
+function nose-profile {
+    if [ "$#" -eq 2 ]; then
+        python -m cProfile -o $1 `which nosetests` $2
+    elif  [ "$#" -eq 1 ]; then
+        python -m cProfile -o $1 `which nosetests` .
+    else
+        echo "usage: nose-profile output-filename directory"
+    fi
+}
