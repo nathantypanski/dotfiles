@@ -10,3 +10,6 @@
 [submodule "cabver"]
 	path = cabver
 	url = git@github.com:nathantypanski/cabver.git
+[submodule "2bwm"]
+	path = 2bwm
+	url = /home/nathan/prj/2bwm
