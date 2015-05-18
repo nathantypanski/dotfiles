@@ -72,7 +72,9 @@ ranger-cd () {
 
 zle -N ranger-cd
 
-function open-urxvt-here () { urxvt &! }
+function open-terminal-here () {
+    st &!
+}
 
 # unregister broken GHC packages. Run this a few times to resolve dependency rot in installed packages.
 # ghc-pkg-clean -f cabal/dev/packages*.conf also works.

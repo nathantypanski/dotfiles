@@ -58,9 +58,8 @@ bindkey '^H' back
 zle -N ranger-cd
 bindkey '^O' ranger-cd
 
-# Open urxvt here
-zle -N open-urxvt-here
-bindkey '^J' open-urxvt-here
+zle -N open-terminal-here
+bindkey '^J' open-terminal-here
 
 setopt vi
 setopt transient_rprompt
