@@ -207,6 +207,7 @@ set rtp+=~/.vim/bundle/Vundle.vim
 
 call vundle#begin()
 
+Plugin 'L9'
 Plugin 'gmarik/Vundle.vim'
 
 Plugin 'sjl/gundo.vim'
