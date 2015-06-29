@@ -8,7 +8,7 @@ export HISTSIZE=1000
 # The number of commands saved in my history file
 export SAVEHIST=1000
 
-export XDG_CONFIG_HOME='/home/nathan/.config'
+export XDG_CONFIG_HOME="$HOME"'/.config'
 export XDG_DATA_HOME="$HOME"'/.local/share'
 
 # pager settings (grml)
@@ -60,8 +60,6 @@ export CCACHE_DIR=$HOME/.ccache
 # Fixes swing stuff in xmonad
 export _JAVA_AWT_WM_NONREPARENTING=1
 
-export VIRTUALENVWRAPPER_PYTHON='/usr/bin/python3'
-
 typeset -TUx PYTHONPATH pythonpath 
 pythonpath+=("$HOME"'/prj/ndtpy/src')
 
@@ -71,12 +69,24 @@ export GOBIN="$GOPATH"/bin
 path=("$GOBIN" "$path[@]")
 
 path=("$HOME"'/.local/bin'                         "$path[@]")
-path=("$HOME"'/.rbenv/bin'                         "$path[@]")
-path=("$HOME"'/devel/java/android-sdk-linux/tools' "$path[@]")
 path=("$HOME"'/.cabal/bin'                         "$path[@]")
 path=("$HOME"'/node_modules/.bin'                  "$path[@]")
 path=("$HOME"'/devel/go/bin'                       "$path[@]")
 path=("$HOME"'/bin'                                "$path[@]")
-path=("$HOME"'/.xmonad/.cabal-sandbox/bin' "$path[@]")
-path=('/usr/lib/ccache/bin'                      "$path[@]")
-path=('/opt/android-sdk/platform-tools'         "$path[@]")
+path=("$HOME"'/.rbenv/bin'                         "$path[@]")
+
+if [ `uname` = 'Darwin' ]; then
+    # OSX
+    export VIRTUALENVWRAPPER_PYTHON='/usr/bin/python'
+    path=('/usr/local/opt/coreutils/libexec/gnubin'    "$path[@]")
+    MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
+else
+    # Linux
+    export VIRTUALENVWRAPPER_PYTHON='/usr/bin/python3'
+    path=("$HOME"'/.rbenv/bin'                         "$path[@]")
+    path=("$HOME"'/.xmonad/.cabal-sandbox/bin' "$path[@]")
+    path=('/usr/lib/ccache/bin'                      "$path[@]")
+    path=('/opt/android-sdk/platform-tools'         "$path[@]")
+
+fi
+

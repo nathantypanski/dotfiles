@@ -10,16 +10,16 @@ alias more='less'
 alias ls='ls --color=auto'
 
 # abbreviated listing
-alias la='ls -A --color=auto'
+alias la='ls -A'
 
 # sort by extension
-alias lx='ll -BX --color=auto'
+alias lx='ll -BX'
 
 # sort by size
-alias lz='ll -rS --color=auto'
+alias lz='ll -rS'
 
 # sort by date
-alias lt='ll -rt --color=auto'
+alias lt='ll -rt'
 
 # cd
 alias ..="cd .."
@@ -84,7 +84,9 @@ alias -s conf=vim
 # systemd users
 alias userctl="systemctl --user"
 
-alias ssh='eval $(/usr/bin/keychain --eval --agents ssh -Q --quiet ~/.ssh/id_rsa ~/.ssh/id_rsa_athen@ephesus) && ssh'
+if [ `uname` != 'Darwin' ]; then
+    alias ssh='eval $(/usr/bin/keychain --eval --agents ssh -Q --quiet ~/.ssh/id_rsa ~/.ssh/id_rsa_athen@ephesus) && ssh'
+fi
 
 # vim like quit
 alias ":q"="exit"
