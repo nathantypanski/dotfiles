@@ -1,10 +1,20 @@
-mktar() { tar cvf "${1%%/}.tar" "${1%%/}/"; }
-mktgz() { tar cvzf "${1%%/}.tar.gz" "${1%%/}/"; }
-mktbz() { tar cvjf "${1%%/}.tar.bz2" "${1%%/}/"; }
+
+mktar() {
+    tar cvf "${1%%/}.tar" "${1%%/}/"
+}
+
+mktgz() {
+    tar cvzf "${1%%/}.tar.gz" "${1%%/}/"
+}
+
+mktbz() {
+    tar cvjf "${1%%/}.tar.bz2" "${1%%/}/"
+}
+
 # Maps a whole subnet with nmap
 nnet () {
-    if [[ -n $1 ]] ; then
-        sudo nmap -sS -P0 $1
+    if [[ -n "$1" ]] ; then
+        sudo nmap -sS -P0 "$1"
     fi
 }
 
@@ -32,10 +42,10 @@ extract () {
 }
 
 absend () {
-    if [ -f $1 ] ; then
-        adb push $1 /sdcard/Books
+    if [ -f "$1" ] ; then
+        adb push "$1" /sdcard/Books
     else
-        echo "'$1' is not a valid file!"
+        echo "$1 is not a valid file!"
     fi
 }
 
