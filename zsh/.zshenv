@@ -78,8 +78,11 @@ path=("$HOME"'/.rbenv/bin'                         "$path[@]")
 if [ `uname` = 'Darwin' ]; then
     # OSX
     export VIRTUALENVWRAPPER_PYTHON='/usr/bin/python'
+    path=('/usr/local/bin' "$path[@]")
     path=('/usr/local/opt/coreutils/libexec/gnubin'    "$path[@]")
+    path=("$HOME/.jenv/bin:$PATH" "$path[@]")
     MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
+    eval "$(jenv init -)"
 else
     # Linux
     export VIRTUALENVWRAPPER_PYTHON='/usr/bin/python3'
@@ -90,3 +93,4 @@ else
 
 fi
 
+export JAVA_HOME=$(/usr/libexec/java_home)
