@@ -273,6 +273,7 @@ map ?  <Plug>(incsearch-backward)
 map g/ <Plug>(incsearch-stay)
 
 Plugin 'tpope/vim-surround'
+autocmd BufNewFile,BufRead *.json set ft=javascript
 
 call vundle#end()
 
