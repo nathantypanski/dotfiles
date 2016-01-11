@@ -87,9 +87,10 @@ if [ `uname` = 'Darwin' ]; then
         export HOMEBREW_GITHUB_API_TOKEN="$(cat ~/.HOMEBREW_GITHUB_API_TOKEN)"
     fi
     path=("$HOME/Library/Haskell/bin" "$path[@]")
+    export JAVA_HOME=$(/usr/libexec/java_home)
 else
     # Linux
-    export VIRTUALENVWRAPPER_PYTHON='/usr/bin/python3'
+    export VIRTUALENVWRAPPER_PYTHON='/usr/bin/python'
     path=("$HOME"'/.rbenv/bin'                         "$path[@]")
     path=("$HOME"'/.xmonad/.cabal-sandbox/bin' "$path[@]")
     path=('/usr/lib/ccache/bin'                      "$path[@]")
@@ -97,7 +98,6 @@ else
 
 fi
 
-export JAVA_HOME=$(/usr/libexec/java_home)
 
 EC2KEYFILE="$HOME"'/.config/zsh/ec2.zsh'
 if [ -f "$EC2KEYFILE" ]; then
