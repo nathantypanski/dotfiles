@@ -101,3 +101,8 @@ alias ipy='ipython'
 alias pysh='ipython --profile=pysh'
 
 alias arbtt-lately='arbtt-stats --dump-samples'
+
+# Search in a node.js project
+alias agnode="ag --js --ignore '*node_modules*' --ignore '*.min.js'"
+
+alias curljson='curl -H "Content-Type: application/json"'
