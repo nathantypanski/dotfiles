@@ -83,6 +83,10 @@ if [ `uname` = 'Darwin' ]; then
     path=("$HOME/.jenv/bin:$PATH" "$path[@]")
     MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
     eval "$(jenv init -)"
+    if [ -f "$HOME/.HOMEBREW_GITHUB_API_TOKEN" ]; then
+        export HOMEBREW_GITHUB_API_TOKEN="$(cat ~/.HOMEBREW_GITHUB_API_TOKEN)"
+    fi
+    path=("$HOME/Library/Haskell/bin" "$path[@]")
 else
     # Linux
     export VIRTUALENVWRAPPER_PYTHON='/usr/bin/python3'
@@ -94,3 +98,8 @@ else
 fi
 
 export JAVA_HOME=$(/usr/libexec/java_home)
+
+EC2KEYFILE="$HOME"'/.config/zsh/ec2.zsh'
+if [ -f "$EC2KEYFILE" ]; then
+    source "$EC2KEYFILE"
+fi
