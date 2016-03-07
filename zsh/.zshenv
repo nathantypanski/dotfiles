@@ -95,7 +95,9 @@ else
     path=("$HOME"'/.xmonad/.cabal-sandbox/bin' "$path[@]")
     path=('/usr/lib/ccache/bin'                      "$path[@]")
     path=('/opt/android-sdk/platform-tools'         "$path[@]")
-
+    if [ -d "$HOME"/npm/bin ]; then
+        path=("$HOME"'/npm/bin' "$path[@]")
+    fi
 fi
 
 
