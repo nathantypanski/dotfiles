@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Just runs dmenu, with my settings.
 
@@ -10,14 +10,16 @@ PROMPT='$'
 CASE_INSENSITIVE=true
 # LINES=49
 
-dmenucmd="dmenu -fn -*-TERMINUS-MEDIUM-*-*-*-16-*-*-*-*-*-ISO8859-*\
+# For whatever reason, my Ubuntu machine at work won't accept X logical font
+# descriptions.
+if [[ "$(dmenu -v)" == 'dmenu-4.6' ]]; then
+    FONT='Terminus'
+else
+    FONT='-*-terminus-medium-*-*-*-16-*-*-*-*-*-iso8859-*'
+fi
+dmenucmd="dmenu -fn $FONT \
     -nb $NORMAL_BACKGROUND -sb $SELECTED_BACKGROUND \
     -nf $NORMAL_FOREGROUND -sf $SELECTED_FOREGROUND \
-    -p $PROMPT" #-l $LINES
-
-for arg in "$*"
-do
-    dmenucmd="$dmenucmd $arg"
-done
+    -p $PROMPT" #-l "$LINES" "$@"
 
 `$dmenucmd`
