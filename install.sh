@@ -32,6 +32,7 @@ if [ "$OSX" != true ]; then
     stow -v --ignore="$I1" --no-folding --target="$HOME" 'xresources'
     stow -v --ignore="$I1" --target="$HOME" 'xmonad'
     stow -v --ignore="$I1" --no-folding --target="$HOME" 'xbindkeys'
+    stow -v --ignore="$I1" --no-folding --target="$HOME" 'xmodmap'
     stow -v --ignore="$I1" --no-folding --target="$HOME/.weechat" 'weechat'
     # individual script links
     ln -s $(pwd)'/displaylink.sh/displaylink.sh' "$HOME"'/bin' 
