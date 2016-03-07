@@ -16,3 +16,7 @@ source "$XDG_CONFIG_HOME"'/zsh/prompt.zsh'
 if [ `uname` != 'Darwin' ]; then
     source "$XDG_CONFIG_HOME"'/zsh/keychain.zsh'
 fi
+
+if [ -f "$XDG_CONFIG_HOME"/zsh/palantir.zsh ]; then
+    source "$XDG_CONFIG_HOME"/zsh/palantir.zsh
+fi
