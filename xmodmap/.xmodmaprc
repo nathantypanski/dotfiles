@@ -1,3 +1,4 @@
+clear lock
 keycode   8 =
 keycode   9 = Escape NoSymbol Escape
 keycode  10 = 1 exclam 1 exclam
@@ -246,5 +247,3 @@ keycode 252 =
 keycode 253 =
 keycode 254 =
 keycode 255 =
-keysym XF86Back = Page_Up
-keysym XF86Forward = Page_Down
