@@ -10,7 +10,7 @@ popup_during_fullscreen smart
 workspace_auto_back_and_forth yes
 force_display_urgency_hint 500 ms
 force_focus_wrapping no
-force_xinerama yes
+force_xinerama no
 
 # Solarized
 # class                 border  backgr. text    indicator
@@ -30,11 +30,11 @@ font -*-terminus-medium-*-*-*-16-*-*-*-*-*-iso8859-*
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Shift+Return exec termite
-bindsym $mod+grave exec termite
+bindsym $mod+Return exec urxvt
+bindsym $mod+grave exec urxvt
 
 # lock --- broken!?
-# bindsym $mod+o exec 'i3lock -c 004354'
+bindsym $mod+Shift+semicolon exec 'bin/lockscreen.sh'
 
 # kill focused window
 bindsym $mod+Shift+c kill
@@ -121,9 +121,6 @@ bindsym $mod+Shift+r restart
 # bindcode --release 133 exec --no-startup-id "killall dzen2 conky dz.sh"
 # bindsym --release $mod exec --no-startup-id "killall dzen2 conky dz.sh"
 # bindsym $mod+F1 exec --no-startup-id "bin/dzen/dz.sh"
-bindsym $mod+F2 exec --no-startup-id "killall dzen2 conky gcpubar dz.sh trayer"
-
-bindsym $mod+o exec "dwb"
 
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+q exec "i3-nagbar -t warning -m 'Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'killall dz.sh; i3-msg exit'"
@@ -157,7 +154,7 @@ bindsym $mod+r mode "resize"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-    status_command i3bar
+    status_command i3status
     tray_output primary
     workspace_buttons yes
 
