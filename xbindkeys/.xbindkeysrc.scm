@@ -15,7 +15,15 @@
 
 ;; decrase volume
 ;; XF86AudioLowerVolume
-(bindkey '("m:0x0" "c:122") "pamixer --decrease 5")
+(xbindkey '("m:0x0" "c:122") "pamixer --decrease 5")
+
+;; (xbindkey '("m:0x0" "c:114") "xsel | xvkbd -xsendevent -file -")
+
+(xbindkey '("m:0x0" "c:233")
+          "sudo bright-up")
+
+(xbindkey '("m:0x0" "c:232")
+          "sudo bright-down")
 
 ;; Toggle mute
 ;; XF86AudioMute
@@ -27,3 +35,4 @@
 (xbindkey '(Mod4 Return) "urxvt")
 
 ;; (xbindkey '(Mod4 Shift grave) "~/bin/emc")
+
