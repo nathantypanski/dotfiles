@@ -1,0 +1,9 @@
+#!/bin/bash
+
+brightness="$(echo `cat /sys/class/backlight/acpi_video0/brightness`'-10' | bc)"
+
+if [[ "${brightness}" -eq 0 || "${brightness}" -lt 0 ]]; then
+	echo 1 > /sys/class/backlight/acpi_video0/brightness
+else
+	echo "${brightness}" > /sys/class/backlight/acpi_video0/brightness
+fi
