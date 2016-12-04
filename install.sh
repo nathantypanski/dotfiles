@@ -15,9 +15,9 @@ WEECHAT_HOME="${HOME}/.weechat"
 
 # Short circuit if the user does not have stow
 which stow &> /dev/null
-HAS_STOW=$?
-if [[ "${HAS_STOW}" -ne 0 ]]; then
+if [[ $? -ne 0 ]]; then
     2>&1 echo "You must install GNU stow to use this installer."
+    exit 1
 fi
 
 if [ -n "$XDG_CONFIG_HOME" ]; then
