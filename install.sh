@@ -57,12 +57,13 @@ stow -v --ignore="$I1" --ignore="$I2" --ignore="$I3" --no-folding --target="${HO
 stow -v --ignore="$I1" --ignore="$I2" --ignore="$I3" --no-folding --target="${HOME}" 'vim'
 stow -v --ignore="$I1" --ignore="$I2" --ignore="$I3" --target="${HOME}" 'emacs'
 
-if [ "${arch}" == 'true' ]; then
+if [ "${ARCH}" == 'true' ]; then
     stow -v --ignore="$I1" --ignore="$I2" --ignore="$I3" --target="$XDG_CONFIG_HOME"'/systemd' 'systemd'
     stow -v --ignore="$I1" --ignore="$I2" --ignore="$I3" --no-folding --target="$XDG_CONFIG_HOME" 'i3'
     stow -v --ignore="$I1" --ignore="$I2" --ignore="$I3" --no-folding --target="$XDG_CONFIG_HOME" 'herbstluftwm'
     stow -v --ignore="$I1" --ignore="$I2" --ignore="$I3" --no-folding --target="$HOME" 'mutt'
     stow -v --ignore="$I1" --ignore="$I2" --ignore="$I3" --target="$HOME" 'xmonad'
+    stow -v --ignore="$I1" --ignore="$I2" --ignore="$I3" --target="$HOME" 'xinitrc'
 
     which xrdb &> /dev/null
     if [[ "$?" -eq 0 ]]; then
