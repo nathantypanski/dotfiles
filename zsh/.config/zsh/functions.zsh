@@ -83,7 +83,7 @@ ranger-cd () {
 zle -N ranger-cd
 
 function open-terminal-here () {
-    st &!
+    urxvt &!
 }
 
 # unregister broken GHC packages. Run this a few times to resolve dependency rot in installed packages.
