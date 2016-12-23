@@ -15,6 +15,11 @@ which setxkbmap
 if [[ $? -eq 0 ]]; then
     setxkbmap -layout us -option ctrl:nocaps 
 fi
+
+which xbindkeys
+if [[ $? -eq 0 ]]; then
+    xbindkeys
+fi
  
 which xrdb
 if [[ $? -eq 0 && -f "${XRESOURCES}" ]]; then
