@@ -48,16 +48,6 @@ alias touchoff='synclient TouchpadOff=1'
 alias blankoff='xset -dpms; xset s off'
 alias blanknow='xset dpms force off'
 
-# Suspend my computer.
-alias suspend='systemctl suspend'
-
-# Window pager
-#alias pager='~/bin/wmpager.sh && tail -f /tmp/wmpager.sh.pipe | dzen2 -ta l -x 0 -y 0 -w 153 -fn Terminus-8 -bg #002b36 -fg #657b83'
-
-#alias czen='conky -c ~/.conkytoprc | dzen2 -ta l -x 153 -fn Terminus-8 -bg #002b36 -fg #657b83'
-
-# give skype its own uers account
-alias skype='xhost +local: && sudo -u skype /usr/bin/skype'
 # start mpd and scmpc
 alias pms='pms -p 6606'
 
