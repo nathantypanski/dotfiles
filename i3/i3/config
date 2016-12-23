@@ -34,7 +34,7 @@ bindsym $mod+Return exec urxvt
 bindsym $mod+grave exec urxvt
 
 # lock --- broken!?
-bindsym $mod+Shift+semicolon exec 'bin/lockscreen.sh'
+bindsym $mod+Shift+semicolon exec 'slock'
 
 # kill focused window
 bindsym $mod+Shift+c kill
