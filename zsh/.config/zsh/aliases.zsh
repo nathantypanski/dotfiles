@@ -87,10 +87,14 @@ alias xm='GHC_PACKAGE_PATH="/home/nathan/.xmonad/.cabal-sandbox/x86_64-linux-ghc
 
 alias x='tmux'
 
-alias ipy='ipython'
-alias pysh='ipython --profile=pysh'
+if which ipython &> /dev/null; then
+    alias ipy='ipython'
+    alias pysh='ipython --profile=pysh'
+fi
 
-alias arbtt-lately='arbtt-stats --dump-samples'
+if which arbtt-stats &> /dev/null; then
+    alias arbtt-lately='arbtt-stats --dump-samples'
+fi
 
 # Search in a node.js project
 alias agnode="ag --js --ignore '*node_modules*' --ignore '*.min.js'"
