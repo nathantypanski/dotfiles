@@ -1,4 +1,4 @@
-#include "/home/nathan/dotfiles/xresources/.config/xresources/my-zenburn.xresources"
+#include "/home/nathan/prj/dotfiles/xresources/.config/xresources/my-zenburn.xresources"
 
 urxvt*internalBorder: 4
 urxvt*termName: rxvt-256color
@@ -8,16 +8,14 @@ URxvt.url-select.underline: true
 URxvt*jumpScroll: true
 URxvt*lineSpace: 0
 
-urxvt*font: -*-gohufont-medium-*-*-*-14-*-*-*-*-*-iso10646-*
+urxvt*font: -*-terminus-medium-*-normal-*-22-*-*-*-*-*-*-u
+
 
 URxvt.transparent: false
 URxvt.tintColor: white
 URxvt.depth: 32
 
 Xcursor.size: 16
-Xft.hintstyle:  hintfull
-Xft.antialias: 1
-Xft.rgba: rgb
 URxvt.keysym.M-S-Return: \ urxvt\ &!\012
 URxvt*termName: rxvt-unicode
 URxvt*letterSpace: 0
@@ -40,3 +38,10 @@ URxvt*pointerBlank:           True
 URxvt*saveLines:              65535
 URxvt*scrollttykeypress:      true
 
+Xft.dpi: 160
+Xft.autohint: 0
+Xft.lcdfilter:  lcddefault
+Xft.hintstyle:  hintfull
+Xft.hinting: 1
+Xft.antialias: 1
+Xft.rgba: rgb
