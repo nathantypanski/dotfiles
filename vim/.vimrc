@@ -196,6 +196,7 @@ augroup indent_settings
     au BufEnter *.h setl autoindent smartindent tabstop=8 expandtab shiftwidth=8
     au BufEnter *.rs setl autoindent smartindent tabstop=4 expandtab shiftwidth=4
     au BufEnter *.rb setl autoindent smartindent tabstop=2 expandtab shiftwidth=2
+    au BufEnter Gemfile setl autoindent smartindent tabstop=2 expandtab shiftwidth=2
     au BufEnter *.erb setl autoindent smartindent tabstop=2 expandtab shiftwidth=2
 
 map<leader>w :w<CR>
