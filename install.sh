@@ -88,7 +88,6 @@ if [ "${ARCH}" == 'true' ]; then
         fi
         stow -v --ignore="$I1" --ignore="$I2" --ignore="$I3" --no-folding --target="$HOME/.weechat" 'weechat'
     fi
-
     # individual script links
     if [[ -h "${DISPLAYLINK_SCRIPT}" ]]; then
         ln -s "${DISPLAYLINK_SCRIPT}" "${HOME}/bin"

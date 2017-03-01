@@ -1,12 +1,11 @@
 typeset -U path
 
-export RBENV_VERSION=2.1.5
 export SHELL='/bin/zsh'
 export HISTFILE=$HOME'/.zhistory'
 # The number of commands stored in memory
-export HISTSIZE=1000
+export HISTSIZE=1000000
 # The number of commands saved in my history file
-export SAVEHIST=1000
+export SAVEHIST=1000000
 
 export XDG_CONFIG_HOME="$HOME"'/.config'
 export XDG_DATA_HOME="$HOME"'/.local/share'
@@ -67,6 +66,7 @@ pythonpath+=("$HOME"'/prj/ndtpy/src')
 export GOPATH="$HOME"/prj/go
 export GOBIN="$GOPATH"/bin
 path=("$GOBIN" "$path[@]")
+export CM_ROOT="$GOPATH/src/github.com/10gen/mms-automation/go_planner"
 
 path=("$HOME"'/.local/bin'                         "$path[@]")
 path=("$HOME"'/.cabal/bin'                         "$path[@]")
@@ -74,6 +74,11 @@ path=("$HOME"'/node_modules/.bin'                  "$path[@]")
 path=("$HOME"'/devel/go/bin'                       "$path[@]")
 path=("$HOME"'/bin'                                "$path[@]")
 path=("$HOME"'/.rbenv/bin'                         "$path[@]")
+path=("$HOME"'/.chefdk/gem/ruby/2.1.0/bin'         "$path[@]")
+if [[ -f "${HOME}/.cargo/env" ]]; then
+    source "${HOME}/.cargo/env"
+fi
+path=("$HOME"'/.chefdk/gem/ruby/2.1.0/bin'         "$path[@]")
 
 if [ `uname` = 'Darwin' ]; then
     # OSX
@@ -83,10 +88,15 @@ if [ `uname` = 'Darwin' ]; then
     path=("$HOME/.jenv/bin:$PATH" "$path[@]")
     MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
     eval "$(jenv init -)"
+    PY27BIN="$HOME/Library/python/2.7/bin"
+    if [ -d "$PY27BIN" ]; then
+        path=("$PY27BIN" "$path[@]")
+    fi
     if [ -f "$HOME/.HOMEBREW_GITHUB_API_TOKEN" ]; then
         export HOMEBREW_GITHUB_API_TOKEN="$(cat ~/.HOMEBREW_GITHUB_API_TOKEN)"
     fi
     path=("$HOME/Library/Haskell/bin" "$path[@]")
+    path=("$HOME/.gem/ruby/2.3.0/bin" "$path[@]")
     export JAVA_HOME=$(/usr/libexec/java_home)
 else
     # Linux

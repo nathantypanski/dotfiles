@@ -274,7 +274,8 @@ map g/ <Plug>(incsearch-stay)
 
 Plugin 'tpope/vim-surround'
 autocmd BufNewFile,BufRead *.json set ft=javascript
-
 call vundle#end()
+
+au BufNewFile,BufRead *.go setlocal noet ts=4 sw=4 sts=4
 
 colorscheme zenburn

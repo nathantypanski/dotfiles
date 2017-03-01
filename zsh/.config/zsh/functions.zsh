@@ -180,3 +180,8 @@ function nose-profile {
         echo "usage: nose-profile output-filename directory"
     fi
 }
+
+function format-json {
+    cat "$1" | jq . | sponge "$1"
+}
+
