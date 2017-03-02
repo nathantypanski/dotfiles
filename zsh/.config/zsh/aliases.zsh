@@ -7,7 +7,7 @@ alias hc='herbstclient'
 alias more='less'
 
 # ls
-alias ls='ls --color=auto'
+alias ls="ls ${LS_DEFAULT_SWITCHES}"
 
 # abbreviated listing
 alias la='ls -A'
