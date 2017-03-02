@@ -1,7 +1,7 @@
 typeset -U path
 
 export SHELL='/bin/zsh'
-export HISTFILE=$HOME'/.zhistory'
+export HISTFILE="${HOME}/.zhistory"
 # The number of commands stored in memory
 export HISTSIZE=1000000
 # The number of commands saved in my history file
@@ -25,7 +25,6 @@ export LESS_TERMCAP_us=$'\E[01;32m'
 
 # My default switches for ls
 export LS_LL_DEFAULT_SWITCHES='-lhkF'
-export LS_DEFAULT_SWITCHES='--color=auto'
 
 # gtags
 export GTAGSLIBPATH="$XDG_DATA_HOME"'/gtags'
@@ -82,24 +81,50 @@ path=("$HOME"'/.chefdk/gem/ruby/2.1.0/bin'         "$path[@]")
 
 if [ `uname` = 'Darwin' ]; then
     # OSX
+    #
+    # First up: Before using this we want to disable /etc/paths by moving it
+    # somewhere else:
+    #
+    #    # mv /etc/paths /etc/paths.bak
+    #
+    # Now we set our path variables and do the rest of our OS X specific magic.
+    path=('/usr/local/bin' "$path[@]")
+    path=('/usr/bin' "$path[@]")
+    path=('/bin' "$path[@]")
+    path=('/usr/sbin' "$path[@]")
+    path=('/sbin' "$path[@]")
+
     export VIRTUALENVWRAPPER_PYTHON='/usr/bin/python'
     path=('/usr/local/bin' "$path[@]")
     path=('/usr/local/opt/coreutils/libexec/gnubin'    "$path[@]")
-    path=("$HOME/.jenv/bin:$PATH" "$path[@]")
-    MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
-    eval "$(jenv init -)"
+
     PY27BIN="$HOME/Library/python/2.7/bin"
     if [ -d "$PY27BIN" ]; then
         path=("$PY27BIN" "$path[@]")
     fi
+    JENV_BIN="${HOME}/.jenv/bin"
+    if [[ -d  "${JENV_BIN}" ]]; then
+        path=("${JENV_BIN}" "$path[@]")
+        eval "$(jenv init -)"
+        export JAVA_HOME=$(/usr/libexec/java_home)
+    fi
+
+    GNU_COREUTILS='/opt/local/libexec/gnubin'
+    if [[ -d "${GNU_COREUTILS}" ]]; then
+        path=("${GNU_COREUTILS}" "${path[@]}")
+        MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
+        # Since we're using GNU coreutils, we can use `--color=auto`
+        export LS_DEFAULT_SWITCHES='--color=auto'
+    fi
+    if [[ -d "/opt/local/bin" ]]; then
+        path=("/opt/local/bin" "${path[@]}")
+    fi
     if [ -f "$HOME/.HOMEBREW_GITHUB_API_TOKEN" ]; then
         export HOMEBREW_GITHUB_API_TOKEN="$(cat ~/.HOMEBREW_GITHUB_API_TOKEN)"
     fi
-    path=("$HOME/Library/Haskell/bin" "$path[@]")
-    path=("$HOME/.gem/ruby/2.3.0/bin" "$path[@]")
-    export JAVA_HOME=$(/usr/libexec/java_home)
 else
     # Linux
+    export LS_DEFAULT_SWITCHES='--color=auto'
     export VIRTUALENVWRAPPER_PYTHON='/usr/bin/python'
     path=("$HOME"'/.rbenv/bin'                         "$path[@]")
     path=("$HOME"'/.xmonad/.cabal-sandbox/bin' "$path[@]")
@@ -109,7 +134,6 @@ else
         path=("$HOME"'/npm/bin' "$path[@]")
     fi
 fi
-
 
 EC2KEYFILE="$HOME"'/.config/zsh/ec2.zsh'
 if [ -f "$EC2KEYFILE" ]; then
