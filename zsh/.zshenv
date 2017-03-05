@@ -79,7 +79,8 @@ if [[ -f "${HOME}/.cargo/env" ]]; then
 fi
 path=("$HOME"'/.chefdk/gem/ruby/2.1.0/bin'         "$path[@]")
 
-if [ `uname` = 'Darwin' ]; then
+if [ "$(uname)" = 'Darwin' ]; then
+    export DARWIN="${OSTYPE}"
     # OSX
     #
     # First up: Before using this we want to disable /etc/paths by moving it
