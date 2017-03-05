@@ -1,4 +1,38 @@
 typeset -U path
+set +x
+
+check_and_add_to_path() {
+    # Check that a directory exists, then add it to the start of the path.
+    #
+    # Args:
+    #
+    # $1 - path to add
+    #
+    # Returns: 0 on success, 1 on failure.
+    MAYBE_PATH="${1}"
+    if [[ -d "${MAYBE_PATH}" ]]; then
+        path=("${MAYBE_PATH}" "$path[@]")
+        return 0
+    fi
+    return 1
+}
+
+check_and_source() {
+    # Check that a file exists, then source it.
+    #
+    # Args:
+    #
+    # $1 - file to source
+    #
+    # Returns: 0 on success, 1 on failure.
+    MAYBE_PATH="${1}"
+    if [[ -f "${MAYBE_PATH}" ]]; then
+        source "${MAYBE_PATH}"
+        return 0
+    fi
+    return 1
+}
+
 
 export SHELL='/bin/zsh'
 export HISTFILE="${HOME}/.zhistory"
@@ -70,13 +104,11 @@ export CM_ROOT="$GOPATH/src/github.com/10gen/mms-automation/go_planner"
 path=("$HOME"'/.local/bin'                         "$path[@]")
 path=("$HOME"'/.cabal/bin'                         "$path[@]")
 path=("$HOME"'/node_modules/.bin'                  "$path[@]")
-path=("$HOME"'/devel/go/bin'                       "$path[@]")
 path=("$HOME"'/bin'                                "$path[@]")
-path=("$HOME"'/.rbenv/bin'                         "$path[@]")
-path=("$HOME"'/.chefdk/gem/ruby/2.1.0/bin'         "$path[@]")
-if [[ -f "${HOME}/.cargo/env" ]]; then
-    source "${HOME}/.cargo/env"
-fi
+check_and_add_to_path "${HOME}/.rbenv/bin"
+check_and_add_to_path "${HOME}/.chefdk/gem/ruby/2.3.0/bin"
+CARGO_ENV="${HOME}/.cargo/env"
+check_and_source "${CARGO_ENV}"
 path=("$HOME"'/.chefdk/gem/ruby/2.1.0/bin'         "$path[@]")
 
 if [ "$(uname)" = 'Darwin' ]; then
@@ -89,7 +121,6 @@ if [ "$(uname)" = 'Darwin' ]; then
     #    # mv /etc/paths /etc/paths.bak
     #
     # Now we set our path variables and do the rest of our OS X specific magic.
-    path=('/usr/local/bin' "$path[@]")
     path=('/usr/bin' "$path[@]")
     path=('/bin' "$path[@]")
     path=('/usr/sbin' "$path[@]")
@@ -97,21 +128,18 @@ if [ "$(uname)" = 'Darwin' ]; then
 
     export VIRTUALENVWRAPPER_PYTHON='/usr/bin/python'
     path=('/usr/local/bin' "$path[@]")
-    path=('/usr/local/opt/coreutils/libexec/gnubin'    "$path[@]")
+    path=('/usr/local/opt/coreutils/libexec/gnubin' "$path[@]")
 
-    PY27BIN="$HOME/Library/python/2.7/bin"
-    if [ -d "$PY27BIN" ]; then
-        path=("$PY27BIN" "$path[@]")
-    fi
     JENV_BIN="${HOME}/.jenv/bin"
+    check_and_add_to_path "${JENV_BIN}"
     if [[ -d  "${JENV_BIN}" ]]; then
-        path=("${JENV_BIN}" "$path[@]")
         eval "$(jenv init -)"
         export JAVA_HOME=$(/usr/libexec/java_home)
     fi
 
     GNU_COREUTILS='/opt/local/libexec/gnubin'
-    if [[ -d "${GNU_COREUTILS}" ]]; then
+    check_and_add_to_path "${GNU_COREUTILS}"
+    if [[ $? -eq 0 ]]; then
         path=("${GNU_COREUTILS}" "${path[@]}")
         MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
         # Since we're using GNU coreutils, we can use `--color=auto`
@@ -127,13 +155,12 @@ else
     # Linux
     export LS_DEFAULT_SWITCHES='--color=auto'
     export VIRTUALENVWRAPPER_PYTHON='/usr/bin/python'
-    path=("$HOME"'/.rbenv/bin'                         "$path[@]")
-    path=("$HOME"'/.xmonad/.cabal-sandbox/bin' "$path[@]")
-    path=('/usr/lib/ccache/bin'                      "$path[@]")
-    path=('/opt/android-sdk/platform-tools'         "$path[@]")
-    if [ -d "$HOME"/npm/bin ]; then
-        path=("$HOME"'/npm/bin' "$path[@]")
-    fi
+    check_and_add_to_path "${HOME}/devel/go/bin"
+    check_and_add_to_path "${HOME}/devel/go/bin"
+    check_and_add_to_path "$HOME/.xmonad/.cabal-sandbox/bin"
+    check_and_add_to_path '/usr/lib/ccache/bin' 
+    check_and_add_to_path '/opt/android-sdk/platform-tools'
+    check_and_add_to_path "${HOME}/npm/bin"
 fi
 
 EC2KEYFILE="$HOME"'/.config/zsh/ec2.zsh'
