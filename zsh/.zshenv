@@ -109,7 +109,6 @@ check_and_add_to_path "${HOME}/.rbenv/bin"
 check_and_add_to_path "${HOME}/.chefdk/gem/ruby/2.3.0/bin"
 CARGO_ENV="${HOME}/.cargo/env"
 check_and_source "${CARGO_ENV}"
-path=("$HOME"'/.chefdk/gem/ruby/2.1.0/bin'         "$path[@]")
 
 if [ "$(uname)" = 'Darwin' ]; then
     export DARWIN="${OSTYPE}"
