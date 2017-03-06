@@ -83,9 +83,6 @@ export GREP_COLOR="1;33"
 # gtk style for qt5
 export QT_STYLE_OVERRIDE="gtk"
 
-# Steam likes this
-export SDL_AUDIODRIVER=alsa
-
 # ccache
 export CCACHE_DIR=$HOME/.ccache
 
@@ -98,7 +95,7 @@ pythonpath+=("$HOME"'/prj/ndtpy/src')
 # golang
 export GOPATH="$HOME"/prj/go
 export GOBIN="$GOPATH"/bin
-path=("$GOBIN" "$path[@]")
+check_and_add_to_path "${GOBIN}"
 export CM_ROOT="$GOPATH/src/github.com/10gen/mms-automation/go_planner"
 
 path=("$HOME"'/.local/bin'                         "$path[@]")
@@ -154,6 +151,9 @@ else
     # Linux
     export LS_DEFAULT_SWITCHES='--color=auto'
     export VIRTUALENVWRAPPER_PYTHON='/usr/bin/python'
+
+    # Steam likes this
+    export SDL_AUDIODRIVER=alsa
     check_and_add_to_path "${HOME}/devel/go/bin"
     check_and_add_to_path "${HOME}/devel/go/bin"
     check_and_add_to_path "$HOME/.xmonad/.cabal-sandbox/bin"
