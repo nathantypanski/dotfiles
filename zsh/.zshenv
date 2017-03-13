@@ -1,12 +1,45 @@
 typeset -U path
+set +x
 
-export RBENV_VERSION=2.1.5
+check_and_add_to_path() {
+    # Check that a directory exists, then add it to the start of the path.
+    #
+    # Args:
+    #
+    # $1 - path to add
+    #
+    # Returns: 0 on success, 1 on failure.
+    MAYBE_PATH="${1}"
+    if [[ -d "${MAYBE_PATH}" ]]; then
+        path=("${MAYBE_PATH}" "$path[@]")
+        return 0
+    fi
+    return 1
+}
+
+check_and_source() {
+    # Check that a file exists, then source it.
+    #
+    # Args:
+    #
+    # $1 - file to source
+    #
+    # Returns: 0 on success, 1 on failure.
+    MAYBE_PATH="${1}"
+    if [[ -f "${MAYBE_PATH}" ]]; then
+        source "${MAYBE_PATH}"
+        return 0
+    fi
+    return 1
+}
+
+
 export SHELL='/bin/zsh'
-export HISTFILE=$HOME'/.zhistory'
+export HISTFILE="${HOME}/.zhistory"
 # The number of commands stored in memory
-export HISTSIZE=1000
+export HISTSIZE=1000000
 # The number of commands saved in my history file
-export SAVEHIST=1000
+export SAVEHIST=1000000
 
 export XDG_CONFIG_HOME="$HOME"'/.config'
 export XDG_DATA_HOME="$HOME"'/.local/share'
@@ -26,7 +59,6 @@ export LESS_TERMCAP_us=$'\E[01;32m'
 
 # My default switches for ls
 export LS_LL_DEFAULT_SWITCHES='-lhkF'
-export LS_DEFAULT_SWITCHES='--color=auto'
 
 # gtags
 export GTAGSLIBPATH="$XDG_DATA_HOME"'/gtags'
@@ -51,9 +83,6 @@ export GREP_COLOR="1;33"
 # gtk style for qt5
 export QT_STYLE_OVERRIDE="gtk"
 
-# Steam likes this
-export SDL_AUDIODRIVER=alsa
-
 # ccache
 export CCACHE_DIR=$HOME/.ccache
 
@@ -66,40 +95,72 @@ pythonpath+=("$HOME"'/prj/ndtpy/src')
 # golang
 export GOPATH="$HOME"/prj/go
 export GOBIN="$GOPATH"/bin
-path=("$GOBIN" "$path[@]")
+check_and_add_to_path "${GOBIN}"
+export CM_ROOT="$GOPATH/src/github.com/10gen/mms-automation/go_planner"
 
 path=("$HOME"'/.local/bin'                         "$path[@]")
 path=("$HOME"'/.cabal/bin'                         "$path[@]")
 path=("$HOME"'/node_modules/.bin'                  "$path[@]")
-path=("$HOME"'/devel/go/bin'                       "$path[@]")
 path=("$HOME"'/bin'                                "$path[@]")
-path=("$HOME"'/.rbenv/bin'                         "$path[@]")
+check_and_add_to_path "${HOME}/.rbenv/bin"
+check_and_add_to_path "${HOME}/.chefdk/gem/ruby/2.3.0/bin"
+CARGO_ENV="${HOME}/.cargo/env"
+check_and_source "${CARGO_ENV}"
 
-if [ `uname` = 'Darwin' ]; then
+if [ "$(uname)" = 'Darwin' ]; then
+    export DARWIN="${OSTYPE}"
     # OSX
+    #
+    # First up: Before using this we want to disable /etc/paths by moving it
+    # somewhere else:
+    #
+    #    # mv /etc/paths /etc/paths.bak
+    #
+    # Now we set our path variables and do the rest of our OS X specific magic.
+    path=('/usr/bin' "$path[@]")
+    path=('/bin' "$path[@]")
+    path=('/usr/sbin' "$path[@]")
+    path=('/sbin' "$path[@]")
+
     export VIRTUALENVWRAPPER_PYTHON='/usr/bin/python'
     path=('/usr/local/bin' "$path[@]")
-    path=('/usr/local/opt/coreutils/libexec/gnubin'    "$path[@]")
-    path=("$HOME/.jenv/bin:$PATH" "$path[@]")
-    MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
-    eval "$(jenv init -)"
+    path=('/usr/local/opt/coreutils/libexec/gnubin' "$path[@]")
+
+    JENV_BIN="${HOME}/.jenv/bin"
+    check_and_add_to_path "${JENV_BIN}"
+    if [[ -d  "${JENV_BIN}" ]]; then
+        eval "$(jenv init -)"
+        export JAVA_HOME=$(/usr/libexec/java_home)
+    fi
+
+    GNU_COREUTILS='/opt/local/libexec/gnubin'
+    check_and_add_to_path "${GNU_COREUTILS}"
+    if [[ $? -eq 0 ]]; then
+        path=("${GNU_COREUTILS}" "${path[@]}")
+        MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
+        # Since we're using GNU coreutils, we can use `--color=auto`
+        export LS_DEFAULT_SWITCHES='--color=auto'
+    fi
+    if [[ -d "/opt/local/bin" ]]; then
+        path=("/opt/local/bin" "${path[@]}")
+    fi
     if [ -f "$HOME/.HOMEBREW_GITHUB_API_TOKEN" ]; then
         export HOMEBREW_GITHUB_API_TOKEN="$(cat ~/.HOMEBREW_GITHUB_API_TOKEN)"
     fi
-    path=("$HOME/Library/Haskell/bin" "$path[@]")
-    export JAVA_HOME=$(/usr/libexec/java_home)
 else
     # Linux
+    export LS_DEFAULT_SWITCHES='--color=auto'
     export VIRTUALENVWRAPPER_PYTHON='/usr/bin/python'
-    path=("$HOME"'/.rbenv/bin'                         "$path[@]")
-    path=("$HOME"'/.xmonad/.cabal-sandbox/bin' "$path[@]")
-    path=('/usr/lib/ccache/bin'                      "$path[@]")
-    path=('/opt/android-sdk/platform-tools'         "$path[@]")
-    if [ -d "$HOME"/npm/bin ]; then
-        path=("$HOME"'/npm/bin' "$path[@]")
-    fi
-fi
 
+    # Steam likes this
+    export SDL_AUDIODRIVER=alsa
+    check_and_add_to_path "${HOME}/devel/go/bin"
+    check_and_add_to_path "${HOME}/devel/go/bin"
+    check_and_add_to_path "$HOME/.xmonad/.cabal-sandbox/bin"
+    check_and_add_to_path '/usr/lib/ccache/bin' 
+    check_and_add_to_path '/opt/android-sdk/platform-tools'
+    check_and_add_to_path "${HOME}/npm/bin"
+fi
 
 EC2KEYFILE="$HOME"'/.config/zsh/ec2.zsh'
 if [ -f "$EC2KEYFILE" ]; then

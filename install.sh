@@ -52,11 +52,11 @@ I3='.*LICENSE$'
 
 stow -v --ignore="$I1" --ignore="$I2" --ignore="$I3" --no-folding --target="${HOME}"'/bin' 'bin'
 stow -v --ignore="$I1" --ignore="$I2" --ignore="$I3" --no-folding --target="${HOME}" 'zsh'
-stow -v --ignore="$I1" --ignore="$I2" --ignore="$I3" --no-folding --target="${HOME}" 'tmux'
 stow -v --ignore="$I1" --ignore="$I2" --ignore="$I3" --no-folding --target="${HOME}" 'vim'
 stow -v --ignore="$I1" --ignore="$I2" --ignore="$I3" --target="${HOME}" 'emacs'
 
 if [ "${ARCH}" == 'true' ]; then
+    echo "Stowing arch"
     stow -v --ignore="$I1" --ignore="$I2" --ignore="$I3" --target="$XDG_CONFIG_HOME"'/systemd' 'systemd'
     stow -v --ignore="$I1" --ignore="$I2" --ignore="$I3" --no-folding --target="$XDG_CONFIG_HOME" 'i3'
     stow -v --ignore="$I1" --ignore="$I2" --ignore="$I3" --no-folding --target="$XDG_CONFIG_HOME" 'herbstluftwm'
@@ -87,7 +87,6 @@ if [ "${ARCH}" == 'true' ]; then
         fi
         stow -v --ignore="$I1" --ignore="$I2" --ignore="$I3" --no-folding --target="$HOME/.weechat" 'weechat'
     fi
-
     # individual script links
     if [[ -h "${DISPLAYLINK_SCRIPT}" ]]; then
         ln -s "${DISPLAYLINK_SCRIPT}" "${HOME}/bin"
@@ -95,4 +94,11 @@ if [ "${ARCH}" == 'true' ]; then
     if [[ -h "${CABVER}" ]]; then
         ln -s "${CABVER}" "${HOME}/bin"
     fi
+    stow -v --ignore="$I1" --ignore="$I2" --ignore="$I3" --no-folding --target="${HOME}" 'tmux'
+elif [[ "${OSX}" = 'true' ]]; then
+    DARWIN_MAJOR_VERSION="$(echo "${OSTYPE}"| sed 's/darwin//g' | tr '.' ' ' | cut -d' ' -f 1)"
+    if [[ "${DARWIN_MAJOR_VERSION}" -eq 16 ]]; then
+        stow -v --ignore="$I1" --ignore="$I2" --ignore="$I3" --no-folding --target="${HOME}" 'tmux.macos'
+    fi
+    stow -v --ignore="$I1" --ignore="$I2" --ignore="$I3" --no-folding --target="${HOME}" 'tmux'
 fi
