@@ -50,7 +50,6 @@ I1='^.dotfiles/?.*'
 I2='.*README.md'
 I3='.*LICENSE$'
 
-stow -v --ignore="$I1" --ignore="$I2" --ignore="$I3" --no-folding --target="${XDG_CONFIG_HOME}"'/ranger' 'ranger'
 stow -v --ignore="$I1" --ignore="$I2" --ignore="$I3" --no-folding --target="${HOME}"'/bin' 'bin'
 stow -v --ignore="$I1" --ignore="$I2" --ignore="$I3" --no-folding --target="${HOME}" 'zsh'
 stow -v --ignore="$I1" --ignore="$I2" --ignore="$I3" --no-folding --target="${HOME}" 'tmux'
