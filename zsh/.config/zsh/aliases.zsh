@@ -7,7 +7,7 @@ alias hc='herbstclient'
 alias more='less'
 
 # ls
-alias ls='ls --color=auto'
+alias ls="ls ${LS_DEFAULT_SWITCHES}"
 
 # abbreviated listing
 alias la='ls -A'
@@ -74,8 +74,19 @@ alias -s conf=vim
 # systemd users
 alias userctl="systemctl --user"
 
-if [ `uname` != 'Darwin' ]; then
+if [ -n "${DARWIN}" ]; then
+    # This is for startin Docker in a boot2docker virtual machine.
+    DOCKER_START_FILE='/Applications/Docker/Docker Quickstart Terminal.app/Contents/Resources/Scripts/start.sh'
+    DOCKER_START='/Applications/Docker/Docker\ Quickstart\ Terminal.app/Contents/Resources/Scripts/start.sh'
+    if [[ -f "${DOCKER_START_FILE}" ]]; then
+        alias docker-start="${DOCKER_START}"
+    fi
+else
+    # Linux
     alias ssh='eval $(/usr/bin/keychain --eval --agents ssh -Q --quiet ~/.ssh/id_rsa ~/.ssh/id_rsa_athen@ephesus) && ssh'
+fi
+
+if [ `uname` = 'Darwin' ]; then
 fi
 
 # vim like quit

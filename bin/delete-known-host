@@ -1,0 +1,54 @@
+#!/bin/bash
+#
+# delete-known-host
+#
+# delete an entry from your user's ~/.ssh/known_hosts file
+
+set -e
+
+KNOWN_HOSTS_FILE="${KNOWN_HOSTS_FILE:-${HOME}/.ssh/known_hosts}"
+
+function usage() {
+    echo "Usage: ${0##*/} KNOWN_HOST" 1>&2
+    exit 1
+}
+
+function error_exit() {
+    if [[ ! -z "$1" ]]; then
+        echo "$1" 1>&2
+    fi
+    usage
+    exit 1
+}
+
+function check_for_host() {
+    if [[ -z "$1" ]]; then
+        echo "${FUNCNAME[0]}: need argument: host" 1>&2
+        exit 1
+    fi
+    if ! grep -iq "$1" "${KNOWN_HOSTS_FILE}"; then
+        echo "Failed to find ${hostname} in ${KNOWN_HOSTS_FILE}"    
+    fi
+    return "$?"
+}
+
+function remove_host() {
+    if [[ -z "$1" ]]; then
+        echo "${FUNCNAME[0]}: need argument: host" 1>&2
+        exit 1
+    fi
+    sed -i.bak "/${1}/d" "${KNOWN_HOSTS_FILE}"
+    return "$?"
+}
+
+if [[ "$#" -ne 1 ]]; then
+    error_exit "need argument: KNOWN_HOST"
+fi
+
+hostname="${1}"
+
+check_for_host "${hostname}"
+remove_host "${hostname}"
+if [[ "$?" -ne 0 ]]; then
+    echo "Failed to remove ${hostname} from ${KNOWN_HOSTS_FILE}"    
+echo
