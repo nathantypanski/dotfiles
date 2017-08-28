@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+
+import argparse
+import os
+import os.path as path
+import heapq
+
+__desc__ = 'Print the top n (default: n=10) files in a directory'
+
+def get_filesizes(files):
+        filesizes = (
+                (path.getsize(path.join(root, f)), path.join(root, f))
+                for f in files
+        )
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__desc__)
+    parser.add_argument('-n', default=10, type=int, help='n')
+    parser.add_argument('directory', default=os.getcwd(), nargs='?',
+            help='directory to get top 10 on')
+    args = parser.parse_args()
+
+    top = []
+    for root, dirs, files in os.walk(args.directory):
+        for f in files:
+            f = path.join(root, f)
+            try:
+                size = path.getsize(f)
+                heapq.heappush(top, (-size, size, f))
+                if len(top) > args.n:
+                    _ = top.pop()
+            except FileNotFoundError:
+                pass
+    print(len(top))
+    for _, size, filename in heapq.nsmallest(args.n, top):
+        print("{} {}".format(size, filename))
+
+if __name__ == '__main__':
+    main()
