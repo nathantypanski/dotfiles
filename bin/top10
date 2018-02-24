@@ -7,6 +7,35 @@ import heapq
 
 __desc__ = 'Print the top n (default: n=10) files in a directory'
 
+SUFFIXES = {1000: ['KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'], 
+            1024: ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']}
+
+
+def approximate_size(size, a_kilobyte_is_1024_bytes = True):
+    '''Convert a file size to human-readable form.
+
+    Keyword arguments:
+    size -- file size in bytes
+    a_kilobyte_is_1024_bytes -- if True (default), use multiples of 1024
+                                if False, use multiples of 1000
+
+    Returns: string
+
+    '''
+
+    if size < 0:
+        raise ValueError('number must be non-negative')
+
+    multiple = 1024 if a_kilobyte_is_1024_bytes else 1000
+
+    for suffix in SUFFIXES[multiple]:
+        size /= multiple
+        if size < multiple:
+            return '{0:.1f} {1}'.format(size, suffix)
+
+    raise ValueError('number too large')
+
+
 def get_filesizes(files):
         filesizes = (
                 (path.getsize(path.join(root, f)), path.join(root, f))
@@ -17,20 +46,45 @@ def get_filesizes(files):
 def main():
     parser = argparse.ArgumentParser(description=__desc__)
     parser.add_argument('-n', default=10, type=int, help='n')
+    parser.add_argument('-e', default=True, action='store_false',
+            help='show (more) exact size in bytes')
     parser.add_argument('directory', default=os.getcwd(), nargs='?',
             help='directory to get top 10 on')
     args = parser.parse_args()
 
+    """
+THIS HAS A BUG
+
+nathan@whitebook ~ % top10 .
+        ql      q-      ql      q10
+7.0 GiB ./Downloads/dnmarchives/outlawmarket.tar.xz
+5.5 GiB ./Downloads/dnmarchives/agora.tar.xz
+4.0 GiB ./Downloads/dnmarchives/nucleus.tar.xz
+3.9 KiB ./.tmux.conf
+1.3 KiB ./.Xdefaults
+1.0 KiB ./.zshrc.orig
+0.7 KiB ./.xinitrc
+0.5 KiB ./.zshrc
+0.4 KiB ./.zdirs
+0.3 KiB ./.bash_history
+top10 .  12.12s user 13.74s system 73% cpu 35.364 total
+
+    """
     top = []
     for root, dirs, files in os.walk(args.directory):
         for f in files:
             f = path.join(root, f)
             try:
                 size = path.getsize(f)
-                heapq.heappush(top, (-size, size, f))
+                if args.e:
+                    heapq.heappush(top, (-size, approximate_size(size), f))
+                else:
+                    heapq.heappush(top, (-size, size, f))
                 if len(top) > args.n:
                     _ = top.pop()
             except FileNotFoundError:
+                pass
+            except PermissionError:
                 pass
     print(len(top))
     for _, size, filename in heapq.nsmallest(args.n, top):
