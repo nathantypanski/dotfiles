@@ -3,7 +3,7 @@
 urxvt*internalBorder: 4
 urxvt*termName: rxvt-256color
 urxvt*scrollBar: false
-urxvt*url-select.launcher: /usr/bin/firefox -new-tab
+urxvt*url-select.launcher: /usr/bin/firefox-developer-edition -new-tab
 URxvt.url-select.underline: true
 URxvt*jumpScroll: true
 URxvt*lineSpace: 0
