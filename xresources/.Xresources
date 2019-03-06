@@ -8,7 +8,9 @@ URxvt.url-select.underline: true
 URxvt*jumpScroll: true
 URxvt*lineSpace: 0
 
-urxvt*font: -*-terminus-medium-*-normal-*-22-*-*-*-*-*-*-u
+!URxvt*font: -*-terminus-medium-*-*-*-20-*-*-*-*-*-iso10646-*
+URxvt*font: xft:xos4\ Terminus:size=10
+xterm*font: -*-terminus-medium-*-*-*-20-*-*-*-*-*-iso10646-*
 
 
 URxvt.transparent: false
@@ -45,3 +47,5 @@ Xft.hintstyle:  hintfull
 Xft.hinting: 1
 Xft.antialias: 1
 Xft.rgba: rgb
+
+rofi.font: Bitstream Vera Sans Mono Roman 16
