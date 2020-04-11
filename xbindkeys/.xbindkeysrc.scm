@@ -1,6 +1,6 @@
 ;; (remove-xbindkey key)
 ;; (run-command "foo-bar-command [args]")
-(grab-all-keys)
+;;(grab-all-keys)
 ;; (ungrab-all-keys)
 ;; (remove-all-keys)
 (debug)
@@ -30,9 +30,9 @@
 (xbindkey '("m:0x0" "c:121") "pamixer --toggle-mute")
 
 ;;(xbindkey '(Mod4 Return) "urxvt")
-(xbindkey '(Mod4 p) "dmenu_run")
+;; (xbindkey '(Mod4 p) "rofi -show run")
 
-(xbindkey '(Mod4 Return) "urxvt")
+;; (xbindkey '(Mod4 Return) "alacritty")
 
 ;; (xbindkey '(Mod4 Shift grave) "~/bin/emc")
 
