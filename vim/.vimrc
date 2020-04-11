@@ -77,6 +77,7 @@ set showcmd
 
 " Makefiles -> Tab characters
 autocmd FileType make setlocal noexpandtab shiftwidth=8 softtabstop=0
+autocmd FileType C set autoindent noexpandtab tabstop=8 shiftwidth=8 softtabstop=0
 
 au BufNewFile,BufRead *.rs set filetype=rust
 
@@ -202,6 +203,7 @@ augroup indent_settings
 map<leader>w :w<CR>
 map<leader>W :wq<CR>
 map<leader>q :q<CR>
+map<leader>Q :q!<CR>
 nnoremap <leader><leader> <C-w><C-w>
 nnoremap <leader>\ :vsplit<CR>
 nnoremap <leader>- :split<CR>
@@ -222,6 +224,7 @@ Plugin 'jcrocholl/pep8'
 Plugin 'scrooloose/syntastic'
 
 Plugin 'fs111/pydoc.vim'
+Plugin 'fatih/vim-go'
 
 Plugin 'zenburn'
 
@@ -248,7 +251,7 @@ Plugin 'jalvesaq/VimCom'
 
 Plugin 'bling/vim-airline'
 
-Plugin 'Yggdroot/indentLine'
+" Plugin 'Yggdroot/indentLine'
 
 Plugin 'LaTeX-Box-Team/LaTeX-Box'
 let g:LatexBox_output_type="pdf"
