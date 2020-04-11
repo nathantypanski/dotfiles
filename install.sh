@@ -63,6 +63,7 @@ if [ "${ARCH}" == 'true' ]; then
     stow -v --ignore="$I1" --ignore="$I2" --ignore="$I3" --no-folding --target="$HOME" 'mutt'
     stow -v --ignore="$I1" --ignore="$I2" --ignore="$I3" --target="$HOME" 'xmonad'
     stow -v --ignore="$I1" --ignore="$I2" --ignore="$I3" --target="$HOME" 'xinitrc'
+    stow -v --ignore="$I1" --ignore="$I2" --ignore="$I3" --target="$HOME" 'stumpwm'
 
     which xrdb &> /dev/null
     if [[ "$?" -eq 0 ]]; then
