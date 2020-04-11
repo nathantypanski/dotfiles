@@ -33,7 +33,7 @@ check-set-titles () {
 # Append all history to history file
 setopt appendhistory
 # share history between terminals
-setopt inc_append_history
+# setopt inc_append_history
 
 # automatically pushd when cd'ing
 setopt auto_pushd

@@ -1,7 +1,7 @@
 
 RBENV_PATH="$HOME/.rbenv/bin"
 which rbenv &> /dev/null
-if [[ "$?" -eq "1" && -e $RBENV_PATH ]]; then
+if [[ "$?" -ne "0" && -d $RBENV_PATH ]]; then
     export PATH=$PATH:$RBENV_PATH
+    bval "$(rbenv init -)"
 fi
-eval "$(rbenv init -)"

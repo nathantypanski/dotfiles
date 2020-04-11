@@ -160,9 +160,15 @@ else
     check_and_add_to_path '/usr/lib/ccache/bin' 
     check_and_add_to_path '/opt/android-sdk/platform-tools'
     check_and_add_to_path "${HOME}/npm/bin"
+    check_and_add_to_path "${HOME}/.cargo/bin"
 fi
 
 EC2KEYFILE="$HOME"'/.config/zsh/ec2.zsh'
 if [ -f "$EC2KEYFILE" ]; then
     source "$EC2KEYFILE"
 fi
+
+export VIRTUALENVWRAPPER_PYTHON=$(which python2)
+. ~/.local/bin/virtualenvwrapper.sh
+
+export RUST_LOG=error
