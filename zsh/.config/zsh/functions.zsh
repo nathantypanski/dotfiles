@@ -185,3 +185,8 @@ function format-json {
     cat "$1" | jq . | sponge "$1"
 }
 
+function docker-compose-attach-to-container {
+    container="$(docker ps --format '{{.ID}}' --filter name="$1" \
+        --no-trunc)"
+    docker exec -it "${container}" /bin/bash
+}
