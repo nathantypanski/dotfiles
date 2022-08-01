@@ -134,3 +134,5 @@ zstyle ':completion:*:urls' local 'www' '/var/www/' 'public_html'
 # caching
 [[ -d $ZSHDIR/cache ]] && zstyle ':completion:*' use-cache yes && \
                         zstyle ':completion::complete:*' cache-path $ZSHDIR/cache/
+
+fpath+="${HOME}/.zfunc"
