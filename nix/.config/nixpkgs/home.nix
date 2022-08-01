@@ -20,6 +20,7 @@
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+  programs.home-manager.path = "$HOME/src/github.com/nix-community/home-manager";
 
   services.gpg-agent = {
     enable = true;
@@ -27,6 +28,7 @@
     enableSshSupport = false;
   };
 
+  home.keyboard.options = ["ctrl:nocaps"];
   wayland.windowManager.sway = {
     enable = true;
     wrapperFeatures.gtk = true ;
@@ -38,7 +40,7 @@
         size = 10.0;
       };
       keybindings = let
-        modifier = config.wayland.windowManager.sway.config.modifier;
+        modifier = "alt";
         terminal = config.wayland.windowManager.sway.config.terminal;
       in lib.mkOptionDefault {
         "${modifier}+Shift+Return" = "exec ${terminal}";
@@ -68,6 +70,8 @@
         "${modifier}+Shift+9" = "move container to workspace 9";
         "${modifier}+Shift+0" = "move container to workspace 10";
       };
+      ## Can't get this to work:
+      # input = { "*" = { xkb_options = "caps:ctrl_modifier"; }; };
     };
   };
   home.packages = with pkgs; [
@@ -77,12 +81,36 @@
     mako
     alacritty
     wofi
-    haskell.compiler.ghc921
+    # haskell.compiler.ghc921
+    haskell.compiler.ghc902
+    # haskell.compiler.ghc922
+    # ghc
     stack
     zathura
     sass
     ispell
     pass
+    ydotool
+    pavucontrol
+    paprefs
+    zotero
+    xfce.thunar
+    rustup
+    go-tools
+    go
+    python39
+    python39Packages.pip
+    python39Packages.virtualenv
+    weechat
+    #discord
+    dig
+    imv
+    vcv-rack
+    xorg.xhost
+    gdb
+    cgdb
+    yubioath-desktop
+    arcan.arcan
   ];
 
   programs.git = {
