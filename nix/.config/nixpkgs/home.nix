@@ -1,7 +1,10 @@
 { config, pkgs, lib, ... }:
 
 {
-  imports = [ ./zsh.nix ];
+  imports = [
+    ./zsh.nix
+    ./tmux.nix
+  ];
 
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
@@ -27,13 +30,22 @@
     defaultCacheTtl = 1800;
     enableSshSupport = false;
   };
+  services.swayidle = {
+    enable = true;
+    timeouts = [
+      { timeout = 60; command = "${pkgs.swaylock}/bin/swaylock -fF"; }
+    ];
+    events = [
+      { event = "lock"; command = "lock"; }
+    ];
+  };
 
   home.keyboard.options = ["ctrl:nocaps"];
   wayland.windowManager.sway = {
     enable = true;
-    wrapperFeatures.gtk = true ;
-    config = {
+    wrapperFeatures.gtk = true ; config = {
       terminal = "alacritty";
+      systemdIntegration = true;
       fonts = {
         names = ["pango:Terminus"];
         style = "normal";
@@ -102,7 +114,7 @@
     python39Packages.pip
     python39Packages.virtualenv
     weechat
-    #discord
+    discord
     dig
     imv
     vcv-rack
@@ -110,13 +122,58 @@
     gdb
     cgdb
     yubioath-desktop
-    arcan.arcan
+    arcan.all-wrapped
+    # urbit
+    qrencode
+    monero
+    monero-gui
+    xmrig
+    bore
+    ledger
+    termbox
+    sqlite # required for helm-dash in emacs
+    libreoffice
+    texlive.combined.scheme-full
+    global
+    python310Packages.poetry
+    zlib
+    libtcod
+    python310Packages.venvShellHook
+    cmake
+    scons
+    SDL2
+    SDL2.dev
+    nix-index
+    rust-analyzer
+    helix
+    renoise
+    #        > ***
+    #  > Unfortunately, we cannot download file jdk-8u281-linux-x64.tar.gz automatically.
+    #  > Please go to http://www.oracle.com    echnetwork/java/javase/downloads/jdk8-downloads-2133151.html to download it yourself, and add it to the Nix store
+    #  > using either
+    #  >   nix-store --add-fixed sha256 jdk-8u281-linux-x64.tar.gz
+    #  > or
+    #  >   nix-prefetch-url --type sha256 file:///path    o/jdk-8u281-linux-x64.tar.gz
+    #  >
+    #  > ***
+    #  >
+    #
+    # processing
+    freetype
+    ungoogled-chromium
   ];
 
   programs.git = {
     enable = true;
     userName = "ndt";
     userEmail = "ndt@nathantypanski.com";
+  };
+
+  programs.neovim = {
+    enable = true;
+    viAlias = true;
+    vimdiffAlias = true;
+    extraConfig = ''set number'';
   };
 
   programs.keychain = {
