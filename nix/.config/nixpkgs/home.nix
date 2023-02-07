@@ -29,7 +29,9 @@
     enable = true;
     defaultCacheTtl = 1800;
     enableSshSupport = false;
+    enableScDaemon = true;
   };
+
   services.swayidle = {
     enable = true;
     timeouts = [
@@ -43,9 +45,22 @@
   home.keyboard.options = ["ctrl:nocaps"];
   wayland.windowManager.sway = {
     enable = true;
-    wrapperFeatures.gtk = true ; config = {
+    wrapperFeatures.gtk = true ;
+    extraConfig = ''
+      output DP-2 mode 5120x1440@99.99Hz
+    '';
+    config = {
+      # output = {
+      #   # TODO: why doesn't this work?
+      #   DP-2 = {
+      #     mode = "5120x1440@99Hz";
+      #   };
+      # };
+      window = {
+        border = 3;
+      };
+      # to list options do `swaymsg -t get_outputs`
       terminal = "alacritty";
-      systemdIntegration = true;
       fonts = {
         names = ["pango:Terminus"];
         style = "normal";
@@ -122,7 +137,6 @@
     gdb
     cgdb
     yubioath-desktop
-    arcan.all-wrapped
     # urbit
     qrencode
     monero
@@ -147,6 +161,7 @@
     rust-analyzer
     helix
     renoise
+    wdisplays
     #        > ***
     #  > Unfortunately, we cannot download file jdk-8u281-linux-x64.tar.gz automatically.
     #  > Please go to http://www.oracle.com    echnetwork/java/javase/downloads/jdk8-downloads-2133151.html to download it yourself, and add it to the Nix store
@@ -161,6 +176,8 @@
     # processing
     freetype
     ungoogled-chromium
+    wine
+    transmission-gtk
   ];
 
   programs.git = {
@@ -180,4 +197,6 @@
     enable = true;
     enableZshIntegration = true;
   };
+
+  manual.manpages.enable = false;
 }
