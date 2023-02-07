@@ -5,8 +5,6 @@
     enable = true;
     extraConfig = ''
 # config from nix
-
-
 # Reasonable key prefix
 unbind C-b
 set-option -g prefix C-a
