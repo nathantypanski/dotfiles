@@ -1,0 +1,206 @@
+# i3 config file (v4)
+#
+# Please see http://i3wm.org/docs/userguide.html for a complete reference!
+
+default_orientation auto
+# new_float 1pixel
+default_border pixel 2
+focus_follows_mouse no
+popup_during_fullscreen smart
+workspace_auto_back_and_forth yes
+force_display_urgency_hint 500 ms
+# force_focus_wrapping no
+
+# Solarized
+# class                 border  backgr. text    indicator
+client.focused          #a54242 #a54242 #c5c8c6 #b5bd68
+client.focused_inactive #282a2e #282a2e #c5c8c6 #8abeb7
+client.unfocused        #1d1f21 #1d1f21 #707880 #8abeb7
+client.urgent           #5f819d #5f819d #002b36 #85678f
+
+set $mod Mod4
+
+# Font for window titles. Will also be used by the bar unless a different font
+# is used in the bar {} block below. ISO 10646 = Unicode
+# font -*-terminus-medium-*-*-*-22-*-*-*-*-*-iso10646-*
+font pango:Terminus 10
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# start a terminal
+bindsym $mod+Shift+Return exec alacritty
+bindsym $mod+grave exec alacritty
+
+
+# lock --- broken!?
+bindsym $mod+Shift+semicolon exec 'swaylock'
+
+# kill focused window
+bindsym $mod+Shift+c kill
+
+# start dmenu (a program launcher)
+bindsym $mod+p exec "/home/ndt/bin/f"
+# bindsym $mod+p exec rofi -show run
+
+# There also is the (new) i3-dmenu-desktop which only displays applications
+# shipping a .desktop file. It is a wrapper around dmenu, so you need that
+# installed.
+
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+bindsym $mod+Shift+apostrophe split v
+bindsym $mod+apostrophe split h
+
+bindsym $mod+f fullscreen
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+bindsym F1 exec 'bright-down'
+bindsym F2 exec 'bright-up'
+
+# toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# focus the parent container
+bindsym $mod+bracketleft focus parent
+
+# focus the child container
+bindsym $mod+bracketright focus child
+
+bindsym $mod+equal exec "rofi -show window"
+
+# switch to workspace
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+bindsym $mod+5 workspace 5
+bindsym $mod+6 workspace 6
+bindsym $mod+7 workspace 7
+bindsym $mod+8 workspace 8
+bindsym $mod+9 workspace 9
+bindsym $mod+0 workspace 10
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace 1
+bindsym $mod+Shift+2 move container to workspace 2
+bindsym $mod+Shift+3 move container to workspace 3
+bindsym $mod+Shift+4 move container to workspace 4
+bindsym $mod+Shift+5 move container to workspace 5
+bindsym $mod+Shift+6 move container to workspace 6
+bindsym $mod+Shift+7 move container to workspace 7
+bindsym $mod+Shift+8 move container to workspace 8
+bindsym $mod+Shift+9 move container to workspace 9
+bindsym $mod+Shift+0 move container to workspace 10
+
+# Reload the configuration file.
+bindsym $mod+Ctrl+r reload
+
+# Restart i3 inplace (preserves your layout/session, can be used to upgrade i3).
+bindsym $mod+Shift+r restart
+
+# dzen customization keybindings
+# bindcode 133 exec --no-startup-id "bin/dzen/dz.sh"
+# bindcode --release 133 exec --no-startup-id "killall dzen2 conky dz.sh"
+# bindsym --release $mod exec --no-startup-id "killall dzen2 conky dz.sh"
+# bindsym $mod+F1 exec --no-startup-id "bin/dzen/dz.sh"
+
+# exit i3 (logs you out of your X session)
+bindsym $mod+Shift+q exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
+
+# resize window (you can also use the mouse for that)
+mode "resize" {
+        # These bindings trigger as soon as you enter the resize mode
+        bindsym $mod+h resize shrink width 10 px or 5 ppt
+        bindsym $mod+j resize grow height 10 px or 5 ppt
+        bindsym $mod+k resize shrink height 10 px or 5 ppt
+        bindsym $mod+l resize grow width 10 px or 5 ppt
+
+        # back to normal: Enter or Escape
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+mode "move" {
+        # back to normal: Enter or Escape
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+# for_window [class="Firefox"] {
+# }
+
+for_window [title="TeX Text"] floating enable
+assign [class="dwb"] 3
+
+bindsym $mod+r mode "resize"
+output eDP-1 scale 1.5
+output DP-3 mode 5120x1440@119.970Hz
+
+input 1452:628:Apple_Inc._Apple_Internal_Keyboard_/_Trackpad {
+    xkb_layout us
+    #xkb_variant ,nodeadkeys
+    xkb_options ctrl:nocaps
+}
+
+input 2131:325:Topre_REALFORCE_87_US {
+    xkb_layout us
+    xkb_options ctrl:nocaps
+}
+
+# Start i3bar to display a workspace bar (plus the system information i3status
+# finds out, if available)
+bar {
+    position top
+    status_command i3status
+    tray_output primary
+    workspace_buttons yes
+
+    colors {
+        background #00141a
+        statusline #839496
+        separator #586e75
+        focused_workspace #268bd2 #268bd2 #00141a
+        inactive_workspace #073642 #00141a #839496
+    }
+}
+
+# Hide vertical borders at screen edges
+# hide_edge_borders both
+
+# Make the currently focused window a scratchpad
+bindsym $mod+Shift+minus move scratchpad
+
+# Show the first scratchpad window
+bindsym $mod+minus scratchpad show
+
+# Use compositing
+# exec --no-startup-id compton -I .04 -O .04 -b -f -D 5 &
+
+# exec --no-startup-id 'dwb'
+
+#exec --no-startup-id i3-msg 'workspace 9; exec bin/urxvt.sh -e irssi; workspace 1'
+# exec --no-startup-id 'unclutter'
+# exec --no-startup-id 'bin/dzen/dz.sh'
+
+for_window [app_id="^launcher$"] floating enable, sticky enable, resize set 30 ppt 60 ppt, border pixel 10
