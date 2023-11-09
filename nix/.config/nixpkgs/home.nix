@@ -6,6 +6,16 @@
     ./tmux.nix
   ];
 
+  services.emacs.package = pkgs.emacsPgtkNativeComp;
+  nixpkgs.overlays = [
+    (import (builtins.fetchGit {
+      url = "https://github.com/nix-community/emacs-overlay.git";
+      # ref = "master";
+      rev = "1a47948bbbe3eea50deaabf5f260d3b2a233aaa5";
+    }))
+  ];
+
+
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
   home.username = "ndt";
@@ -101,7 +111,9 @@
       # input = { "*" = { xkb_options = "caps:ctrl_modifier"; }; };
     };
   };
+
   home.packages = with pkgs; [
+    foot
     swaylock
     swayidle
     wl-clipboard
@@ -136,7 +148,6 @@
     xorg.xhost
     gdb
     cgdb
-    yubioath-desktop
     # urbit
     qrencode
     monero
@@ -146,10 +157,10 @@
     ledger
     termbox
     sqlite # required for helm-dash in emacs
+    emacsPgtkNativeComp
     libreoffice
     texlive.combined.scheme-full
     global
-    python310Packages.poetry
     zlib
     libtcod
     python310Packages.venvShellHook
@@ -158,7 +169,6 @@
     SDL2
     SDL2.dev
     nix-index
-    rust-analyzer
     helix
     renoise
     wdisplays
@@ -175,7 +185,6 @@
     #
     # processing
     freetype
-    ungoogled-chromium
     wine
     transmission-gtk
   ];
@@ -184,6 +193,37 @@
     enable = true;
     userName = "ndt";
     userEmail = "ndt@nathantypanski.com";
+  };
+
+  programs.foot = {
+    enable = true;
+    settings = {
+      main = {
+        font = "Terminus:size=16";
+      };
+      colors = {
+        foreground = "dcdccc";
+        background = "111111";
+        ## Normal/regular colors (color palette 0-7)
+        regular0 = "222222";  # black
+        regular1 = "cc9393";  # red
+        regular2 = "7f9f7f";  # green
+        regular3 = "d0bf8f";  # yellow
+        regular4 = "6ca0a3";  # blue
+        regular5 = "dc8cc3";  # magenta
+        regular6 = "93e0e3";  # cyan
+        regular7 = "dcdccc";  # white
+        ## Bright colors (color palette 8-15)
+        bright0 = "666666";   # bright black
+        bright1 = "dca3a3";   # bright red
+        bright2 = "bfebbf";   # bright green
+        bright3 = "f0dfaf";   # bright yellow
+        bright4 = "8cd0d3";   # bright blue
+        bright5 = "fcace3";   # bright magenta
+        bright6 = "b3ffff";   # bright cyan
+        bright7 = "ffffff";   # bright white
+      };
+    };
   };
 
   programs.neovim = {
