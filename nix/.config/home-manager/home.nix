@@ -137,7 +137,7 @@
     # zotero # Package ‘zotero-6.0.26’ in
     # /nix/store/cyz72bh2sp5jk0asal64cpm09vrggb97-nixos-23.05.4738.41de143fda10/nixos/pkgs/applications/office/zotero/default.nix:151
     # is marked as insecure, refusing to evaluate.
-
+    tig
     xfce.thunar
     rustup
     go-tools
