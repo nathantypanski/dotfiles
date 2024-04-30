@@ -41,7 +41,9 @@ bindsym $mod+Shift+semicolon exec 'slock'
 bindsym $mod+Shift+c kill
 
 # start dmenu (a program launcher)
-bindsym $mod+p exec 'bin/dmenu/dmenu_run.sh' -p '$ '
+# bindsym $mod+p exec 'bin/dmenu/dmenu_run.sh' -p '$ '
+bindsym $mod+p exec rofi -show run
+
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
@@ -85,7 +87,7 @@ bindsym $mod+bracketleft focus parent
 # focus the child container
 bindsym $mod+bracketright focus child
 
-bindsym $mod+equal exec "~/bin/i3/winmenu.py"
+bindsym $mod+equal exec "rofi -show window"
 
 # switch to workspace
 bindsym $mod+1 workspace 1
@@ -178,31 +180,13 @@ bindsym $mod+Shift+minus move scratchpad
 # Show the first scratchpad window
 bindsym $mod+minus scratchpad show
 
-# search for a a program by name
-bindsym $mod+n exec python ~/bin/i3-wm-scripts/nextfind.py
-
-# mark a window
-bindsym $mod+m exec ~/bin/i3-wm-scripts/mark
-
-# unmark a window
-bindsym $mod+u exec ~/bin/i3-wm-scripts/unmark
-
-# use dmenu to jump back to a mark
-bindsym $mod+g exec ~/bin/i3-wm-scripts/goto
-
-# go to my web browser
-bindsym $mod+b exec python ~/bin/i3-wm-scripts/nextmatch.py '(chromium|firefox)'
-
-# open ranger
-bindsym $mod+d exec "termite -e ranger"
-
 # Use compositing
 # exec --no-startup-id compton -I .04 -O .04 -b -f -D 5 &
 
-exec --no-startup-id 'dwb'
+# exec --no-startup-id 'dwb'
 
 #exec --no-startup-id i3-msg 'workspace 9; exec bin/urxvt.sh -e irssi; workspace 1'
-exec --no-startup-id 'unclutter'
+# exec --no-startup-id 'unclutter'
 # exec --no-startup-id 'bin/dzen/dz.sh'
 
 # The IPC interface allows programs like an external workspace bar
