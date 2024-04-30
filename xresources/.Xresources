@@ -8,8 +8,9 @@ URxvt.url-select.underline: true
 URxvt*jumpScroll: true
 URxvt*lineSpace: 0
 
-URxvt*font: xft:xos4\ Terminus:size=10
-xterm*font: -*-terminus-medium-*-*-*-20-*-*-*-*-*-iso10646-*
+!URxvt*font: xft:xos4\ Terminus:size=12
+xterm*font: -*-terminus-medium-*-*-*-22-*-*-*-*-*-iso10646-*
+URxvt*font: -*-terminus-medium-*-*-*-22-*-*-*-*-*-iso10646-*
 
 
 URxvt.transparent: false
