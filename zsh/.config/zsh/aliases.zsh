@@ -83,7 +83,7 @@ if [ -n "${DARWIN}" ]; then
     fi
 else
     # Linux
-    alias ssh='eval $(/usr/bin/keychain --eval --agents ssh -Q --quiet ~/.ssh/id_rsa ~/.ssh/id_rsa_athen@ephesus) && ssh'
+    #alias ssh='eval $(/usr/bin/keychain --eval --agents ssh -Q --quiet ~/.ssh/id_rsa ~/.ssh/id_rsa_athen@ephesus) && ssh'
 fi
 
 if [ `uname` = 'Darwin' ]; then
