@@ -1,6 +1,8 @@
 typeset -U path
 set +x
 
+umask 022
+
 check_and_add_to_path() {
     # Check that a directory exists, then add it to the start of the path.
     #
@@ -16,6 +18,14 @@ check_and_add_to_path() {
     fi
     return 1
 }
+
+append_path() {
+    check_and_add_to_path $@
+}
+
+for f in /etc/profile.d/*.sh; do
+    . "${f}"
+done
 
 check_and_source() {
     # Check that a file exists, then source it.
@@ -38,6 +48,7 @@ export SHELL='/bin/zsh'
 export HISTFILE="${HOME}/.zhistory"
 # The number of commands stored in memory
 export HISTSIZE=1000000
+export HISTCONTROL=ignorespace
 # The number of commands saved in my history file
 export SAVEHIST=1000000
 
@@ -168,7 +179,6 @@ if [ -f "$EC2KEYFILE" ]; then
     source "$EC2KEYFILE"
 fi
 
-export VIRTUALENVWRAPPER_PYTHON=$(which python2)
-. ~/.local/bin/virtualenvwrapper.sh
-
 export RUST_LOG=error
+
+. /opt/asdf-vm/asdf.sh
