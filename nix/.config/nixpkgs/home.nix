@@ -2,16 +2,16 @@
 
 {
   imports = [
-    ./zsh.nix
+     ./zsh.nix
     ./tmux.nix
   ];
 
-  services.emacs.package = pkgs.emacsPgtkNativeComp;
+  services.emacs.package = pkgs.emacs-pgtk;
   nixpkgs.overlays = [
     (import (builtins.fetchGit {
       url = "https://github.com/nix-community/emacs-overlay.git";
       # ref = "master";
-      rev = "1a47948bbbe3eea50deaabf5f260d3b2a233aaa5";
+      rev = "1c9b038a329736e444cabffb0e473642458a9858";
     }))
   ];
 
@@ -118,6 +118,8 @@
     swayidle
     wl-clipboard
     mako
+    # so things like virt-manager don't break
+    gnome.adwaita-icon-theme 
     alacritty
     wofi
     # haskell.compiler.ghc921
@@ -132,7 +134,10 @@
     ydotool
     pavucontrol
     paprefs
-    zotero
+    # zotero # Package ‘zotero-6.0.26’ in
+    # /nix/store/cyz72bh2sp5jk0asal64cpm09vrggb97-nixos-23.05.4738.41de143fda10/nixos/pkgs/applications/office/zotero/default.nix:151
+    # is marked as insecure, refusing to evaluate.
+
     xfce.thunar
     rustup
     go-tools
@@ -157,7 +162,7 @@
     ledger
     termbox
     sqlite # required for helm-dash in emacs
-    emacsPgtkNativeComp
+    emacs-pgtk
     libreoffice
     texlive.combined.scheme-full
     global
@@ -187,6 +192,7 @@
     freetype
     wine
     transmission-gtk
+    # ipfs
   ];
 
   programs.git = {
@@ -238,5 +244,16 @@
     enableZshIntegration = true;
   };
 
+  # xdg-desktop-portal works by exposing a series of D-Bus interfaces
+  # known as portals under a well-known name
+  # (org.freedesktop.portal.Desktop) and object path
+  # (/org/freedesktop/portal/desktop).
+  # The portal interfaces include APIs for file access, opening URIs,
+  # printing and others.
+
   manual.manpages.enable = false;
+
+  # services.kubo = {
+  #   enable = true;
+  # };
 }
