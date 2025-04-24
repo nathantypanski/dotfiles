@@ -37,15 +37,11 @@
 
         ids.gids.nixbld = 350;
 
-        # Create /etc/zshrc that loads the nix-darwin environment.
-        programs.zsh.enable = true;
-
         environment.systemPackages = [
           pkgs.neovim
           pkgs.git
           pkgs.pass
           pkgs.helix
-          pkgs.openssh
         ];
     };
     secrets = {
