@@ -1,9 +1,11 @@
 { config, pkgs, username, homeDirectory, secrets, ... }:
 
-{
+let
+  copyCommand = "pbcopy";
+in {
   imports = [
     ./zsh.nix
-    ./tmux.nix
+    (import ./tmux.nix { inherit config pkgs copyCommand; })
   ];
 
   home.username = username;

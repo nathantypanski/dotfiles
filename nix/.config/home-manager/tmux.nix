@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, copyCommand, ... }:
 
 {
   programs.tmux = {
@@ -38,10 +38,8 @@ unbind p
 bind p paste-buffer
 
  bind-key -T copy-mode-vi 'v' send -X begin-selection
-# bind -T copy-mode-vi y send-keys -X copy-pipe-and-cancel 'xsel -in -selection clipboard'
-# bind-key -T copy-mode-vi y send-keys -X copy-selection-and-cancel
-bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel 'wl-copy' # 'xclip -sel clip -i'
-bind-key -T copy-mode-vi Y send-keys -X copy-end-of-line 'wl-copy' #"xclip -selection c"
+bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "${copyCommand}" # 'xclip -sel clip -i'
+bind-key -T copy-mode-vi Y send-keys -X copy-end-of-line "${copyCommand}" #"xclip -selection c"
 set -g set-clipboard on
 
 # Vimish nav
@@ -71,7 +69,7 @@ set -g default-terminal "screen-256color"
 # set -g terminal-overrides 'xterm:colors=256'
 
 # source config file
-bind r source-file ~/.tmux.conf \; display "Reloaded!"
+bind r source-file ~/.config/tmux/tmux.conf \; display "Reloaded!"
 
 # history
 set -g history-limit 9999
