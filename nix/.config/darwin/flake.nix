@@ -58,7 +58,7 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.users.ndt = import ../home-manger/darwin.nix;
+            home-manager.users.ndt = import ../home-manager/darwin.nix;
 
             # Optionally, use home-manager.extraSpecialArgs to pass
             # arguments to home.nix
