@@ -2,8 +2,8 @@
 
 To run:
 
-```bash
-$ nix run nix-darwin -- switch --flake ~/.config/nix
+```
+./rebuild.sh
 ```
 
 ## References
