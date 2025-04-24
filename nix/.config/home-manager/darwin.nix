@@ -6,6 +6,7 @@ in {
   imports = [
     ./zsh.nix
     (import ./tmux.nix { inherit config pkgs copyCommand; })
+    (import ./neovim.nix { inherit config pkgs; })
   ];
 
   home.username = username;
