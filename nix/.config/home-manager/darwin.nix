@@ -35,5 +35,14 @@ in {
     enable = true;
     userName = username;
     userEmail = secrets.userEmail;
+    # home-manager only supports gnupg, so try to workaround
+    signing = {
+      signByDefault = true;
+    };
+    extraConfig = {
+      gpg.format = "ssh";
+      gpg."ssh".allowedSignersFile = "/Users/ndt/.git_allowed_signers";
+      user.signingkey = "/Users/ndt/.ssh/id_ed25519.pub";
+    };
   };
 }
