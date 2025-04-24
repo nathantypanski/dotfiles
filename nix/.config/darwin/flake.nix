@@ -15,34 +15,34 @@
 
   outputs = inputs@{ self, nix-darwin, nixpkgs, home-manager }:
   let
+    system = "aarch64-darwin";
     configuration = {pkgs, ... }: {
-        # Necessary for using flakes on this system.
-        nix.settings.experimental-features = "nix-command flakes";
+      # Necessary for using flakes on this system.
+      nix.settings.experimental-features = "nix-command flakes";
 
-        system.configurationRevision = self.rev or self.dirtyRev or null;
+      system.configurationRevision = self.rev or self.dirtyRev or null;
 
-        # Used for backwards compatibility. please read the changelog
-        # before changing: `darwin-rebuild changelog`.
-        system.stateVersion = 4;
+      # Used for backwards compatibility. please read the changelog
+      # before changing: `darwin-rebuild changelog`.
+      system.stateVersion = 4;
 
-        # The platform the configuration will be used on.
-        # If you're on an Intel system, replace with "x86_64-darwin"
-        nixpkgs.hostPlatform = "aarch64-darwin";
+      # The platform the configuration will be used on.
+      # If you're on an Intel system, replace with "x86_64-darwin"
+      nixpkgs.hostPlatform = "aarch64-darwin";
 
-        # Declare the user that will be running `nix-darwin`.
-        users.users.ndt = {
-            name = "ndt";
-            home = "/Users/ndt";
-        };
+      # Declare the user that will be running `nix-darwin`.
+      users.users.ndt = {
+          name = "ndt";
+          home = "/Users/ndt";
+      };
 
-        ids.gids.nixbld = 350;
+      ids.gids.nixbld = 350;
 
-        environment.systemPackages = [
-          pkgs.neovim
-          pkgs.git
-          pkgs.pass
-          pkgs.helix
-        ];
+      environment.systemPackages = [
+        pkgs.neovim
+        pkgs.git
+        pkgs.pass
+      ];
     };
     secrets = {
       userEmail = builtins.getEnv "USER_EMAIL";
@@ -50,21 +50,23 @@
   in
   {
     darwinConfigurations.H640WQ7FHV = nix-darwin.lib.darwinSystem {
+      
+      system = system;
       modules = [
-         configuration
-         home-manager.darwinModules.home-manager {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.extraSpecialArgs = {
-              username = "ndt";
-              homeDirectory = "/Users/ndt";
-	      secrets = secrets;
-            };
-            home-manager.users.ndt = import ../home-manager/darwin.nix;
-
-            # Optionally, use home-manager.extraSpecialArgs to pass
-            # arguments to home.nix
-         }
+        configuration
+        home-manager.darwinModules.home-manager {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.extraSpecialArgs = {
+            username = "ndt";
+            homeDirectory = "/Users/ndt";
+  	        secrets = secrets;
+          };
+          home-manager.users.ndt = import ../home-manager/darwin.nix;
+  
+         # Optionally, use home-manager.extraSpecialArgs to pass
+         # arguments to home.nix
+        }
       ];
     };
   };
