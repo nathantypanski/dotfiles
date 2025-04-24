@@ -16,7 +16,6 @@
   outputs = inputs@{ self, nix-darwin, nixpkgs, home-manager }:
   let
     configuration = {pkgs, ... }: {
-
         # Necessary for using flakes on this system.
         nix.settings.experimental-features = "nix-command flakes";
 
@@ -49,15 +48,22 @@
           pkgs.openssh
         ];
     };
+    secrets = {
+      userEmail = builtins.getEnv "USER_EMAIL";
+    };
   in
   {
     darwinConfigurations.H640WQ7FHV = nix-darwin.lib.darwinSystem {
       modules = [
          configuration
-         home-manager.darwinModules.home-manager
-          {
+         home-manager.darwinModules.home-manager {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = {
+              username = "ndt";
+              homeDirectory = "/Users/ndt";
+	      secrets = secrets;
+            };
             home-manager.users.ndt = import ../home-manager/darwin.nix;
 
             # Optionally, use home-manager.extraSpecialArgs to pass
