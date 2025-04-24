@@ -4,12 +4,14 @@
   programs.neovim = {
     enable = true;
     defaultEditor = true;
-    coc = {
-      enable = true;
-    };
-    extraPackages = with pkgs.vimPlugins; [
+    plugins = with pkgs.vimPlugins; [
       nvim-lspconfig
       nvim-treesitter.withAllGrammars
+      guess-indent-nvim
+      llm-nvim
+      zenburn
     ];
+    extraConfig = ''
+    '';
   };
 }

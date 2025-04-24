@@ -38,10 +38,11 @@
 
       ids.gids.nixbld = 350;
 
-      environment.systemPackages = [
-        pkgs.neovim
-        pkgs.git
-        pkgs.pass
+      environment.systemPackages = with pkgs; [
+        neovim
+        git
+        pass
+	gopls
       ];
     };
     secrets = {
