@@ -26,10 +26,10 @@
       # . "$HOME/.nix-profile/etc/profile.d/nix.sh"
     '';
     sessionVariables = {
-      PROMPT = "%F{red}%n%F{white}@%B%F{blue}%m%b %F{yellow}%3~ %F{white}$ ";
       NIXPKGS_ALLOW_UNFREE = "1";
     };
     initContent = ''
+      PROMPT="%F{red}%n%F{white}@%B%F{blue}%m%b %F{yellow}%3~ %F{white}$ "
       bindkey '^R' history-incremental-search-backward
       alias ls='ls --color=auto'
       alias ll='ls -l'
