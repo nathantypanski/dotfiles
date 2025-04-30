@@ -1,3 +1,4 @@
 .DS_Store
 bin/spotify
 nix/.config/darwin/secrets.sh
+nix/.config/arch/secrets.sh

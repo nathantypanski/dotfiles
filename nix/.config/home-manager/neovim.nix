@@ -4,6 +4,8 @@
   programs.neovim = {
     enable = true;
     defaultEditor = true;
+    viAlias = true;
+    vimdiffAlias = true;
     plugins = with pkgs.vimPlugins; [
       nvim-lspconfig
       nvim-treesitter.withAllGrammars
@@ -12,6 +14,8 @@
       zenburn
     ];
     extraConfig = ''
+      set expandtab
+      set number
     '';
   };
 }

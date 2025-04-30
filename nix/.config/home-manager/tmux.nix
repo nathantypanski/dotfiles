@@ -52,8 +52,7 @@ bind-key k select-pane -U
 unbind-key l
 bind-key l select-pane -R
 
-set -g default-command /run/current-system/sw/bin/zsh
-set -g default-shell /run/current-system/sw/bin/zsh
+set -g default-command zsh
 
 # start with window 1 (instead of 0)
 set -g base-index 1
@@ -143,16 +142,6 @@ bind-key C-s \
   if-shell "(($(tmux display -p '#{session_many_attached}') > 0))" \
     choose-session \
     "run-shell \"tmux choose-session \\\"switch-client -t '%%'; kill-session -t '$(tmux display -p '#S')'\\\"\""
-# bind-key S \
-#   if-shell "(($(tmux display -p '#{session_many_attached}') > 0))" \
-#     choose-session \
-#     "run-shell \"tmux choose-session \\\"switch-client -t '%%'\\\"\""
-# set -g @custom_copy_command 'xsel -i'
-# set -g @override_copy_command 'xsel -i'
-# set -g @yank_selection_mouse 'primary'
-# set -g @yank_selection_mouse 'primary'
-# set -g @shell_mode 'vi'
-# run '~/.tmux/plugins/tpm/tpm'
     '';
   };
 }

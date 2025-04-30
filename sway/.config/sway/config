@@ -32,7 +32,6 @@ floating_modifier $mod
 bindsym $mod+Shift+Return exec alacritty
 bindsym $mod+grave exec alacritty
 
-
 # lock --- broken!?
 bindsym $mod+Shift+semicolon exec 'swaylock'
 
