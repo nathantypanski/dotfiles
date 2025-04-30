@@ -47,7 +47,7 @@
             focusedWorkspace = {
               border = "#cc9393";
               background = "#cc9393";
-              text = "#2b2b2b";
+              text = "#00000";
             };
 
             activeWorkspace = {
@@ -125,7 +125,8 @@
         }
       ];
       startup = [
-        { command = "workspace 1"; always = true; }
+        { command = "swaymsg workspace 1"; always = true; }
+        { command = "swaybg -c #2b2b2b"; always = true; }
       ];
     };
     extraConfig = ''

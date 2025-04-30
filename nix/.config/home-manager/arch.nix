@@ -64,6 +64,7 @@ in {
     firefox-devedition
     dconf-editor
     sway-contrib.grimshot
+    swaybg
     fzf
     bashInteractive
 
