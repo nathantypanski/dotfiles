@@ -24,7 +24,7 @@ in {
     };
     extraConfig = {
       gpg.format = "ssh";
-      gpg."ssh".allowedSignersFile = "${homeDirectory}/.git_allowed_signers";
+      gpg."ssh".allowedSignersFile = "${homeDirectory}/.config/git/allowed_signers";
       user.signingkey = "${homeDirectory}/.ssh/id_ed25519.pub";
     };
   };
