@@ -47,7 +47,7 @@
             focusedWorkspace = {
               border = "#cc9393";
               background = "#cc9393";
-              text = "#00000";
+              text = "#000000";
             };
 
             activeWorkspace = {
