@@ -10,17 +10,13 @@
   };
 
   outputs = { self, nixpkgs, home-manager, ... }: let
-    system = "x86_64-linux"; # Change to "aarch64-linux" if you’re on ARM
+    system = "x86_64-linux";
     user = builtins.getEnv "USER";
 
     secrets = {
       userEmail = builtins.getEnv "USER_EMAIL";
     };
   in {
-    # "System-level" configuration
-    packages.${system}.default = nixpkgs.legacyPackages.${system}.hello;
-
-    # Home-manager configuration
     homeConfigurations.${user} = home-manager.lib.homeManagerConfiguration {
       pkgs = import nixpkgs {
         inherit system;
