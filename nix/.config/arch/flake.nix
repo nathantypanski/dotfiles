@@ -11,13 +11,14 @@
 
   outputs = { self, nixpkgs, home-manager, ... }: let
     system = "x86_64-linux";
-    user = builtins.getEnv "USER";
+    username = builtins.getEnv "USER";
+    homeDirectory = builtins.getEnv "HOME";
 
     secrets = {
       userEmail = builtins.getEnv "USER_EMAIL";
     };
   in {
-    homeConfigurations.${user} = home-manager.lib.homeManagerConfiguration {
+    homeConfigurations.${username} = home-manager.lib.homeManagerConfiguration {
       pkgs = import nixpkgs {
         inherit system;
       };
@@ -25,9 +26,6 @@
       modules = [
         ../home-manager/arch.nix
         {
-          home.username = user;
-          home.homeDirectory = builtins.getEnv "HOME";
-
           programs.home-manager.enable = true;
           home.stateVersion = "24.11";
         }
@@ -35,8 +33,8 @@
       extraSpecialArgs = {
         inherit system;
         secrets = secrets;
-        username = user;
-        homeDirectory = "/home/${user}";
+        username = username;
+        homeDirectory = homeDirectory;
       };
     };
   };

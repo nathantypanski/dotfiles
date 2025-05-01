@@ -4,6 +4,9 @@ let
   copyCommand = "wl-copy";
   mod = "Mod4";
 in {
+    home.username = username;
+    home.homeDirectory = homeDirectory;
+
   imports = [
     ./zsh.nix
     (import ./tmux.nix { inherit config pkgs copyCommand; })
