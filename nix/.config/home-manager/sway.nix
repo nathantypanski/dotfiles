@@ -24,6 +24,15 @@
           dwt = "enabled";
           click_method = "clickfinger";
         };
+        # external usb with trackpoint
+        "1241:1031:USB-HID_Keyboard_Mouse" = {
+          scroll_factor = "0.5";
+          accel_profile = "adaptive";
+          pointer_accel = "-0.1";
+          dwt = "enabled";
+          click_method = "clickfinger";
+        };
+
       };
       # to list options do `swaymsg -t get_outputs`
       terminal = "foot";
