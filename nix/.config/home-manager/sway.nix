@@ -26,11 +26,10 @@
         };
         # external usb with trackpoint
         "1241:1031:USB-HID_Keyboard_Mouse" = {
-          scroll_factor = "0.5";
+          scroll_factor = "0.3";
           accel_profile = "adaptive";
-          pointer_accel = "-0.1";
+          pointer_accel = "-1.0";
           dwt = "enabled";
-          click_method = "clickfinger";
         };
 
       };
@@ -125,12 +124,12 @@
           "${mod}+Shift+r" = "exec swaymsg reload";
           "--release Print" = "exec --no-startup-id ${pkgs.sway-contrib.grimshot}/bin/grimshot copy area";
           # nix swaylock is broken
-          "${mod}+Shift+semicolon" = "exec /usr/bin/swaylock";
+          "${mod}+Shift+semicolon" = "exec /usr/bin/swaylock -f -c 000000";
           "${mod}+Shift+p" = "exec --no-startup-id ${pkgs.wofi}/bin/wofi --show drun,run";
           "${mod}+p" = "exec --no-startup-id pick-foot";
           "${mod}+Shift+q" = "exit";
           "XF86MonBrightnessUp" = "exec --no-startup-id ${pkgs.brightnessctl}/bin/brightnessctl s 25+";
-          "XF86MonBrightnessDown" = "exec --no-startup-id ${pkgs.brightnessctl}/bin/brightnessctl brightnessctl s 25-";
+          "XF86MonBrightnessDown" = "exec --no-startup-id ${pkgs.brightnessctl}/bin/brightnessctl s 25-";
         }
       ];
       startup = [
