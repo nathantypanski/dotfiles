@@ -4,8 +4,8 @@ let
   copyCommand = "wl-copy";
   mod = "Mod4";
 in {
-    home.username = username;
-    home.homeDirectory = homeDirectory;
+  home.username = username;
+  home.homeDirectory = homeDirectory;
 
   imports = [
     ./zsh.nix
@@ -71,11 +71,17 @@ in {
     fzf
     bashInteractive
     brightnessctl
+    nix-search
+    terminus_font_ttf
+    emacs-unstable
+    silver-searcher
 
     (pkgs.writeShellScriptBin "pick-foot" ''
       exec ${pkgs.foot}/bin/foot --app-id=launcher --title=launcher -e 'bash' '-c' 'compgen -c | grep -v fzf | sort -u | fzf --layout=reverse | xargs -r swaymsg -t command exec'
     '')
-
+    (pkgs.writeShellScriptBin "rebuild-home" ''
+      exec /home/ndt/src/github.com/nathantypanski/dotfiles/nix/.config/arch/rebuild.sh
+    '')
   ];
 
   programs.wofi = {
@@ -127,7 +133,7 @@ in {
       "id_ed25519"
     ];
   };
-  
+
   programs.gpg = {
     enable = true;
   };

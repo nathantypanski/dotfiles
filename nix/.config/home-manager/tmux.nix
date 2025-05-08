@@ -142,6 +142,12 @@ bind-key C-s \
   if-shell "(($(tmux display -p '#{session_many_attached}') > 0))" \
     choose-session \
     "run-shell \"tmux choose-session \\\"switch-client -t '%%'; kill-session -t '$(tmux display -p '#S')'\\\"\""
+
+# use a thin vertical bar everywhere
+set -g cursor-style bar            # block | bar | underline
+
+# keep copy‑mode readable (optional)
+set -g cursor-style-mode block     # still a block when you scroll or search
     '';
   };
 }

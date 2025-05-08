@@ -7,9 +7,15 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Bleeding‑edge Emacs overlay with native‑comp by default
+    emacs-overlay = {
+      url = "github:nix-community/emacs-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";   # reuse your pinned nixpkgs
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }: let
+  outputs = { self, nixpkgs, home-manager, emacs-overlay, ... }: let
     system = "x86_64-linux";
     username = builtins.getEnv "USER";
     homeDirectory = builtins.getEnv "HOME";
@@ -21,6 +27,8 @@
     homeConfigurations.${username} = home-manager.lib.homeManagerConfiguration {
       pkgs = import nixpkgs {
         inherit system;
+        overlays = [ emacs-overlay.overlay ];
+        # config = { allowUnfree = true; };
       };
 
       modules = [
