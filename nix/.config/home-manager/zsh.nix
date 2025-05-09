@@ -23,7 +23,6 @@
     };
     profileExtra = ''
       umask 027
-      . "$HOME.nix-profile/etc/profile.d/nix.sh"
     '';
     sessionVariables = {
       PROMPT = "%F{red}%n%F{white}@%B%F{blue}%m%b %F{yellow}%3~ %F{white}$ ";
