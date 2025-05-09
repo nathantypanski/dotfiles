@@ -25,7 +25,6 @@
     profileExtra = ''
       umask 027
       EDITOR=nvim
-      # . "$HOME/.nix-profile/etc/profile.d/nix.sh"
     '';
     sessionVariables = {
       NIXPKGS_ALLOW_UNFREE = "1";

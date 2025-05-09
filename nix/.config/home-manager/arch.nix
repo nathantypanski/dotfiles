@@ -116,7 +116,6 @@ in {
         regular5  = "dc8cc3";  # magenta
         regular6  = "8cd0d3";  # cyan
         regular7  = "dcdccc";  # white (light gray)
-
         # Bright 8–15
         bright0   = "709080";  # bright black (gray)
         bright1   = "dca3a3";  # bright red
