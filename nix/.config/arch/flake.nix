@@ -28,7 +28,6 @@
       pkgs = import nixpkgs {
         inherit system;
         overlays = [ emacs-overlay.overlay ];
-        # config = { allowUnfree = true; };
       };
 
       modules = [
@@ -36,6 +35,9 @@
         {
           programs.home-manager.enable = true;
           home.stateVersion = "24.11";
+
+          home.username = username;
+          home.homeDirectory = homeDirectory;
         }
       ];
       extraSpecialArgs = {

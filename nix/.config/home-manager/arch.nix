@@ -4,9 +4,6 @@ let
   copyCommand = "wl-copy";
   mod = "Mod4";
 in {
-  home.username = username;
-  home.homeDirectory = homeDirectory;
-
   imports = [
     ./zsh.nix
     (import ./tmux.nix { inherit config pkgs copyCommand; })
@@ -55,7 +52,7 @@ in {
     swayidle
     wl-clipboard
     mako
-    adwaita-icon-theme 
+    adwaita-icon-theme
     wofi
     zathura
     ispell
