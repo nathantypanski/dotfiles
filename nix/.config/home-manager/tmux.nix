@@ -92,10 +92,10 @@ set -g set-titles-string '#T'
 # status bar with load and time
 set -g status-left-length 30
 set -g status-right-length 60
-set -g status-left '#[bg=#BFEBBF]#[fg=#3F3F3F]#{session_name}#[fg=#DCDCCC]#[bg=3F3F3F]'
-set -g status-right '#[bg=#3F3F3F]#[fg=#DFAF8F]#{pane_current_command} @ #{pane_pid} #(date +" %H:%M ")'
-set -g window-status-format '#[fg=#707880]#I#F #[fg=#C5C8C6]#W '
-set -g window-status-current-format '#[bg=#8CD0D3]#[fg=#3F3F3F]#I#F #W#[fg=#8CD0D3] '
+# set -g status-left '#[bg=#BFEBBF]#[fg=#3F3F3F]#{session_name}#[fg=#DCDCCC]#[bg=3F3F3F]'
+# set -g status-right '#[bg=#3F3F3F]#[fg=#DFAF8F]#{pane_current_command} @ #{pane_pid} #(date +" %H:%M ")'
+# set -g window-status-format '#[fg=#707880]#I#F #[fg=#C5C8C6]#W '
+# set -g window-status-current-format '#[bg=#8CD0D3]#[fg=#3F3F3F]#I#F #W#[fg=#8CD0D3] '
 
 # Activity monitoring
 setw -g monitor-activity on
@@ -148,6 +148,8 @@ set -g cursor-style bar            # block | bar | underline
 
 # keep copy‑mode readable (optional)
 set -g cursor-style-mode block     # still a block when you scroll or search
+
+
     '';
   };
 }
