@@ -22,6 +22,12 @@ in {
     signing = {
       signByDefault = true;
     };
+    aliases = {
+      co = "checkout";
+      br = "branch";
+      ci = "commit";
+      s  = "status";
+    };
     extraConfig = {
       gpg.format = "ssh";
       gpg."ssh".allowedSignersFile = "${homeDirectory}/.config/git/allowed_signers";
