@@ -68,6 +68,19 @@ in {
     wdisplays
     wine
     firefox-devedition
+
+    (ungoogled-chromium.override {
+      # these args get baked into the wrapper
+      commandLineArgs = [
+        "--enable-features=UseOzonePlatform"
+        "--ozone-platform-hint=auto"
+        "--use-gl=egl"
+        "--force-device-scale-factor=0.6"
+        "--gtk-version=4"
+        "--enable-features=WaylandPerSurfaceScale,WaylandUiScale"
+      ];
+    })
+
     dconf-editor
     sway-contrib.grimshot
     swaybg
@@ -79,6 +92,14 @@ in {
     emacs-unstable
     silver-searcher
     aspellDicts.en
+    pavucontrol
+
+    go
+    # lsps
+    gopls
+    rust-analyzer
+    nil
+    bash-language-server
 
     (pkgs.writeShellScriptBin "pick-foot" ''
       exec ${pkgs.foot}/bin/foot --app-id=launcher --title=launcher -e 'bash' '-c' 'compgen -c | grep -v fzf | sort -u | fzf --layout=reverse | xargs -r swaymsg -t command exec'
@@ -86,6 +107,18 @@ in {
     (pkgs.writeShellScriptBin "rebuild-home" ''
       exec /home/ndt/src/github.com/nathantypanski/dotfiles/nix/.config/arch/rebuild.sh
     '')
+
+    pkgs.age-plugin-yubikey
+    (pkgs.runCommand "age-wrapper" { buildInputs = [ pkgs.makeWrapper ]; } ''
+        mkdir -p $out/bin
+        makeWrapper ${pkgs.rage}/bin/rage $out/bin/rage \
+        --set PATH ${pkgs.age-plugin-yubikey}/bin \
+        --set PINENTRY_PROGRAM ${pkgs.pinentry-curses}/bin/pinentry-curses
+    '')
+    passage
+    yubikey-manager
+
+    firejail
   ];
 
   programs.wofi = {

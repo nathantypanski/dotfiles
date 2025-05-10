@@ -29,6 +29,9 @@
     sessionVariables = {
       NIXPKGS_ALLOW_UNFREE = "1";
     };
+    envExtra = ''
+      GOROOT=$HOME
+    '';
     initContent = ''
       setopt vi
       PROMPT="%F{red}%n%F{white}@%B%F{blue}%m%b %F{yellow}%3~ %F{white}$ "
