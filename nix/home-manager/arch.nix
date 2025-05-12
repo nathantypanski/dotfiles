@@ -101,6 +101,10 @@ in {
     rust-analyzer
     nil
     bash-language-server
+    python313
+    python313Packages.pip
+    python313Packages.virtualEnv
+    poetry
 
     (pkgs.writeShellScriptBin "pick-foot" ''
       exec ${pkgs.foot}/bin/foot --app-id=launcher --title=launcher -e 'bash' '-c' 'compgen -c | grep -v fzf | sort -u | fzf --layout=reverse | xargs -r swaymsg -t command exec'
