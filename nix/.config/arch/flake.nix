@@ -11,7 +11,7 @@
     # Bleeding‑edge Emacs overlay with native‑comp by default
     emacs-overlay = {
       url = "github:nix-community/emacs-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";   # reuse your pinned nixpkgs
+      # inputs.nixpkgs.follows = "nixpkgs";   # reuse your pinned nixpkgs
     };
   };
 
@@ -39,6 +39,8 @@
           home.username = username;
           home.homeDirectory = homeDirectory;
         }
+        ../home-manager/newsboat.nix
+        ../home-manager/zsh.nix
       ];
       extraSpecialArgs = {
         inherit system;

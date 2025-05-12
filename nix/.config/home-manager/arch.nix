@@ -5,8 +5,6 @@ let
   mod = "Mod4";
 in {
   imports = [
-    ./zsh.nix
-    (import ./tmux.nix { inherit config pkgs copyCommand; })
     (import ./neovim.nix { inherit config pkgs; })
     (import ./sway.nix { inherit config pkgs lib mod; })
   ];
@@ -96,6 +94,7 @@ in {
     pavucontrol
 
     go
+    gotools
     # lsps
     gopls
     rust-analyzer
@@ -109,11 +108,15 @@ in {
       exec /home/ndt/src/github.com/nathantypanski/dotfiles/nix/.config/arch/rebuild.sh
     '')
 
-    pkgs.age-plugin-yubikey
+    age-plugin-yubikey
+    age-plugin-tpm
+    tomb
+    passExtensions.pass-tomb
     (pkgs.runCommand "age-wrapper" { buildInputs = [ pkgs.makeWrapper ]; } ''
         mkdir -p $out/bin
         makeWrapper ${pkgs.rage}/bin/rage $out/bin/rage \
         --set PATH ${pkgs.age-plugin-yubikey}/bin \
+        --set PATH ${pkgs.age-plugin-tpm}/bin \
         --set PINENTRY_PROGRAM ${pkgs.pinentry-curses}/bin/pinentry-curses
     '')
     passage
