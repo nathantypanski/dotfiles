@@ -2,10 +2,11 @@
   description = "My full system config (Arch + Home Manager)";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
     # Bleeding‑edge Emacs overlay with native‑comp by default
@@ -15,7 +16,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, emacs-overlay, ... }: let
+  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, emacs-overlay, ... }: let
     system = "x86_64-linux";
     username = builtins.getEnv "USER";
     homeDirectory = builtins.getEnv "HOME";
@@ -25,23 +26,23 @@
     };
   in {
     homeConfigurations.${username} = home-manager.lib.homeManagerConfiguration {
-      pkgs = import nixpkgs {
+      pkgs = import nixpkgs-unstable {
         inherit system;
         overlays = [ emacs-overlay.overlay ];
       };
 
       modules = [
-        ../home-manager/newsboat.nix
-        ../home-manager/zsh.nix
-        ../home-manager/arch.nix
-        ../home-manager/foot.nix
+        ../home-manager/home.nix
         {
           programs.home-manager.enable = true;
-          home.stateVersion = "24.11";
+          home.stateVersion = "22.05";
 
           home.username = username;
           home.homeDirectory = homeDirectory;
         }
+        ../home-manager/newsboat.nix
+        ../home-manager/zsh.nix
+        ../home-manager/foot.nix
       ];
       extraSpecialArgs = {
         inherit system;

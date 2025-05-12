@@ -1,46 +1,16 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, username, homeDirectory, secrets, termFont, ... }:
 
 {
   imports = [
      ./zsh.nix
-    ./tmux.nix
-  ];
-
-  services.emacs.package = pkgs.emacs-pgtk;
-  nixpkgs.overlays = [
-    (import (builtins.fetchGit {
-      url = "https://github.com/nix-community/emacs-overlay.git";
-      # ref = "master";
-      rev = "1c9b038a329736e444cabffb0e473642458a9858";
+    (import ./tmux.nix ({
+      inherit config pkgs;
+      copyCommand = "wl-copy";
+    }))
+    (import ./foot.nix ({
+      inherit config pkgs termFont;
     }))
   ];
-
-
-  # Home Manager needs a bit of information about you and the
-  # paths it should manage.
-  home.username = "ndt";
-  home.homeDirectory = "/home/ndt";
-
-  # This value determines the Home Manager release that your
-  # configuration is compatible with. This helps avoid breakage
-  # when a new Home Manager release introduces backwards
-  # incompatible changes.
-  #
-  # You can update Home Manager without changing this value. See
-  # the Home Manager release notes for a list of state version
-  # changes in each release.
-  home.stateVersion = "22.05";
-
-  # Let Home Manager install and manage itself.
-  programs.home-manager.enable = true;
-  programs.home-manager.path = "$HOME/src/github.com/nix-community/home-manager";
-
-  services.gpg-agent = {
-    enable = true;
-    defaultCacheTtl = 1800;
-    enableSshSupport = false;
-    enableScDaemon = true;
-  };
 
   services.swayidle = {
     enable = true;
@@ -51,8 +21,8 @@
       { event = "lock"; command = "lock"; }
     ];
   };
-
   home.keyboard.options = ["ctrl:nocaps"];
+
   wayland.windowManager.sway = {
     enable = true;
     wrapperFeatures.gtk = true ;
@@ -113,13 +83,15 @@
   };
 
   home.packages = with pkgs; [
+    emacs-unstable
+
     foot
     swaylock
     swayidle
     wl-clipboard
     mako
     # so things like virt-manager don't break
-    gnome.adwaita-icon-theme 
+    adwaita-icon-theme 
     alacritty
     wofi
     # haskell.compiler.ghc921
@@ -142,9 +114,6 @@
     rustup
     go-tools
     go
-    python39
-    python39Packages.pip
-    python39Packages.virtualenv
     weechat
     discord
     dig
@@ -155,20 +124,22 @@
     cgdb
     # urbit
     qrencode
-    monero
+    monero-cli
     monero-gui
     xmrig
     bore
     ledger
     termbox
     sqlite # required for helm-dash in emacs
-    emacs-pgtk
     libreoffice
-    texlive.combined.scheme-full
+    texlive.combined.scheme-medium
     global
     zlib
     libtcod
-    python310Packages.venvShellHook
+    python311Packages.venvShellHook
+    python311
+    python311Packages.pip
+    python311Packages.virtualenv
     cmake
     scons
     SDL2
@@ -191,44 +162,30 @@
     # processing
     freetype
     wine
-    transmission-gtk
+    # TODO: update to t4
+    transmission_3-gtk
     # ipfs
   ];
 
   programs.git = {
     enable = true;
-    userName = "ndt";
-    userEmail = "ndt@nathantypanski.com";
-  };
-
-  programs.foot = {
-    enable = true;
-    settings = {
-      main = {
-        font = "Terminus:size=16";
-      };
-      colors = {
-        foreground = "dcdccc";
-        background = "111111";
-        ## Normal/regular colors (color palette 0-7)
-        regular0 = "222222";  # black
-        regular1 = "cc9393";  # red
-        regular2 = "7f9f7f";  # green
-        regular3 = "d0bf8f";  # yellow
-        regular4 = "6ca0a3";  # blue
-        regular5 = "dc8cc3";  # magenta
-        regular6 = "93e0e3";  # cyan
-        regular7 = "dcdccc";  # white
-        ## Bright colors (color palette 8-15)
-        bright0 = "666666";   # bright black
-        bright1 = "dca3a3";   # bright red
-        bright2 = "bfebbf";   # bright green
-        bright3 = "f0dfaf";   # bright yellow
-        bright4 = "8cd0d3";   # bright blue
-        bright5 = "fcace3";   # bright magenta
-        bright6 = "b3ffff";   # bright cyan
-        bright7 = "ffffff";   # bright white
-      };
+    userName = username;
+    userEmail = secrets.userEmail;
+    # home-manager only supports gnupg, so try to workaround
+    signing = {
+      signByDefault = true;
+    };
+    aliases = {
+      co = "checkout";
+      br = "branch";
+      ci = "commit";
+      S  = "status";
+      s  = "status --short";
+    };
+    extraConfig = {
+      gpg.format = "ssh";
+      gpg."ssh".allowedSignersFile = "${homeDirectory}/.config/git/allowed_signers";
+      user.signingkey = "${homeDirectory}/.ssh/id_ed25519.pub";
     };
   };
 
@@ -239,21 +196,17 @@
     extraConfig = ''set number'';
   };
 
+  services.gpg-agent = {
+    enable = true;
+    defaultCacheTtl = 1800;
+    enableSshSupport = false;
+    enableScDaemon = true;
+  };
+
   programs.keychain = {
     enable = true;
     enableZshIntegration = true;
   };
 
-  # xdg-desktop-portal works by exposing a series of D-Bus interfaces
-  # known as portals under a well-known name
-  # (org.freedesktop.portal.Desktop) and object path
-  # (/org/freedesktop/portal/desktop).
-  # The portal interfaces include APIs for file access, opening URIs,
-  # printing and others.
-
   manual.manpages.enable = false;
-
-  # services.kubo = {
-  #   enable = true;
-  # };
 }
