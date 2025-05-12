@@ -132,7 +132,7 @@
     termbox
     sqlite # required for helm-dash in emacs
     libreoffice
-    texlive.combined.scheme-full
+    texlive.combined.scheme-medium
     global
     zlib
     libtcod
