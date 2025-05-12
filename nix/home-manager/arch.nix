@@ -106,7 +106,7 @@ in {
       exec ${pkgs.foot}/bin/foot --app-id=launcher --title=launcher -e 'bash' '-c' 'compgen -c | grep -v fzf | sort -u | fzf --layout=reverse | xargs -r swaymsg -t command exec'
     '')
     (pkgs.writeShellScriptBin "rebuild-home" ''
-      exec /home/ndt/src/github.com/nathantypanski/dotfiles/nix/.config/arch/rebuild.sh
+      exec /home/ndt/src/github.com/nathantypanski/dotfiles/nix/arch/rebuild.sh
     '')
 
     age-plugin-yubikey

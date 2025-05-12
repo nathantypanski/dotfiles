@@ -122,7 +122,7 @@
           "${mod}+v" = "split v";
 
           # recompile home-manager
-          "${mod}+Shift+apostrophe" = "exec foot --font 'Terminus:size=8' --window-size-chars=120x50 --app-id=popup-term -- bash -i -c \"~/dotfiles/nix/.config/arch/rebuild.sh; read -n 1 -s -r -p '[ press any key to continue ]'\"";
+          "${mod}+Shift+apostrophe" = "exec foot --font 'Terminus:size=8' --window-size-chars=120x50 --app-id=popup-term -- bash -i -c \"rebuild-home; read -n 1 -s -r -p '[ press any key to continue ]'\"";
           "${mod}+Shift+r" = "exec swaymsg reload";
           "--release Print" = "exec --no-startup-id ${pkgs.sway-contrib.grimshot}/bin/grimshot copy area";
           # nix swaylock is broken
