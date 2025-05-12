@@ -1,12 +1,6 @@
 [submodule ".emacs.d"]
 	path = emacs/.emacs.d
 	url = git@github.com:nathantypanski/emacs.d
-[submodule ".xmonad"]
-	path = xmonad/.xmonad
-	url = git@github.com:nathantypanski/my-xmonad
 [submodule "displaylink.sh"]
 	path = displaylink.sh
 	url = git@github.com:nathantypanski/displaylink.sh.git
-[submodule "cabver"]
-	path = cabver
-	url = git@github.com:nathantypanski/cabver.git
