@@ -1,9 +1,0 @@
-[Unit]
-Description=Advanced modern tiling window manager
-
-[Service]
-Environment=DISPLAY=:%i
-ExecStart=/home/nathan/.xmonad/xmonad
-
-[Install]
-WantedBy=wm@.target

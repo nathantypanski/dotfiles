@@ -1,9 +1,0 @@
-[Unit]
-Description=openbox window manager
-
-[Service]
-Environment=DISPLAY=:%i
-ExecStart=/usr/bin/openbox
-
-[Install]
-WantedBy=wm@.target
