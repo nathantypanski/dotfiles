@@ -1,5 +1,5 @@
 [submodule ".emacs.d"]
-	path = emacs/.emacs.d
+	path = emacs.d
 	url = git@github.com:nathantypanski/emacs.d
 [submodule "displaylink.sh"]
 	path = displaylink.sh
