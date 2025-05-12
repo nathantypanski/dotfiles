@@ -26,7 +26,8 @@ in {
       co = "checkout";
       br = "branch";
       ci = "commit";
-      s  = "status";
+      S  = "status";
+      s  = "status --short";
     };
     extraConfig = {
       gpg.format = "ssh";
