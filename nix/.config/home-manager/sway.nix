@@ -21,7 +21,7 @@
           scroll_factor = "0.5";
           accel_profile = "adaptive";
           pointer_accel = "-0.1";
-          dwt = "enabled";
+          dwt = "disabled";
           click_method = "clickfinger";
         };
         # external usb with trackpoint
@@ -29,9 +29,11 @@
           scroll_factor = "0.3";
           accel_profile = "adaptive";
           pointer_accel = "-1.0";
-          dwt = "enabled";
+          dwt = "disabled";
         };
-
+        "*" = {
+          dwt = "disabled";
+        };
       };
       # to list options do `swaymsg -t get_outputs`
       terminal = "foot";
