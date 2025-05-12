@@ -44,6 +44,7 @@ in {
   home.keyboard.options = ["ctrl:nocaps"];
 
   home.packages = with pkgs; [
+    tmux
     foot
     mesa
     wayland

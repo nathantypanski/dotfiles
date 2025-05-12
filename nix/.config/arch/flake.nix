@@ -31,6 +31,8 @@
       };
 
       modules = [
+        ../home-manager/newsboat.nix
+        ../home-manager/zsh.nix
         ../home-manager/arch.nix
         {
           programs.home-manager.enable = true;
@@ -39,8 +41,6 @@
           home.username = username;
           home.homeDirectory = homeDirectory;
         }
-        ../home-manager/newsboat.nix
-        ../home-manager/zsh.nix
       ];
       extraSpecialArgs = {
         inherit system;
