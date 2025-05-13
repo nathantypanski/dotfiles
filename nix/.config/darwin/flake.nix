@@ -9,11 +9,16 @@
         url = "github:LnL7/nix-darwin";
         inputs.nixpkgs.follows = "nixpkgs";
     };
+    # Bleeding‑edge Emacs overlay with native‑comp by default
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    emacs-overlay = {
+      url = "github:nix-community/emacs-overlay";
+      # inputs.nixpkgs.follows = "nixpkgs";   # reuse your pinned nixpkgs
+    };
   };
 
-  outputs = inputs@{ self, nix-darwin, nixpkgs, home-manager }:
+  outputs = inputs@{ self, nix-darwin, nixpkgs, home-manager, emacs-overlay }:
   let
     system = "aarch64-darwin";
     configuration = {pkgs, ... }: {
@@ -64,9 +69,6 @@
   	        secrets = secrets;
           };
           home-manager.users.ndt = import ../home-manager/darwin.nix;
-  
-         # Optionally, use home-manager.extraSpecialArgs to pass
-         # arguments to home.nix
         }
       ];
     };
