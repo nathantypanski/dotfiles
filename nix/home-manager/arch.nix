@@ -112,7 +112,7 @@ in {
     bash-language-server
     python313
     python313Packages.pip
-    python313Packages.virtualEnv
+    python313Packages.virtualenv
     poetry
 
     (pkgs.writeShellScriptBin "pick-foot" ''

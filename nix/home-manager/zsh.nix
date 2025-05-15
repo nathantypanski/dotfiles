@@ -34,7 +34,7 @@
     '';
     initContent = ''
       setopt vi
-      PROMPT="%F{red}%n%F{white}@%B%F{blue}%m%b %F{yellow}%3~ %F{white}$ "
+      PROMPT="%F{red}%n%F{white}@%B%F{blue}%m%b %F{white}[%F{yellow}%5~%F{white}]%F %F{white}$ "
       bindkey '^R' history-incremental-search-backward
     '';
   };
