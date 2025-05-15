@@ -121,9 +121,16 @@ in {
     (pkgs.writeShellScriptBin "rebuild-home" ''
       exec /home/ndt/src/github.com/nathantypanski/dotfiles/nix/arch/rebuild.sh
     '')
+    (pkgs.writeShellScriptBin "which-path" ''
+      while IFS= read -r line; do
+        p="$line/tpm-fido"
+         [[ -x "$p" ]] && echo "$p"
+      done < <(echo $PATH | tr ':' '\n')
+    '')
 
     age-plugin-yubikey
     age-plugin-tpm
+    tpm-fido
     tomb
     passExtensions.pass-tomb
     (pkgs.runCommand "age-wrapper" { buildInputs = [ pkgs.makeWrapper ]; } ''
