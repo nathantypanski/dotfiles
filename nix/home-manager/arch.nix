@@ -3,9 +3,18 @@
 let
   copyCommand = "wl-copy";
   mod = "Mod4";
+  envPrintScript = pkgs.writeShellScript "test" ''
+    #!${pkgs.bash}/bin/bash
+    printf '(systemd)=(envvar)\n'
+    printf '%s=%s\n' XDG_CACHE_HOME "$XDG_CACHE_HOME"
+    printf '%s=%s\n' XDG_CONFIG_HOME "$XDG_CONFIG_HOME"
+    printf '%s=%s\n' XDG_STATE_HOME "$XDG_STATE_HOME"
+    printf '%s=%s\n' XDG_RUNTIME_DIR "$XDG_RUNTIME_DIR"
+  '';
 in {
   imports = [
     (import ./neovim.nix { inherit config pkgs; })
+    (import ./tmux.nix { inherit config pkgs copyCommand; })
     (import ./sway.nix { inherit config pkgs lib mod; })
   ];
 
@@ -159,6 +168,21 @@ in {
   manual.manpages.enable = false;
 
   home.sessionVariables = {
-    # Put session vars here
+    XDG_CONFIG_HOME = "${homeDirectory}/.config";
+    XDG_CACHE_HOME = "${homeDirectory}/.cache";
+    XDG_STATE_HOME = "${homeDirectory}/.local/state";
   };
+
+  systemd.user.services.env-print = {
+    Unit.Description = "print environment";
+    Install.WantedBy = [ "default.target" ];
+    Service.Type = "oneshot";
+    Service.ExecStart = envPrintScript;
+  };
+  systemd.user.sessionVariables = {
+    XDG_CONFIG_HOME = "${homeDirectory}/.config";
+    XDG_CACHE_HOME = "${homeDirectory}/.cache";
+    XDG_STATE_HOME = "${homeDirectory}/.local/state";
+  };
+
 }
