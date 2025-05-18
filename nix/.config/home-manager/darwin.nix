@@ -1,3 +1,5 @@
+# home-manager/darwin.nix
+
 { config, pkgs, username, homeDirectory, secrets, ... }:
 
 let
@@ -27,6 +29,7 @@ in {
   # environment.
   home.packages = [
     pkgs.tmux
+    pkgs.emacs-git
   ];
 
   # Let Home Manager install and manage itself.
