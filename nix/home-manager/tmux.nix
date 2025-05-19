@@ -63,8 +63,11 @@ set -g pane-base-index 1
 # automatically number windows to stay near each other
 set -g renumber-windows on
 
-# screen mode
-set -g default-terminal "screen-256color"
+# Try tmux-256color first, else screen-256color
+if-shell "infocmp tmux-256color >/dev/null 2>&1" \
+  "set -g default-terminal tmux-256color"  \
+  "set -g default-terminal screen-256color"
+
 # set -g terminal-overrides 'xterm:colors=256'
 
 # source config file
