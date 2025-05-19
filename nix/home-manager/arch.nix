@@ -121,6 +121,9 @@ in {
     (pkgs.writeShellScriptBin "rebuild-home" ''
       exec /home/ndt/src/github.com/nathantypanski/dotfiles/nix/arch/rebuild.sh
     '')
+    (pkgs.writeShellScriptBin "firefox-devedition" ''
+      exec /usr/local/bin/firefox-devedition
+    '')
     (pkgs.writeShellScriptBin "which-path" ''
       while IFS= read -r line; do
         p="$line/tpm-fido"
@@ -133,17 +136,10 @@ in {
     tpm-fido
     tomb
     passExtensions.pass-tomb
-    (pkgs.runCommand "age-wrapper" { buildInputs = [ pkgs.makeWrapper ]; } ''
-        mkdir -p $out/bin
-        makeWrapper ${pkgs.rage}/bin/rage $out/bin/rage \
-        --set PATH ${pkgs.age-plugin-yubikey}/bin \
-        --set PATH ${pkgs.age-plugin-tpm}/bin \
-        --set PINENTRY_PROGRAM ${pkgs.pinentry-curses}/bin/pinentry-curses
-    '')
+    pinentry-emacs
+    rage
     passage
     yubikey-manager
-
-    firejail
   ];
 
   programs.wofi = {
@@ -169,6 +165,8 @@ in {
     enableZshIntegration = true;
     extraConfig = ''
       pinentry-program ${pkgs.pinentry-tty}/bin/pinentry-tty
+      allow-loopback-pinentry
+      allow-emacs-pinentry
     '';
   };
 
@@ -178,7 +176,14 @@ in {
     XDG_CONFIG_HOME = "${homeDirectory}/.config";
     XDG_CACHE_HOME = "${homeDirectory}/.cache";
     XDG_STATE_HOME = "${homeDirectory}/.local/state";
+    PINENTRY_PROGRAM = "${pkgs.pinentry-tty}/bin/pinentry-tty";
   };
+
+  home.sessionPath = [
+    "${pkgs.rage}/bin"
+    "${pkgs.age-plugin-yubikey}/bin"
+    "${pkgs.age-plugin-tpm}/bin"
+  ];
 
   systemd.user.services.env-print = {
     Unit.Description = "print environment";

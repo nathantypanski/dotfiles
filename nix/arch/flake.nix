@@ -27,7 +27,9 @@
     homeConfigurations.${username} = home-manager.lib.homeManagerConfiguration {
       pkgs = import nixpkgs {
         inherit system;
-        overlays = [ emacs-overlay.overlay ];
+        overlays = [
+          emacs-overlay.overlay
+        ];
       };
 
       modules = [
