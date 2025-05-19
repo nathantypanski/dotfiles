@@ -138,6 +138,12 @@ in {
     passExtensions.pass-tomb
     pinentry-emacs
     rage
+    (pkgs.writeShellScriptBin "rage-emacs" ''
+      #!/usr/bin/env bash
+      export PINENTRY_PROGRAM=${pkgs.pinentry-emacs}/bin/pinentry-emacs
+      export PATH=${pkgs.age-plugin-yubikey}/bin:${pkgs.age-plugin-tpm}/bin:${pkgs.pinentry-emacs}/bin}:$PATH
+      exec ${pkgs.rage}/bin/rage "$@"
+    '')
     passage
     yubikey-manager
   ];
