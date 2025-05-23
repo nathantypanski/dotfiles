@@ -4,7 +4,7 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 . "$SCRIPT_DIR/secrets.sh"
 
-nix build ".#darwinConfigurations.${HOSTNAME}.system"
+nix build ".#darwinConfigurations.${HOSTNAME}.system" --impure
 
 sudo ./result/sw/bin/darwin-rebuild activate
 

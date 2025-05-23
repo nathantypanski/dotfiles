@@ -82,6 +82,7 @@
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.extraSpecialArgs = {
+            inherit system;
             nixpkgs = nixpkgs;
             username = "ndt";
             homeDirectory = "/Users/ndt";
