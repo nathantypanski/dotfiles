@@ -50,7 +50,7 @@
         secrets = secrets;
         username = username;
         homeDirectory = homeDirectory;
-        termFont = "Terminus:size=10";
+        termFont = "Terminus:size=9";
       };
     };
   };

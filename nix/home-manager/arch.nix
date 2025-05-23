@@ -61,7 +61,9 @@ in {
     brightnessctl
     tailscale
     i3status
+    fontconfig
     terminus_font
+    terminus_font_ttf
     libglvnd
     xwayland
     swayidle
@@ -97,8 +99,7 @@ in {
     bashInteractive
     brightnessctl
     nix-search
-    terminus_font_ttf
-    emacs-unstable
+    emacs-git-pgtk
     silver-searcher
     aspellDicts.en
     pavucontrol
@@ -203,4 +204,7 @@ in {
     XDG_STATE_HOME = "${homeDirectory}/.local/state";
   };
 
+  fonts.fontconfig = {
+    enable = true;
+  };
 }

@@ -151,6 +151,8 @@
       input "type:keyboard" {
         xkb_layout us
         xkb_options caps:ctrl_modifier
+        repeat_delay 333
+        repeat_rate 10
       }
       for_window [app_id="popup-term"] floating enable, move position center, border pixel 3
       for_window [app_id="launcher"] floating enable, move position center, border pixel 3, focus
