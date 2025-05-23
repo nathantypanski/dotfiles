@@ -68,7 +68,7 @@ if-shell "infocmp tmux-256color >/dev/null 2>&1" \
   "set -g default-terminal tmux-256color"  \
   "set -g default-terminal screen-256color"
 
-# set -g terminal-overrides 'xterm:colors=256'
+set-option -ga terminal-overrides ",xterm-256color:Tc"
 
 # source config file
 bind r source-file ~/.config/tmux/tmux.conf \; display "Reloaded!"
