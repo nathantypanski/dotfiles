@@ -14,13 +14,14 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     emacs-overlay = {
       url = "github:nix-community/emacs-overlay";
-      # inputs.nixpkgs.follows = "nixpkgs";   # reuse your pinned nixpkgs
+      inputs.nixpkgs.follows = "nixpkgs";   # reuse your pinned nixpkgs
     };
   };
 
   outputs = inputs@{ self, nix-darwin, nixpkgs, home-manager, emacs-overlay }:
   let
     system = "aarch64-darwin";
+
     configuration = {pkgs, ... }: {
       # Necessary for using flakes on this system.
       nix.settings.experimental-features = "nix-command flakes";
@@ -47,27 +48,50 @@
         neovim
         git
         pass
-	gopls
+        gopls
       ];
     };
     secrets = {
       userEmail = builtins.getEnv "USER_EMAIL";
     };
+
+    nix.config = {
+      extra-substituters = [
+        "https://nix-community.cachix.org"
+      ];
+      extra-trusted-public-keys = [
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      ];
+    };
+
   in
   {
     darwinConfigurations.H640WQ7FHV = nix-darwin.lib.darwinSystem {
-      
       system = system;
+
       modules = [
         configuration
         home-manager.darwinModules.home-manager {
+          nixpkgs = {
+            overlays = [
+              inputs.emacs-overlay.overlay
+            ];
+            config.allowUnfree = true;
+          };
+
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.extraSpecialArgs = {
+            nixpkgs = nixpkgs;
             username = "ndt";
             homeDirectory = "/Users/ndt";
   	        secrets = secrets;
           };
+          # I almost wish I were using a standalone home-manager instead
+          # of it being a darwin module, because it's annoying how modules
+          # can't be imported here.
+          #
+          # If you want home modules, you have to import them in darwin.nix.
           home-manager.users.ndt = import ../home-manager/darwin.nix;
         }
       ];
