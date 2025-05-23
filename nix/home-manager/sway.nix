@@ -1,4 +1,4 @@
-{ config, pkgs, lib, mod, ... }:
+{ pkgs, lib, mod, ... }:
 
 {
   wayland.windowManager.sway = {
