@@ -33,8 +33,14 @@
       GOROOT=$HOME
     '';
     initContent = ''
+      # I'm currently relying on system-provided grml prompts.
+      #
+      # PROMPT="%F{red}%n%F{white}@%B%F{blue}%m%b %F{white}[%F{yellow}%5~%F{white}]%F %F{white}$ "
+
+      # source grml zshrc
+     . /etc/zsh/zshrc
+
       setopt vi
-      PROMPT="%F{red}%n%F{white}@%B%F{blue}%m%b %F{white}[%F{yellow}%5~%F{white}]%F %F{white}$ "
       bindkey '^R' history-incremental-search-backward
     '';
   };
