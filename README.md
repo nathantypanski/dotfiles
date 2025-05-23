@@ -16,9 +16,9 @@ use [Nix Flakes](https://wiki.nixos.org/wiki/Flakes).
 
 Today, I have separate flakes for each system I maintain:
 
-- [NixOS](./blackbeta)
-- [Arch](./arch)
-- [macOS](./darwin)
+- [NixOS](./nix/blackbeta)
+- [Arch](./nix/arch)
+- [macOS](./nix/darwin)
 
 The Darwin system is special because it actually maintains the host system. The
 other two simply manage my homedir.
