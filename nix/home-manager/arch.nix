@@ -80,8 +80,6 @@ in {
     xfce.thunar
     wdisplays
     wine
-    firefox-devedition
-
     (ungoogled-chromium.override {
       # these args get baked into the wrapper
       commandLineArgs = [
@@ -97,6 +95,7 @@ in {
     dconf-editor
     sway-contrib.grimshot
     swaybg
+    procps
     fzf
     bashInteractive
     brightnessctl
@@ -128,6 +127,7 @@ in {
     (pkgs.writeShellScriptBin "rebuild-home" ''
       exec /home/ndt/src/github.com/nathantypanski/dotfiles/nix/arch/rebuild.sh
     '')
+    firefox-devedition
     (pkgs.writeShellScriptBin "firefox-devedition" ''
       exec /usr/local/bin/firefox-devedition
     '')
@@ -197,6 +197,10 @@ in {
     XDG_STATE_HOME = "${homeDirectory}/.local/state";
     PINENTRY_PROGRAM = "${pkgs.pinentry-tty}/bin/pinentry-tty";
     PAGER = "less -R --use-color";
+
+    GDK_SCALE = "1.2";
+    GDK_DPI_SCALE = "1.0";
+    QT_SCALE_FACTOR = "1.2";
   };
 
   home.sessionPath = [
