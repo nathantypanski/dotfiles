@@ -4,7 +4,7 @@
   home.pointerCursor = {
     package = pkgs.adwaita-icon-theme;
     name  = "Adwaita";   # any cursor theme in your icon path
-    size  = 24;          # logical pixels → doubles on a 2×-scaled output
+    size  = 7;          # logical pixels → doubles on a 2×-scaled output
     gtk.enable  = true;  # write GTK settings files
     x11.enable  = true;  # export XCURSOR_* for XWayland & Flatpaks
     sway.enable = true;  # adds `seat * xcursor_theme …` to sway.conf

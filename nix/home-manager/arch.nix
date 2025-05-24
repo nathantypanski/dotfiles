@@ -62,6 +62,8 @@ in {
     tailscale
     i3status
     fontconfig
+    font-manager
+    adwaita-icon-theme
     terminus_font
     terminus_font_ttf
     libglvnd
@@ -114,6 +116,10 @@ in {
     python313
     python313Packages.pip
     python313Packages.virtualenv
+    python313Packages.python-lsp-server
+    python313Packages.pylsp-mypy
+    python313Packages.pylsp-rope
+    python313Packages.python-lsp-ruff
     poetry
 
     (pkgs.writeShellScriptBin "pick-foot" ''
@@ -145,6 +151,12 @@ in {
       export PATH=${pkgs.age-plugin-yubikey}/bin:${pkgs.age-plugin-tpm}/bin:${pkgs.pinentry-emacs}/bin}:$PATH
       exec ${pkgs.rage}/bin/rage "$@"
     '')
+    (pkgs.writeShellScriptBin "signal" ''
+      ${signal-desktop}/bin/signal-desktop \
+          --enable-features=UseOzonePlatform \
+          --ozone-platform=wayland
+    '')
+    swayimg
     passage
     yubikey-manager
   ];
@@ -184,6 +196,7 @@ in {
     XDG_CACHE_HOME = "${homeDirectory}/.cache";
     XDG_STATE_HOME = "${homeDirectory}/.local/state";
     PINENTRY_PROGRAM = "${pkgs.pinentry-tty}/bin/pinentry-tty";
+    PAGER = "less -R --use-color";
   };
 
   home.sessionPath = [
@@ -207,4 +220,6 @@ in {
   fonts.fontconfig = {
     enable = true;
   };
+
+  systemd.user.enable = true;
 }
