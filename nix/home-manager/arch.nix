@@ -114,7 +114,7 @@ in {
       exec /home/ndt/src/github.com/nathantypanski/dotfiles/nix/arch/rebuild.sh
     '')
     firefox-devedition
-    (pkgs.writeShellScriptBin "firefox-devedition" ''
+    (pkgs.writeShellScriptBin "firefox-jailed" ''
       exec /usr/local/bin/firefox-devedition
     '')
     (pkgs.writeShellScriptBin "which-path" ''
@@ -140,8 +140,9 @@ in {
     (pkgs.writeShellScriptBin "signal" ''
       ${signal-desktop}/bin/signal-desktop \
           --enable-features=UseOzonePlatform \
-          --ozone-platform=wayland
+          --ozone-platform=wayland $@
     '')
+    signal-desktop
     swayimg
     passage
     yubikey-manager
