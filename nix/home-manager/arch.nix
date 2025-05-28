@@ -17,13 +17,13 @@ in {
     (import ./neovim.nix { inherit config pkgs; })
     (import ./tmux.nix { inherit config pkgs copyCommand; })
     (import ./sway.nix { inherit config pkgs lib mod; })
+    (import ./newsboat.nix { inherit config pkgs; })
+    (import ./zsh.nix { inherit pkgs; })
+    (import ./foot.nix { inherit termFont; })
     (import ./git.nix {
       inherit homeDirectory username;
       userEmail = secrets.userEmail;
     })
-    (import ./newsboat.nix { inherit config pkgs; })
-    (import ./zsh.nix { inherit pkgs; })
-    (import ./foot.nix { inherit termFont; })
   ];
 
   # Let Home Manager install and manage itself.
