@@ -16,32 +16,13 @@ in {
     (import ./neovim.nix { inherit config pkgs; })
     (import ./tmux.nix { inherit config pkgs copyCommand; })
     (import ./sway.nix { inherit config pkgs lib mod; })
+    (import ./git.nix {
+      inherit homeDirectory username;
+      userEmail = secrets.userEmail;
+    })
   ];
 
   # Let Home Manager install and manage itself.
-  # programs.home-manager.enable = true;
-
-  programs.git = {
-    enable = true;
-    userName = username;
-    userEmail = secrets.userEmail;
-    # home-manager only supports gnupg, so try to workaround
-    signing = {
-      signByDefault = true;
-    };
-    aliases = {
-      co = "checkout";
-      br = "branch";
-      ci = "commit";
-      S  = "status";
-      s  = "status --short";
-    };
-    extraConfig = {
-      gpg.format = "ssh";
-      gpg."ssh".allowedSignersFile = "${homeDirectory}/.config/git/allowed_signers";
-      user.signingkey = "${homeDirectory}/.ssh/id_ed25519.pub";
-    };
-  };
 
   services.gpg-agent = {
     enable = true;
