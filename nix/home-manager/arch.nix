@@ -189,9 +189,9 @@ in {
     PINENTRY_PROGRAM = "${pkgs.pinentry-tty}/bin/pinentry-tty";
     PAGER = "less -R --use-color";
 
-    GDK_SCALE = "1.2";
+    GDK_SCALE = "1.5";
     GDK_DPI_SCALE = "1.0";
-    QT_SCALE_FACTOR = "1.2";
+    QT_SCALE_FACTOR = "1.5";
   };
 
   home.sessionPath = [
