@@ -33,11 +33,13 @@ bind-key s send-prefix
 # I'm a Vim user, this makes navigation easier
 setw -g mode-keys vi # I especially like being able to search with /,? when in copy-mode
 unbind [
+
+
 bind Escape copy-mode #-vi
 unbind p
 bind p paste-buffer
-
- bind-key -T copy-mode-vi 'v' send -X begin-selection
+bind-key p run-shell "tmux set-buffer \"$(wl-paste)\"; tmux paste-buffer"
+bind-key -T copy-mode-vi 'v' send -X begin-selection
 bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "${copyCommand}" # 'xclip -sel clip -i'
 bind-key -T copy-mode-vi Y send-keys -X copy-end-of-line "${copyCommand}" #"xclip -selection c"
 set -g set-clipboard on
