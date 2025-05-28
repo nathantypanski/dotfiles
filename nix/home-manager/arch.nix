@@ -12,14 +12,20 @@ let
     printf '%s=%s\n' XDG_RUNTIME_DIR "$XDG_RUNTIME_DIR"
   '';
   termFont = "Terminus:size=9";
+  firefox-jailed = (pkgs.writeShellScriptBin "firefox-jailed" ''
+      exec firejail firefox-devedition "$@"
+    '');
 in {
   imports = [
     (import ./neovim.nix { inherit config pkgs; })
     (import ./tmux.nix { inherit config pkgs copyCommand; })
     (import ./sway.nix { inherit config pkgs lib mod; })
-    (import ./newsboat.nix { inherit config pkgs; })
     (import ./zsh.nix { inherit pkgs; })
     (import ./foot.nix { inherit termFont; })
+    (import ./newsboat.nix {
+      inherit config pkgs;
+      browser = "${firefox-jailed}/bin/firefox-jailed";
+    })
     (import ./git.nix {
       inherit homeDirectory username;
       userEmail = secrets.userEmail;
@@ -114,9 +120,7 @@ in {
       exec /home/ndt/src/github.com/nathantypanski/dotfiles/nix/arch/rebuild.sh
     '')
     firefox-devedition
-    (pkgs.writeShellScriptBin "firefox-jailed" ''
-      exec /usr/local/bin/firefox-devedition
-    '')
+    firefox-jailed
     (pkgs.writeShellScriptBin "which-path" ''
       while IFS= read -r line; do
         p="$line/tpm-fido"

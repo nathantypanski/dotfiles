@@ -1,8 +1,9 @@
-{ ... }:
+{ browser, ... }:
 
 {
   programs.newsboat = {
     enable = true;
+    browser = browser;
     maxItems = 50;
     urls = [
       { url = "https://words.filippo.io/rss/"; }
@@ -13,6 +14,7 @@
       { url = "http://feeds.feedburner.com/Unit42"; }
       { url = "https://nedwill.github.io/blog/feed.xml"; }
       { url = "https://nathantypanski.com/atom.xml"; }
+      { url = "https://hnrss.org/frontpage"; }
     ];
   };
 }
