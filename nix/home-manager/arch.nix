@@ -11,6 +11,7 @@ let
     printf '%s=%s\n' XDG_STATE_HOME "$XDG_STATE_HOME"
     printf '%s=%s\n' XDG_RUNTIME_DIR "$XDG_RUNTIME_DIR"
   '';
+  termFont = "Terminus:size=9";
 in {
   imports = [
     (import ./neovim.nix { inherit config pkgs; })
@@ -20,9 +21,13 @@ in {
       inherit homeDirectory username;
       userEmail = secrets.userEmail;
     })
+    (import ./newsboat.nix { inherit config pkgs; })
+    (import ./zsh.nix { inherit pkgs; })
+    (import ./foot.nix { inherit termFont; })
   ];
 
   # Let Home Manager install and manage itself.
+  programs.home-manager.enable = true;
 
   services.gpg-agent = {
     enable = true;

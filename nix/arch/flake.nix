@@ -33,10 +33,7 @@
       };
 
       modules = [
-        ../home-manager/newsboat.nix
-        ../home-manager/zsh.nix
         ../home-manager/arch.nix
-        ../home-manager/foot.nix
         {
           programs.home-manager.enable = true;
           home.stateVersion = "24.11";
@@ -50,7 +47,6 @@
         secrets = secrets;
         username = username;
         homeDirectory = homeDirectory;
-        termFont = "Terminus:size=9";
       };
     };
   };

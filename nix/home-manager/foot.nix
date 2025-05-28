@@ -1,4 +1,4 @@
-{ config, pkgs, termFont, ... }:
+{ termFont, ... }:
 
 {
   programs.foot = {
