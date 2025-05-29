@@ -86,6 +86,7 @@ in {
 
     dconf-editor
     sway-contrib.grimshot
+    imv
     swaybg
     procps
     fzf
