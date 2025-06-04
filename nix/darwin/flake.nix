@@ -22,6 +22,11 @@
   let
     system = "aarch64-darwin";
 
+    username = "ndt";
+    secrets = {
+      userEmail = builtins.getEnv "USER_EMAIL";
+    };
+    homeDirectory = "/Users/${username}";
     configuration = {pkgs, ... }: {
       # Necessary for using flakes on this system.
       nix.settings.experimental-features = "nix-command flakes";
@@ -49,12 +54,19 @@
         git
         pass
         gopls
+        grml-zsh-config
       ];
-    };
-    secrets = {
-      userEmail = builtins.getEnv "USER_EMAIL";
-    };
 
+      homebrew = {
+        enable = true;
+        # onActivation.cleanup = "uninstall";
+
+        taps = [ ];
+        brews = [ ];
+        casks = [];
+      };
+
+    };
     nix.config = {
       extra-substituters = [
         "https://nix-community.cachix.org"
@@ -82,11 +94,7 @@
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.extraSpecialArgs = {
-            inherit system;
-            nixpkgs = nixpkgs;
-            username = "ndt";
-            homeDirectory = "/Users/ndt";
-  	        secrets = secrets;
+            inherit system secrets nixpkgs homeDirectory username;
           };
           # I almost wish I were using a standalone home-manager instead
           # of it being a darwin module, because it's annoying how modules

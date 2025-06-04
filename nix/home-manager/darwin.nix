@@ -9,6 +9,10 @@ in {
     ./zsh.nix
     (import ./tmux.nix { inherit config pkgs copyCommand; })
     (import ./neovim.nix { inherit config pkgs; })
+    (import ./git.nix {
+      inherit homeDirectory username secrets;
+      userEmail = secrets.userEmail;
+    })
   ];
 
   home.username = username;
@@ -30,23 +34,25 @@ in {
   home.packages = [
     pkgs.tmux
     pkgs.emacs-git
+    pkgs.nix-search
+    pkgs.silver-searcher
   ];
 
   # Let Home Manager install and manage itself.
   # programs.home-manager.enable = true;
 
-  programs.git = {
-    enable = true;
-    userName = username;
-    userEmail = secrets.userEmail;
-    # home-manager only supports gnupg, so try to workaround
-    signing = {
-      signByDefault = true;
-    };
-    extraConfig = {
-      gpg.format = "ssh";
-      gpg."ssh".allowedSignersFile = "/Users/ndt/.git_allowed_signers";
-      user.signingkey = "/Users/ndt/.ssh/id_ed25519.pub";
-    };
-  };
+  # programs.git = {
+  #   enable = true;
+  #   userName = username;
+  #   userEmail = secrets.userEmail;
+  #   # home-manager only supports gnupg, so try to workaround
+  #   signing = {
+  #     signByDefault = true;
+  #   };
+  #   extraConfig = {
+  #     gpg.format = "ssh";
+  #     gpg."ssh".allowedSignersFile = "/Users/ndt/.git_allowed_signers";
+  #     user.signingkey = "/Users/ndt/.ssh/id_ed25519.pub";
+  #   };
+  # };
 }
