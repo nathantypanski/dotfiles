@@ -150,6 +150,18 @@ bind-key C-s \
     "run-shell \"tmux choose-session \\\"switch-client -t '%%'; kill-session -t '$(tmux display -p '#S')'\\\"\""
 
 set -g cursor-style bar            # block | bar | underline
+
+# ## image previews
+#
+# allow-passthrough
+#
+# Allow  programs  in the pane to bypass tmux using a terminal es‐
+# cape sequence (\ePtmux;...\e\\).  If set to on, passthrough  se‐
+# quences  will be allowed only if the pane is visible.  If set to
+# all, they will be allowed even if the pane is invisible.
+set -g allow-passthrough on
+set -ga update-environment TERM
+set -ga update-environment TERM_PROGRAM
     '';
   };
 }
