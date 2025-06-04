@@ -113,6 +113,9 @@ in {
     python313Packages.python-lsp-ruff
     poetry
 
+    #mcp
+    python313Packages.mcp
+
     (pkgs.writeShellScriptBin "pick-foot" ''
       exec ${pkgs.foot}/bin/foot --app-id=launcher --title=launcher -e 'bash' '-c' 'compgen -c | grep -v fzf | sort -u | fzf --layout=reverse | xargs -r swaymsg -t command exec'
     '')
