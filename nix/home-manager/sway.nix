@@ -137,8 +137,8 @@
           "${mod}+Shift+p" = "exec --no-startup-id ${pkgs.wofi}/bin/wofi --show drun,run";
           "${mod}+p" = "exec --no-startup-id pick-foot";
           "${mod}+Shift+q" = "exit";
-          "XF86MonBrightnessUp" = "exec --no-startup-id ${pkgs.brightnessctl}/bin/brightnessctl s 25+";
-          "XF86MonBrightnessDown" = "exec --no-startup-id ${pkgs.brightnessctl}/bin/brightnessctl s 25-";
+          "XF86MonBrightnessUp" = "exec --no-startup-id ${pkgs.brightnessctl}/bin/brightnessctl s 10+";
+          "XF86MonBrightnessDown" = "exec --no-startup-id ${pkgs.brightnessctl}/bin/brightnessctl s 10-";
         }
       ];
       startup = [
