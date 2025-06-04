@@ -1,4 +1,4 @@
-{ pkgs, lib, mod, ... }:
+{ pkgs, lib, mod, termFont, ... }:
 
 {
   home.pointerCursor = {
@@ -43,18 +43,17 @@
           dwt = "disabled";
         };
       };
-      # to list options do `swaymsg -t get_outputs`
       terminal = "foot";
       fonts = {
         names = ["Terminus"];
         style = "normal";
-        size = 7.0;
+        size = 9.0;
       };
       bars = [{
           fonts = {
             names = ["Terminus"];
             style = "normal";
-            size = 7.0;
+            size = 9.0;
           };
           statusCommand = "i3status";
           position = "top";
@@ -130,7 +129,7 @@
           "${mod}+v" = "split v";
 
           # recompile home-manager
-          "${mod}+Shift+apostrophe" = "exec foot --font 'Terminus:size=8' --window-size-chars=120x50 --app-id=popup-term -- bash -i -c \"rebuild-home; read -n 1 -s -r -p '[ press any key to continue ]'\"";
+          "${mod}+Shift+apostrophe" = "exec foot --font '${termFont}:size=9' --window-size-chars=100x50 --app-id=popup-term -- bash -i -c \"rebuild-home; read -n 1 -s -r -p '[ press any key to continue ]'\"";
           "${mod}+Shift+r" = "exec swaymsg reload";
           "--release Print" = "exec --no-startup-id ${pkgs.sway-contrib.grimshot}/bin/grimshot copy area";
           # nix swaylock is broken
@@ -154,6 +153,8 @@
         repeat_delay 333
         repeat_rate 25
       }
+      # to list options do `swaymsg -t get_outputs`
+      output eDP-1 scale 2
       for_window [app_id="popup-term"] floating enable, move position center, border pixel 3
       for_window [app_id="launcher"] floating enable, move position center, border pixel 3, focus
       workspace_auto_back_and_forth yes

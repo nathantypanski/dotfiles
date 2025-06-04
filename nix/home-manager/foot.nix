@@ -5,7 +5,7 @@
     enable = true;
     settings = {
       main = {
-        font = termFont;
+        font = "${termFont}:size=9";
       };
       colors = {
         foreground = "dcdccc";

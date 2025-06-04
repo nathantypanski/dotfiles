@@ -11,7 +11,7 @@ let
     printf '%s=%s\n' XDG_STATE_HOME "$XDG_STATE_HOME"
     printf '%s=%s\n' XDG_RUNTIME_DIR "$XDG_RUNTIME_DIR"
   '';
-  termFont = "Terminus:size=9";
+  termFont = "Terminus";
   firefox-jailed = (pkgs.writeShellScriptBin "firefox-jailed" ''
       exec firejail firefox-devedition "$@"
     '');
@@ -19,7 +19,7 @@ in {
   imports = [
     (import ./neovim.nix { inherit config pkgs; })
     (import ./tmux.nix { inherit config pkgs copyCommand; })
-    (import ./sway.nix { inherit config pkgs lib mod; })
+    (import ./sway.nix { inherit config pkgs lib mod termFont; })
     (import ./zsh.nix { inherit pkgs; })
     (import ./foot.nix { inherit termFont; })
     (import ./newsboat.nix {
@@ -193,10 +193,6 @@ in {
     XDG_STATE_HOME = "${homeDirectory}/.local/state";
     PINENTRY_PROGRAM = "${pkgs.pinentry-tty}/bin/pinentry-tty";
     PAGER = "less -R --use-color";
-
-    GDK_SCALE = "1.5";
-    GDK_DPI_SCALE = "1.0";
-    QT_SCALE_FACTOR = "1.5";
   };
 
   home.sessionPath = [
