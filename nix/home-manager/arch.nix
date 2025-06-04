@@ -93,7 +93,6 @@ in {
     bashInteractive
     brightnessctl
     nix-search
-    emacs-git-pgtk
     silver-searcher
     aspellDicts.en
     pavucontrol
@@ -158,6 +157,11 @@ in {
     settings = {
       font = "Terminus:size=12";
     };
+  };
+
+  programs.emacs = {
+    enable = true;
+    package = pkgs.emacs-git-pgtk;
   };
 
   programs.keychain = {
