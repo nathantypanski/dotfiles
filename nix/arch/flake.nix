@@ -23,8 +23,7 @@
     secrets = {
       userEmail = builtins.getEnv "USER_EMAIL";
     };
-  in {
-    homeConfigurations.${username} = home-manager.lib.homeManagerConfiguration {
+    hmConfig = home-manager.lib.homeManagerConfiguration {
       pkgs = import nixpkgs {
         inherit system;
         overlays = [
@@ -49,5 +48,8 @@
         homeDirectory = homeDirectory;
       };
     };
+  in {
+    homeConfigurations.${username} = hmConfig;
+    packages.${system}.home-manager-activation = hmConfig.activationPackage;
   };
 }
