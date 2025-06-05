@@ -1,10 +1,10 @@
-{ pkgs, lib, mod, termFont, homeDirectory, nixGL, ... }:
+{ config, pkgs, lib, mod, termFont, homeDirectory, ... }:
 
 {
   home.pointerCursor = {
     package = pkgs.adwaita-icon-theme;
     name  = "Adwaita";   # any cursor theme in your icon path
-    size  = 7;          # logical pixels → doubles on a 2×-scaled output
+    size  = 7;           # logical pixels → doubles on a 2×-scaled output
     gtk.enable  = true;  # write GTK settings files
     x11.enable  = true;  # export XCURSOR_* for XWayland & Flatpaks
     sway.enable = true;  # adds `seat * xcursor_theme …` to sway.conf
@@ -15,8 +15,7 @@
   };
 
   wayland.windowManager.sway = {
-    package = pkgs.sway-nixgl;
-    # command = "${pkgs.nixgl.nixGLMesa}/bin/nixGLMesa ${pkgs.sway}/bin/sway";
+    package = (config.lib.nixGL.wrap pkgs.sway);
     enable = true;
     wrapperFeatures.gtk = true;
     config = {
@@ -143,7 +142,7 @@
           # nix swaylock is broken
           "${mod}+Shift+semicolon" = "exec ${pkgs.sway}/bin/swaylock -f -c 000000";
           "${mod}+p" = "exec --no-startup-id pick-foot";
-          "${mod}+Shift+q" = "exec ${pkgs.sway}/swaynag -t warning -m 'Exit Sway?' -b 'Yes' '${pkgs.sway}/bin/swaymsg exit'";
+          "${mod}+Shift+q" = "exec ${pkgs.sway}/bin/swaynag -t warning -m 'Exit Sway?' -b 'Yes' '${pkgs.sway}/bin/swaymsg exit'";
           "XF86MonBrightnessUp" = "exec --no-startup-id ${pkgs.brightnessctl}/bin/brightnessctl s 10+";
           "XF86MonBrightnessDown" = "exec --no-startup-id ${pkgs.brightnessctl}/bin/brightnessctl s 10-";
         }

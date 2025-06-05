@@ -34,28 +34,15 @@
         overlays = [
           emacs-overlay.overlay
           nixgl.overlay
-(final: prev: {
-  sway-nixgl = prev.runCommand "sway-nixgl" {
-    buildInputs = [ prev.makeWrapper ];
-  } ''
-    mkdir -p $out/bin
-    # Main wrapper
-    cat > $out/bin/sway <<EOF
-#!/bin/sh
-exec ${pkgs.lib.getExe pkgs.nixgl.nixGLMesa} ${prev.sway}/bin/sway "\$@"
-EOF
-    chmod +x $out/bin/sway
-    # Only helpers that are unique to sway package:
-    for bin in swaymsg swaybar swaynag; do
-      ln -s ${prev.sway}/bin/$bin $out/bin/$bin || true
-    done
-  '';
-})
         ];
 
       };
 
       modules = [
+        {
+          nixGL.packages = nixgl.packages;
+          nixGL.defaultWrapper = "mesa";
+        }
         ../home-manager/arch.nix
         {
           programs.home-manager.enable = true;

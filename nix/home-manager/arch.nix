@@ -12,17 +12,15 @@ let
     printf '%s=%s\n' XDG_RUNTIME_DIR "$XDG_RUNTIME_DIR"
   '';
   termFont = "Terminus";
-  nixGL = "${pkgs.nixgl.nixGLMesa}/bin/nixGLMesa";
   firefox-jailed = (pkgs.writeShellScriptBin "firefox-jailed" ''
-      exec ${lib.getExe pkgs.nixgl.nixGLMesa} firejail firefox-devedition "$@"
-      # exec firejail firefox-devedition "$@"
+      exec firejail ${lib.getExe pkgs.firefox-devedition} "$@"
     '');
 in {
   imports = [
     (import ./neovim.nix { inherit config pkgs; })
     (import ./tmux.nix { inherit config pkgs copyCommand; })
     (import ./sway.nix {
-      inherit config pkgs lib mod termFont homeDirectory nixGL;
+      inherit config pkgs lib mod termFont homeDirectory;
     })
     (import ./zsh.nix { inherit pkgs; })
     (import ./foot.nix { inherit termFont; })
@@ -225,4 +223,5 @@ in {
   };
 
   systemd.user.enable = true;
+
 }
