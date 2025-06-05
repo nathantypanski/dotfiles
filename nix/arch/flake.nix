@@ -35,16 +35,17 @@
           emacs-overlay.overlay
           nixgl.overlay
         ];
-
       };
 
       modules = [
         {
-          nixGL.packages = nixgl.packages;
-          nixGL.defaultWrapper = "mesa";
+          # nixGL.packages = nixgl.packages;
+          # nixGL.defaultWrapper = "mesa"; # or the driver you need
+          # nixGL.installScripts = [ "mesa" ];
         }
         ../home-manager/arch.nix
         {
+
           programs.home-manager.enable = true;
           home.stateVersion = "24.11";
 
@@ -53,7 +54,7 @@
         }
       ];
       extraSpecialArgs = {
-        inherit system;
+        inherit system nixgl;
         secrets = secrets;
         username = username;
         homeDirectory = homeDirectory;

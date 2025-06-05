@@ -1,5 +1,18 @@
-{ config, pkgs, lib, mod, termFont, homeDirectory, ... }:
+{ config, pkgs, lib, mod, termFont, homeDirectory, withNixGL, ... }:
 
+
+let
+  swayWithNixGL = pkgs.symlinkJoin {
+    name = "sway-with-nixgl";
+    paths = [ pkgs.sway ];
+    buildInputs = [ pkgs.makeWrapper ];
+    postBuild = ''
+        rm $out/bin/sway
+            makeWrapper ${lib.getExe pkgs.nixgl.nixGLMesa} $out/bin/sway \
+                  --add-flags ${pkgs.sway}/bin/sway
+                    '';
+  };
+in
 {
   home.pointerCursor = {
     package = pkgs.adwaita-icon-theme;
@@ -15,7 +28,10 @@
   };
 
   wayland.windowManager.sway = {
-    package = (config.lib.nixGL.wrap pkgs.sway);
+    # Only use nixGL on non-nixos systems.
+    package = if withNixGL
+              then swayWithNixGL
+              else pkgs.sway;
     enable = true;
     wrapperFeatures.gtk = true;
     config = {
@@ -170,8 +186,8 @@
     extraSessionCommands = ''
       # force software rendering - broken hardware rendering on arch
       # export WLR_RENDERER=pixman
-      export LIBGL_DRIVERS_PATH=/usr/lib/dri
-      export GBM_DRIVERS_PATH=/usr/lib/dri
+      # export LIBGL_DRIVERS_PATH=/usr/lib/dri
+      # export GBM_DRIVERS_PATH=/usr/lib/dri
     '';
   };
 }

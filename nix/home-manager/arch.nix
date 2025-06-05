@@ -13,6 +13,7 @@ let
   '';
   termFont = "Terminus";
   firefox-jailed = (pkgs.writeShellScriptBin "firefox-jailed" ''
+      echo "LIBGL_DRIVERS_PATH: $LIBGL_DRIVERS_PATH"
       exec firejail ${lib.getExe pkgs.firefox-devedition} "$@"
     '');
 in {
@@ -21,12 +22,13 @@ in {
     (import ./tmux.nix { inherit config pkgs copyCommand; })
     (import ./sway.nix {
       inherit config pkgs lib mod termFont homeDirectory;
+      withNixGL = true;
     })
     (import ./zsh.nix { inherit pkgs; })
     (import ./foot.nix { inherit termFont; })
     (import ./newsboat.nix {
       inherit config pkgs;
-      browser = "${firefox-jailed}/bin/firefox-jailed";
+      browser = lib.getExe firefox-jailed;
     })
     (import ./git.nix {
       inherit homeDirectory username;
@@ -54,7 +56,7 @@ in {
     brightnessctl
     tailscale
 
-    nixgl.nixGLMesa
+    # nixgl.nixGLMesa
 
     fontconfig
     font-manager
