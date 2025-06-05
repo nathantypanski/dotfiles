@@ -17,9 +17,12 @@ export NIXPKGS_ALLOW_UNFREE=1
 
 mkdir -p "${MANUAL_GCROOTS_DIR}"
 
-nix shell nixpkgs#nixVersions.latest \
+(
+  echo "$SCRIPT_DIR"
+  cd "${SCRIPT_DIR}" && nix shell nixpkgs#nixVersions.latest \
     --command nix build --impure "${SCRIPT_DIR}#home-manager-activation"
+)
 
 ln -sf "$(readlink ${SCRIPT_DIR}/result)" "${MANUAL_GCROOTS_DIR}"
 
-./result/activate
+"${SCRIPT_DIR}/result/activate"
