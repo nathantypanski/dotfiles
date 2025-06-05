@@ -1,4 +1,4 @@
-{ pkgs, lib, mod, termFont, ... }:
+{ pkgs, lib, mod, termFont, homeDirectory, nixGL, ... }:
 
 {
   home.pointerCursor = {
@@ -9,7 +9,14 @@
     x11.enable  = true;  # export XCURSOR_* for XWayland & Flatpaks
     sway.enable = true;  # adds `seat * xcursor_theme …` to sway.conf
   };
+
+  programs.i3status = {
+    enable = true;
+  };
+
   wayland.windowManager.sway = {
+    package = pkgs.sway-nixgl;
+    # command = "${pkgs.nixgl.nixGLMesa}/bin/nixGLMesa ${pkgs.sway}/bin/sway";
     enable = true;
     wrapperFeatures.gtk = true;
     config = {
@@ -50,47 +57,48 @@
         size = 9.0;
       };
       bars = [{
-          fonts = {
-            names = ["Terminus"];
-            style = "normal";
-            size = 9.0;
+        statusCommand = "i3status";
+        # statusCommand = "${pkgs.i3status-rust}/bin/i3status-rs ${homeDirectory}/.config/i3status-rust/config-default.toml";
+        fonts = {
+          names = ["Terminus"];
+          style = "normal";
+          size = 9.0;
+        };
+        position = "top";
+        colors = {
+          background = "#2b2b2b";
+          statusline = "#dcdccc";
+
+          focusedWorkspace = {
+            border = "#cc9393";
+            background = "#cc9393";
+            text = "#000000";
           };
-          statusCommand = "i3status";
-          position = "top";
-          colors = {
-            background = "#2b2b2b";
-            statusline = "#dcdccc";
 
-            focusedWorkspace = {
-              border = "#cc9393";
-              background = "#cc9393";
-              text = "#000000";
-            };
-
-            activeWorkspace = {
-              border = "#6f6f6f";
-              background = "#6f6f6f";
-              text = "#dcdccc";
-            };
-
-            inactiveWorkspace = {
-              border = "#3f3f3f";
-              background = "#3f3f3f";
-              text = "#a0a0a0";
-            };
-
-            urgentWorkspace = {
-              border = "#cc9393";
-              background = "#cc9393";
-              text = "#3f3f3f";
-            };
-
-            bindingMode = {
-              border = "#f0dfaf";
-              background = "#f0dfaf";
-              text = "#3f3f3f";
-            };
+          activeWorkspace = {
+            border = "#6f6f6f";
+            background = "#6f6f6f";
+            text = "#dcdccc";
           };
+
+          inactiveWorkspace = {
+            border = "#3f3f3f";
+            background = "#3f3f3f";
+            text = "#a0a0a0";
+          };
+
+          urgentWorkspace = {
+            border = "#cc9393";
+            background = "#cc9393";
+            text = "#3f3f3f";
+          };
+
+          bindingMode = {
+            border = "#f0dfaf";
+            background = "#f0dfaf";
+            text = "#3f3f3f";
+          };
+        };
       }];
       # drag + resize with mod
       floating.modifier = "${mod}";
@@ -130,19 +138,18 @@
 
           # recompile home-manager
           "${mod}+Shift+apostrophe" = "exec foot --font '${termFont}:size=9' --window-size-chars=100x50 --app-id=popup-term -- bash -i -c \"rebuild-home; read -n 1 -s -r -p '[ press any key to continue ]'\"";
-          "${mod}+Shift+r" = "exec swaymsg reload";
+          "${mod}+Shift+r" = "exec ${pkgs.sway}/bin/swaymsg reload";
           "--release Print" = "exec --no-startup-id ${pkgs.sway-contrib.grimshot}/bin/grimshot copy area";
           # nix swaylock is broken
-          "${mod}+Shift+semicolon" = "exec /usr/bin/swaylock -f -c 000000";
-          "${mod}+Shift+p" = "exec --no-startup-id ${pkgs.wofi}/bin/wofi --show drun,run";
+          "${mod}+Shift+semicolon" = "exec ${pkgs.sway}/bin/swaylock -f -c 000000";
           "${mod}+p" = "exec --no-startup-id pick-foot";
-          "${mod}+Shift+q" = "exit";
+          "${mod}+Shift+q" = "exec ${pkgs.sway}/swaynag -t warning -m 'Exit Sway?' -b 'Yes' '${pkgs.sway}/bin/swaymsg exit'";
           "XF86MonBrightnessUp" = "exec --no-startup-id ${pkgs.brightnessctl}/bin/brightnessctl s 10+";
           "XF86MonBrightnessDown" = "exec --no-startup-id ${pkgs.brightnessctl}/bin/brightnessctl s 10-";
         }
       ];
       startup = [
-        { command = "swaymsg workspace 1"; always = true; }
+        { command = "${pkgs.sway}/bin/swaymsg workspace 1"; always = true; }
         { command = "swaybg -c #2b2b2b"; always = true; }
       ];
     };
@@ -160,6 +167,12 @@
       workspace_auto_back_and_forth yes
       default_border pixel 1
       default_floating_border pixel 3
+    '';
+    extraSessionCommands = ''
+      # force software rendering - broken hardware rendering on arch
+      # export WLR_RENDERER=pixman
+      export LIBGL_DRIVERS_PATH=/usr/lib/dri
+      export GBM_DRIVERS_PATH=/usr/lib/dri
     '';
   };
 }

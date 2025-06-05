@@ -12,14 +12,18 @@ let
     printf '%s=%s\n' XDG_RUNTIME_DIR "$XDG_RUNTIME_DIR"
   '';
   termFont = "Terminus";
+  nixGL = "${pkgs.nixgl.nixGLMesa}/bin/nixGLMesa";
   firefox-jailed = (pkgs.writeShellScriptBin "firefox-jailed" ''
-      exec firejail firefox-devedition "$@"
+      exec ${lib.getExe pkgs.nixgl.nixGLMesa} firejail firefox-devedition "$@"
+      # exec firejail firefox-devedition "$@"
     '');
 in {
   imports = [
     (import ./neovim.nix { inherit config pkgs; })
     (import ./tmux.nix { inherit config pkgs copyCommand; })
-    (import ./sway.nix { inherit config pkgs lib mod termFont; })
+    (import ./sway.nix {
+      inherit config pkgs lib mod termFont homeDirectory nixGL;
+    })
     (import ./zsh.nix { inherit pkgs; })
     (import ./foot.nix { inherit termFont; })
     (import ./newsboat.nix {
@@ -49,10 +53,11 @@ in {
     foot
     mesa
     wayland
-    waybar
     brightnessctl
     tailscale
-    i3status
+
+    nixgl.nixGLMesa
+
     fontconfig
     font-manager
     adwaita-icon-theme
@@ -61,17 +66,16 @@ in {
     libglvnd
     xwayland
     swayidle
+
     wl-clipboard
     mako
     adwaita-icon-theme
-    wofi
     zathura
     ispell
     pass
     tig
     xfce.thunar
     wdisplays
-    wine
     (ungoogled-chromium.override {
       # these args get baked into the wrapper
       commandLineArgs = [
