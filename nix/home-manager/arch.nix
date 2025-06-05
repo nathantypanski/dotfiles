@@ -13,7 +13,15 @@ let
   '';
   termFont = "Terminus";
   firefox-jailed = (pkgs.writeShellScriptBin "firefox-jailed" ''
-      echo "LIBGL_DRIVERS_PATH: $LIBGL_DRIVERS_PATH"
+      # this allows firefox to work under nixGL sway
+      MESA_DRI_PATH=$(echo "''$LIBGL_DRIVERS_PATH" | cut -d':' -f1)
+      if [ -n "''$MESA_DRI_PATH" ]; then
+        # Convert /path/to/mesa/lib/dri to /path/to/mesa/lib/gbm
+        export GBM_BACKENDS_PATH="''${MESA_DRI_PATH%/dri}/gbm"
+        echo "Setting GBM_BACKENDS_PATH: ''$GBM_BACKENDS_PATH"
+      fi
+
+      export MOZ_ENABLE_WAYLAND=1
       exec firejail ${lib.getExe pkgs.firefox-devedition} "$@"
     '');
 in {
@@ -56,7 +64,7 @@ in {
     brightnessctl
     tailscale
 
-    # nixgl.nixGLMesa
+    nixgl.nixGLMesa
 
     fontconfig
     font-manager
@@ -82,7 +90,6 @@ in {
         "--enable-features=UseOzonePlatform"
         "--ozone-platform-hint=auto"
         "--use-gl=egl"
-        "--force-device-scale-factor=0.6"
         "--gtk-version=4"
         "--enable-features=WaylandPerSurfaceScale,WaylandUiScale"
       ];
@@ -225,5 +232,4 @@ in {
   };
 
   systemd.user.enable = true;
-
 }
