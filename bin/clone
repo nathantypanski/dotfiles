@@ -1,0 +1,107 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+parsegiturl() {
+    local url="${1}"
+
+    echo "${url}" | awk -F '[/:@]' '
+    /^https?:\/\// { 
+        print $3, substr($0, index($0, $4))
+    }
+    /^[^@]*@[^:]*:/ {
+        for(i=1; i<=NF; i++) if($i ~ /@/) break
+        print substr($i, index($i, "@")+1), $(i+1)
+    }'
+}
+
+clone_repo() {
+    local url="$1"
+    
+    read -r host path < <(parse_git_url "$url")
+    if [[ -z "$host" || -z "$path" ]]; then
+        echo "Error: Unable to parse URL: $url"
+        return 1
+    fi
+    
+    path="${path%.git}"
+    local target_dir="$HOME/src/$host/$path"
+    
+    if [[ -d "$target_dir" ]]; then
+        echo "Directory already exists: $target_dir"
+        return 0
+    fi
+    
+    echo "Cloning $url to $target_dir"
+    git clone "$url" "$target_dir"
+}
+
+show_usage() {
+    cat << EOF
+Usage: $(basename "$0") [OPTIONS] <git-url> [git-url...]
+
+Options:
+    -d, --base-dir DIR    Base directory for clones (default: ~/src)
+    -h, --help           Show this help
+
+Examples:
+    $(basename "$0") https://github.com/golang/example
+    $(basename "$0") git@github.com:user/repo.git
+    $(basename "$0") -d /opt/src https://github.com/user/repo
+
+Environment:
+    CLONE_BASE_DIR       Override default base directory
+
+Source this script to use functions in other scripts:
+    source $(basename "$0")
+    clone_repo "https://github.com/user/repo"
+EOF
+}
+
+# CLI interface - only run if script is executed directly
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    # Parse command line arguments
+    CLONE_BASE_DIR=""
+    URLS=()
+    
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            -d|--base-dir)
+                CLONE_BASE_DIR="$2"
+                shift 2
+                ;;
+            -h|--help)
+                show_usage
+                exit 0
+                ;;
+            -*)
+                echo "Unknown option: $1" >&2
+                show_usage >&2
+                exit 1
+                ;;
+            *)
+                URLS+=("$1")
+                shift
+                ;;
+        esac
+    done
+    
+    if [[ ${#URLS[@]} -eq 0 ]]; then
+        echo "Error: No URLs provided" >&2
+        show_usage >&2
+        exit 1
+    fi
+    
+    # Export for use in functions
+    export CLONE_BASE_DIR
+    
+    # Clone each repository
+    exit_code=0
+    for url in "${URLS[@]}"; do
+        if ! clone_repo "$url"; then
+            exit_code=1
+        fi
+    done
+    
+    exit $exit_code
+fi

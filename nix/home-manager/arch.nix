@@ -42,6 +42,9 @@ in {
       inherit homeDirectory username;
       userEmail = secrets.userEmail;
     })
+    (import ./scripts.nix {
+      inherit pkgs lib;
+    })
   ];
 
   # Let Home Manager install and manage itself.
