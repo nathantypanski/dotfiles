@@ -18,7 +18,7 @@ in {
     (import ./tmux.nix { inherit config pkgs copyCommand; })
     (import ./sway.nix {
       inherit config pkgs lib mod termFont homeDirectory;
-      withNixGL = true;
+      withNixGL = false;
     })
     (import ./zsh.nix { inherit pkgs; })
     (import ./foot.nix { inherit termFont; })
@@ -57,8 +57,6 @@ in {
     wayland
     brightnessctl
     tailscale
-
-    nixgl.nixGLMesa
 
     fontconfig
     font-manager
@@ -107,6 +105,7 @@ in {
     gotools
     # lsps
     tree-sitter
+    jq
 
     gopls
     rust-analyzer
@@ -124,9 +123,6 @@ in {
     #mcp
     python313Packages.mcp
 
-    (pkgs.writeShellScriptBin "pick-foot" ''
-      exec ${pkgs.foot}/bin/foot --app-id=launcher --title=launcher -e 'bash' '-c' 'compgen -c | grep -v fzf | sort -u | fzf --layout=reverse | xargs -r swaymsg -t command exec'
-    '')
     (pkgs.writeShellScriptBin "rebuild-home" ''
       exec /home/ndt/src/github.com/nathantypanski/dotfiles/nix/arch/rebuild.sh
     '')

@@ -2,16 +2,20 @@
 
 
 let
-  swayWithNixGL = pkgs.symlinkJoin {
+  swayWithNixGL = pkgs.writeShellScriptBin "sway" ''
+    exec ${lib.getExe pkgs.nixgl.nixGLMesa} ${pkgs.sway}/bin/sway "$@"
+  '';
+  swayPackageWithNixGL = pkgs.symlinkJoin {
     name = "sway-with-nixgl";
     paths = [ pkgs.sway ];
-    buildInputs = [ pkgs.makeWrapper ];
     postBuild = ''
       rm $out/bin/sway
-      makeWrapper ${lib.getExe pkgs.nixgl.nixGLMesa} $out/bin/sway \
-                  --add-flags ${pkgs.sway}/bin/sway
+      cp ${swayWithNixGL}/bin/sway $out/bin/sway
     '';
   };
+  swayPackage = if withNixGL
+                then swayPackageWithNixGL
+                else pkgs.sway;
 in
 {
   options.ndt-home.sway = {
@@ -43,16 +47,154 @@ in
       sway.enable = true;  # adds `seat * xcursor_theme …` to sway.conf
     };
 
-    programs.i3status = {
+    fonts.fontconfig = {
       enable = true;
     };
 
+    programs.i3status = {
+      enable = true;
+      general = {
+        colors = true;
+        interval = 5;
+      };
+      modules = {
+        ipv6.enable = false;
+        "wireless _first_" = {
+          position = 1;
+          settings = {
+            format_up = "W: (%quality at %essid) %ip";
+            format_down = "W: down";
+          };
+        };
+        "ethernet _first_" = {
+          position = 2;
+          settings = {
+            format_up = "E: %ip (%speed)";
+            format_down = "E: down";
+          };
+        };
+        "battery all" = {
+          position = 3;
+          settings = {
+            format = "%status %percentage %remaining";
+          };
+        };
+        "disk /" = {
+          position = 4;
+          settings = {
+            format = "%avail";
+          };
+        };
+        load = {
+          position = 5;
+          settings = {
+            format = "%1min";
+          };
+        };
+        memory = {
+          position = 6;
+          settings = {
+            format = "%used | %available";
+            threshold_degraded = "1G";
+            threshold_critical = "200M";
+          };
+        };
+        "tztime local" = {
+          position = 7;
+          settings = {
+            format = "%Y-%m-%d %H:%M:%S";
+          };
+        };
+      };
+    };
+
+    services.mako = {
+      enable = true;
+      package = pkgs.mako;
+      settings = {
+        font = "${termFont}";
+        background-color = "#3f3f3f";
+        text-color = "#dcdccc";
+        border-color = "#4f4f4f";
+        progress-color = "over #688060";
+        border-radius = 0;
+        border-size = 2;
+        default-timeout = 5000;
+        ignore-timeout = true;
+        max-visible = 5;
+      };
+    };
+
+    systemd.user.services.mako = {
+      Unit = {
+        Description = "Mako notification daemon";
+        PartOf = "sway-session.target";
+        After = "sway-session.target";
+      };
+
+      Service = {
+        Type = "dbus";
+        BusName = "org.freedesktop.Notifications";
+        ExecStart = "${pkgs.mako}/bin/mako";
+        Restart = "on-failure";
+      };
+
+      Install = {
+        WantedBy = [ "sway-session.target" ];
+      };
+    };
+
+    home.packages = with pkgs; [
+      # support utilities
+      xwayland
+      libnotify # notify-send
+
+      # sway tools
+      wl-clipboard
+      adwaita-icon-theme
+      brightnessctl
+      swayidle
+      swaylock-effects
+      imv
+      swaybg
+      dconf-editor
+      sway-contrib.grimshot
+      swayimg
+
+      nixgl.nixGLMesa
+
+      (pkgs.writeShellScriptBin "user-sway-nixgl" ''
+        systemd-run --user --scope ${lib.getExe pkgs.nixgl.nixGLMesa} sway
+      '')
+
+      # (pkgs.writeShellScriptBin "user-sway-nixgl" ''
+      #   exec dbus-run-session ${lib.getExe pkgs.nixgl.nixGLMesa} ${pkgs.sway}/bin/sway
+      # '')
+      (pkgs.writeShellScriptBin "pick-foot" ''
+        exec ${pkgs.foot}/bin/foot --app-id=launcher --title=launcher \
+             -e 'bash' '-c' \
+                 'compgen -c |
+                  grep -v fzf |
+                  sort -u |
+                  fzf --layout=reverse |
+                  xargs -r swaymsg -t command exec'
+    '')
+      (pkgs.writeShellScriptBin "tmux-rebind-sway" ''
+        export WAYLAND_DISPLAY="$(swaymsg -t get_outputs | jq -r '.[0].name')"
+        export SWAYSOCK="$(ls /run/user/$UID/sway-ipc.* 2>/dev/null | head -n 1)"
+        tmux set-environment -g WAYLAND_DISPLAY "$WAYLAND_DISPLAY"
+        tmux set-environment -g SWAYSOCK "$SWAYSOCK"
+    '')
+    ];
+
     wayland.windowManager.sway = {
       # Only use nixGL on non-nixos systems.
-      package = if withNixGL
-                then swayWithNixGL
-                else pkgs.sway;
+      package = swayPackage;
       enable = true;
+
+      systemd = {
+        enable = true;
+      };
       wrapperFeatures.gtk = true;
       config = {
         window = {
@@ -87,7 +229,7 @@ in
         };
         terminal = "foot";
         fonts = {
-          names = ["Terminus"];
+          names = [termFont];
           style = "normal";
           size = 9.0;
         };
@@ -95,7 +237,7 @@ in
           statusCommand = "i3status";
           # statusCommand = "${pkgs.i3status-rust}/bin/i3status-rs ${homeDirectory}/.config/i3status-rust/config-default.toml";
           fonts = {
-            names = ["Terminus"];
+            names = [termFont];
             style = "normal";
             size = 9.0;
           };
@@ -173,18 +315,18 @@ in
 
             # recompile home-manager
             "${mod}+Shift+apostrophe" = "exec ${lib.getExe pkgs.foot} --font '${termFont}:size=9' --window-size-chars=100x50 --app-id=popup-term -- bash -i -c \"rebuild-home; read -n 1 -s -r -p '[ press any key to continue ]'\"";
-            "${mod}+Shift+r" = "exec ${pkgs.sway}/bin/swaymsg reload";
+            "${mod}+Shift+r" = "exec ${swayPackage}/bin/swaymsg reload";
             "--release Print" = "exec --no-startup-id ${lib.getExe pkgs.sway-contrib.grimshot} copy area";
             # nix swaylock is broken
             "${mod}+Shift+semicolon" = "exec /usr/bin/swaylock -f -c 000000";
             "${mod}+p" = "exec --no-startup-id pick-foot";
-            "${mod}+Shift+q" = "exec ${pkgs.sway}/bin/swaynag -t warning -m 'Exit Sway?' -b 'Yes' '${pkgs.sway}/bin/swaymsg exit'";
+            "${mod}+Shift+q" = "exec ${swayPackage}/bin/swaynag -t warning -m 'Exit Sway?' -b 'Yes' '${swayPackage}/bin/swaymsg exit'";
             "XF86MonBrightnessUp" = "exec --no-startup-id ${lib.getExe pkgs.brightnessctl} s 10+";
             "XF86MonBrightnessDown" = "exec --no-startup-id ${lib.getExe pkgs.brightnessctl} s 10-";
           }
         ];
         startup = [
-          { command = "${pkgs.sway}/bin/swaymsg workspace 1"; always = true; }
+          { command = "${swayPackage}/bin/swaymsg workspace 1"; always = true; }
           { command = "swaybg -c #2b2b2b"; always = true; }
           { command = "${pkgs.swayidle}/bin/swayidle -w before-sleep '/usr/bin/waylock'"; always = false; }
         ];
@@ -209,6 +351,8 @@ in
       # export WLR_RENDERER=pixman
       # export LIBGL_DRIVERS_PATH=/usr/lib/dri
       # export GBM_DRIVERS_PATH=/usr/lib/dri
+
+      eval "$(${lib.getExe pkgs.nixgl.nixGLMesa} printenv)"
     '';
     };
   };
