@@ -6,7 +6,7 @@ parsegiturl() {
     local url="${1}"
 
     echo "${url}" | awk -F '[/:@]' '
-    /^https?:\/\// { 
+    /^https?:\/\// {
         print $3, substr($0, index($0, $4))
     }
     /^[^@]*@[^:]*:/ {
@@ -17,21 +17,21 @@ parsegiturl() {
 
 clone_repo() {
     local url="$1"
-    
+
     read -r host path < <(parse_git_url "$url")
     if [[ -z "$host" || -z "$path" ]]; then
         echo "Error: Unable to parse URL: $url"
         return 1
     fi
-    
+
     path="${path%.git}"
     local target_dir="$HOME/src/$host/$path"
-    
+
     if [[ -d "$target_dir" ]]; then
         echo "Directory already exists: $target_dir"
         return 0
     fi
-    
+
     echo "Cloning $url to $target_dir"
     git clone "$url" "$target_dir"
 }
@@ -63,7 +63,7 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     # Parse command line arguments
     CLONE_BASE_DIR=""
     URLS=()
-    
+
     while [[ $# -gt 0 ]]; do
         case $1 in
             -d|--base-dir)
@@ -85,16 +85,16 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
                 ;;
         esac
     done
-    
+
     if [[ ${#URLS[@]} -eq 0 ]]; then
         echo "Error: No URLs provided" >&2
         show_usage >&2
         exit 1
     fi
-    
+
     # Export for use in functions
     export CLONE_BASE_DIR
-    
+
     # Clone each repository
     exit_code=0
     for url in "${URLS[@]}"; do
@@ -102,6 +102,6 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
             exit_code=1
         fi
     done
-    
+
     exit $exit_code
 fi
