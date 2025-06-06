@@ -1,0 +1,35 @@
+{ config, pkgs, lib, ... }:
+
+let
+  firefox-jailed = (pkgs.writeShellScriptBin "firefox-jailed" ''
+      # this allows firefox to work under nixGL sway
+      MESA_DRI_PATH=$(echo "''$LIBGL_DRIVERS_PATH" | cut -d':' -f1)
+      if [ -n "''$MESA_DRI_PATH" ]; then
+        # Convert /path/to/mesa/lib/dri to /path/to/mesa/lib/gbm
+        export GBM_BACKENDS_PATH="''${MESA_DRI_PATH%/dri}/gbm"
+        echo "Setting GBM_BACKENDS_PATH: ''$GBM_BACKENDS_PATH"
+      fi
+
+      export MOZ_ENABLE_WAYLAND=1
+      exec firejail ${lib.getExe pkgs.firefox-devedition} "$@"
+    '');
+in
+{
+  options.myPackages.firefox-jailed = lib.mkOption {
+    type = lib.types.package;
+    default = firefox-jailed;
+    description = "Firefox wrapped with firejail";
+  };
+
+  config = {
+    programs.firefox = {
+      enable = true;
+      package = pkgs.firefox-devedition;
+    };
+
+    home.packages = with pkgs; [
+      firefox-devedition
+      config.myPackages.firefox-jailed
+    ];
+  };
+}
