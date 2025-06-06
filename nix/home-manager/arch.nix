@@ -18,7 +18,7 @@ in {
     (import ./tmux.nix { inherit config pkgs copyCommand; })
     (import ./sway.nix {
       inherit config pkgs lib mod termFont homeDirectory;
-      withNixGL = false;
+      withNixGL = true;
     })
     (import ./zsh.nix { inherit pkgs; })
     (import ./foot.nix { inherit termFont; })
