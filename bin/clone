@@ -5,14 +5,13 @@ set -euo pipefail
 parse_git_url() {
     local url="${1}"
 
-    echo "${url}" | awk -F '[/:@]' '
-    /^https?:\/\// {
-        print $3, substr($0, index($0, $4))
-    }
-    /^[^@]*@[^:]*:/ {
-        for(i=1; i<=NF; i++) if($i ~ /@/) break
-        print substr($i, index($i, "@")+1), $(i+1)
-    }'
+    if [[ "$url" =~ ^https?://([^/]+)/(.+)$ ]]; then
+        echo "${BASH_REMATCH[1]}" "${BASH_REMATCH[2]}"
+    elif [[ "$url" =~ ^[^@]*@([^:]+):(.+)$ ]]; then
+        echo "${BASH_REMATCH[1]}" "${BASH_REMATCH[2]}"
+    else
+        echo "" ""
+    fi
 }
 
 clone_repo() {
@@ -25,11 +24,17 @@ clone_repo() {
     fi
 
     path="${path%.git}"
-    local target_dir="$HOME/src/$host/$path"
+    local target_dir="${CLONE_BASE_DIR:-$HOME/src}/$host/$path"
 
     if [[ -d "$target_dir" ]]; then
-        echo "Directory already exists: $target_dir"
-        return 0
+        # Check if it's actually a git repo
+        if [[ -d "$target_dir/.git" ]] || git -C "$target_dir" rev-parse --git-dir >/dev/null 2>&1; then
+            echo "Repository already exists: $target_dir"
+            return 0
+        else
+            echo "Directory exists but is not a git repository: $target_dir"
+            return 1
+        fi
     fi
 
     echo "Cloning $url to $target_dir"
@@ -103,5 +108,5 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
         fi
     done
 
-    exit $exit_code
+    exit "${exit_code}"
 fi
