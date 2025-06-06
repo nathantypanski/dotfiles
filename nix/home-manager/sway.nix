@@ -136,7 +136,7 @@ in
           })
 
         {
-          "${mod}+Shift+Return" = "exec --no-startup-id ${pkgs.foot}/bin/foot";
+          "${mod}+Shift+Return" = "exec --no-startup-id ${lib.getExe pkgs.foot}";
 
           "${mod}+Shift+c" = "kill";
           "${mod}+Shift+space" = "floating toggle";
@@ -152,20 +152,21 @@ in
           "${mod}+v" = "split v";
 
           # recompile home-manager
-          "${mod}+Shift+apostrophe" = "exec foot --font '${termFont}:size=9' --window-size-chars=100x50 --app-id=popup-term -- bash -i -c \"rebuild-home; read -n 1 -s -r -p '[ press any key to continue ]'\"";
+          "${mod}+Shift+apostrophe" = "exec ${lib.getExe pkgs.foot} --font '${termFont}:size=9' --window-size-chars=100x50 --app-id=popup-term -- bash -i -c \"rebuild-home; read -n 1 -s -r -p '[ press any key to continue ]'\"";
           "${mod}+Shift+r" = "exec ${pkgs.sway}/bin/swaymsg reload";
-          "--release Print" = "exec --no-startup-id ${pkgs.sway-contrib.grimshot}/bin/grimshot copy area";
+          "--release Print" = "exec --no-startup-id ${lib.getExe pkgs.sway-contrib.grimshot} copy area";
           # nix swaylock is broken
-          "${mod}+Shift+semicolon" = "exec ${pkgs.sway}/bin/swaylock -f -c 000000";
+          "${mod}+Shift+semicolon" = "exec /usr/bin/swaylock -f -c 000000";
           "${mod}+p" = "exec --no-startup-id pick-foot";
           "${mod}+Shift+q" = "exec ${pkgs.sway}/bin/swaynag -t warning -m 'Exit Sway?' -b 'Yes' '${pkgs.sway}/bin/swaymsg exit'";
-          "XF86MonBrightnessUp" = "exec --no-startup-id ${pkgs.brightnessctl}/bin/brightnessctl s 10+";
-          "XF86MonBrightnessDown" = "exec --no-startup-id ${pkgs.brightnessctl}/bin/brightnessctl s 10-";
+          "XF86MonBrightnessUp" = "exec --no-startup-id ${lib.getExe pkgs.brightnessctl} s 10+";
+          "XF86MonBrightnessDown" = "exec --no-startup-id ${pkgs.brightnessctl} s 10-";
         }
       ];
       startup = [
         { command = "${pkgs.sway}/bin/swaymsg workspace 1"; always = true; }
         { command = "swaybg -c #2b2b2b"; always = true; }
+        { command = "${pkgs.swayidle}/bin/swayidle -w before-sleep '/usr/bin/waylock'"; always = false; }
       ];
     };
     extraConfig = ''

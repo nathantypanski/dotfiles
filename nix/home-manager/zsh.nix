@@ -28,6 +28,7 @@ in
       ls = "ls --color=auto";
       ll = "ls -l";
       la = "ls -a";
+      userctl = "systemctl --user";
     };
     profileExtra = ''
       umask 027

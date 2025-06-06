@@ -74,6 +74,7 @@ in {
     libglvnd
     xwayland
     swayidle
+    swaylock-effects
 
     wl-clipboard
     mako
