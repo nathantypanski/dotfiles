@@ -24,7 +24,7 @@ in {
     (import ./foot.nix { inherit termFont; })
     (import ./newsboat.nix {
       inherit config pkgs;
-      browser = lib.getExe config.myPackages.firefox-jailed;
+      browser = lib.getExe config.ndt-home.firefox-jailed;
     })
     (import ./git.nix {
       inherit homeDirectory username;

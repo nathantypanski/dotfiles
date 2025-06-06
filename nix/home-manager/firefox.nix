@@ -15,7 +15,7 @@ let
     '');
 in
 {
-  options.myPackages.firefox-jailed = lib.mkOption {
+  options.ndt-home.firefox-jailed = lib.mkOption {
     type = lib.types.package;
     default = firefox-jailed;
     description = "Firefox wrapped with firejail";
@@ -29,7 +29,7 @@ in
 
     home.packages = with pkgs; [
       firefox-devedition
-      config.myPackages.firefox-jailed
+      config.ndt-home.firefox-jailed
     ];
   };
 }
