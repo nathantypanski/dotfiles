@@ -180,7 +180,7 @@ in
             "${mod}+p" = "exec --no-startup-id pick-foot";
             "${mod}+Shift+q" = "exec ${pkgs.sway}/bin/swaynag -t warning -m 'Exit Sway?' -b 'Yes' '${pkgs.sway}/bin/swaymsg exit'";
             "XF86MonBrightnessUp" = "exec --no-startup-id ${lib.getExe pkgs.brightnessctl} s 10+";
-            "XF86MonBrightnessDown" = "exec --no-startup-id ${pkgs.brightnessctl} s 10-";
+            "XF86MonBrightnessDown" = "exec --no-startup-id ${lib.getExe pkgs.brightnessctl} s 10-";
           }
         ];
         startup = [
