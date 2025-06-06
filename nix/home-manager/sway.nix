@@ -2,20 +2,33 @@
 
 
 let
-  swayWithNixGL = pkgs.writeShellScriptBin "sway" ''
-    exec ${lib.getExe pkgs.nixgl.nixGLMesa} ${pkgs.sway}/bin/sway "$@"
-  '';
-  swayPackageWithNixGL = pkgs.symlinkJoin {
-    name = "sway-with-nixgl";
-    paths = [ pkgs.sway ];
-    postBuild = ''
-      rm $out/bin/sway
-      cp ${swayWithNixGL}/bin/sway $out/bin/sway
+  _ = builtins.trace "withNixGL is: ${toString withNixGL}" null;
+
+  swayPackageWithNixGL = pkgs.sway.overrideAttrs (old: {
+    nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ pkgs.makeWrapper ];
+
+    postInstall = (old.postInstall or "") + ''
+      # Wrap the sway binary
+      wrapProgram $out/bin/sway \
+        --run 'eval "$(${lib.getExe pkgs.nixgl.nixGLMesa} printenv)"'
     '';
-  };
+  });
+
   swayPackage = if withNixGL
                 then swayPackageWithNixGL
                 else pkgs.sway;
+
+  # Create user-sway based on whether nixGL is enabled
+  userSway = if withNixGL == true
+    then (pkgs.writeShellScriptBin "user-sway" ''
+      # Set up nixGL environment and pass it to systemd-run
+      exec systemd-run --user --scope \
+        ${lib.getExe pkgs.nixgl.nixGLMesa} ${pkgs.sway}/bin/sway "$@"
+    '')
+    else (pkgs.writeShellScriptBin "user-sway" ''
+      # Use plain sway
+      exec systemd-run --user --scope ${pkgs.sway}/bin/sway "$@"
+    '');
 in
 {
   options.ndt-home.sway = {
@@ -161,15 +174,7 @@ in
       sway-contrib.grimshot
       swayimg
 
-      nixgl.nixGLMesa
-
-      (pkgs.writeShellScriptBin "user-sway-nixgl" ''
-        systemd-run --user --scope ${lib.getExe pkgs.nixgl.nixGLMesa} sway
-      '')
-
-      # (pkgs.writeShellScriptBin "user-sway-nixgl" ''
-      #   exec dbus-run-session ${lib.getExe pkgs.nixgl.nixGLMesa} ${pkgs.sway}/bin/sway
-      # '')
+      userSway
       (pkgs.writeShellScriptBin "pick-foot" ''
         exec ${pkgs.foot}/bin/foot --app-id=launcher --title=launcher \
              -e 'bash' '-c' \
@@ -185,6 +190,8 @@ in
         tmux set-environment -g WAYLAND_DISPLAY "$WAYLAND_DISPLAY"
         tmux set-environment -g SWAYSOCK "$SWAYSOCK"
     '')
+    ] ++ lib.optionals withNixGL [
+      nixgl.nixGLMesa
     ];
 
     wayland.windowManager.sway = {
