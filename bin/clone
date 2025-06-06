@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-parsegiturl() {
+parse_git_url() {
     local url="${1}"
 
     echo "${url}" | awk -F '[/:@]' '
