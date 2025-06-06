@@ -115,6 +115,8 @@ in {
     go
     gotools
     # lsps
+    tree-sitter
+
     gopls
     rust-analyzer
     nil
