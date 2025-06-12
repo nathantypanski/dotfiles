@@ -54,7 +54,7 @@ in
     home.pointerCursor = {
       package = pkgs.adwaita-icon-theme;
       name  = "Adwaita";   # any cursor theme in your icon path
-      size  = 7;           # logical pixels → doubles on a 2×-scaled output
+      size  = 14;          # logical pixels → doubles on a 2×-scaled output
       gtk.enable  = true;  # write GTK settings files
       x11.enable  = true;  # export XCURSOR_* for XWayland & Flatpaks
       sway.enable = true;  # adds `seat * xcursor_theme …` to sway.conf
@@ -158,21 +158,29 @@ in
     };
 
     home.packages = with pkgs; [
-      # support utilities
       xwayland
-      libnotify # notify-send
-
-      # sway tools
-      wl-clipboard
+      # libnotify provides `notify-send`
+      libnotify
+      mesa
+      wayland
+      xwayland
+      swayidle
+      dconf-editor
       adwaita-icon-theme
+
+      # sway tools (bound)
+      wl-clipboard
       brightnessctl
       swayidle
-      swaylock-effects
-      imv
       swaybg
-      dconf-editor
       sway-contrib.grimshot
       swayimg
+
+      # programs
+      dconf-editor
+      swayimg
+      imv
+      signal-desktop
 
       userSway
       (pkgs.writeShellScriptBin "pick-foot" ''
@@ -219,7 +227,7 @@ in
           "2362:628:PIXA3854:00_093A:0274_Touchpad" = {
             scroll_factor = "0.5";
             accel_profile = "adaptive";
-            pointer_accel = "-0.1";
+            pointer_accel = "0.2";
             dwt = "disabled";
             click_method = "clickfinger";
           };

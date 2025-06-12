@@ -25,6 +25,7 @@ in
     };
     shellAliases = {
       x = "tmux";
+      g = "git";
       ls = "ls --color=auto";
       ll = "ls -l";
       la = "ls -a";

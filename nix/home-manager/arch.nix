@@ -53,9 +53,6 @@ in {
   home.packages = with pkgs; [
     tmux
     foot
-    mesa
-    wayland
-    brightnessctl
     tailscale
 
     fontconfig
@@ -64,9 +61,6 @@ in {
     terminus_font
     terminus_font_ttf
     libglvnd
-    xwayland
-    swayidle
-    swaylock-effects
 
     wl-clipboard
     mako
@@ -77,6 +71,7 @@ in {
     tig
     xfce.thunar
     wdisplays
+    pavucontrol
     (ungoogled-chromium.override {
       # these args get baked into the wrapper
       commandLineArgs = [
@@ -88,18 +83,12 @@ in {
       ];
     })
 
-    dconf-editor
-    sway-contrib.grimshot
-    imv
-    swaybg
     procps
     fzf
     bashInteractive
-    brightnessctl
     nix-search
     silver-searcher
     aspellDicts.en
-    pavucontrol
 
     go
     gotools
@@ -151,10 +140,10 @@ in {
           --enable-features=UseOzonePlatform \
           --ozone-platform=wayland $@
     '')
-    signal-desktop
-    swayimg
     passage
     yubikey-manager
+
+    transmission_4-gtk
   ];
 
   programs.wofi = {
