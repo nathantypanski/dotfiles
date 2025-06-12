@@ -15,6 +15,6 @@ echo >&2 "running 'nix build .#darwinConfigurations.${HOSTNAME}.system'"
 
 nix build ".#darwinConfigurations.${HOSTNAME}.system" --impure
 
-echo >&2 "./result/sw/bin/darwin-rebuild activate"
+echo >&2 "${SCRIPT_DIR}/result/sw/bin/darwin-rebuild activate"
 
 "${SCRIPT_DIR}/result/sw/bin/darwin-rebuild" "activate"
