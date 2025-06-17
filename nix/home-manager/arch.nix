@@ -144,6 +144,9 @@ in {
     yubikey-manager
 
     transmission_4-gtk
+    gitit
+
+    claude-code
   ];
 
   programs.wofi = {
