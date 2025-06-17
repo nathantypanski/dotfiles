@@ -366,8 +366,6 @@ in
       # export WLR_RENDERER=pixman
       # export LIBGL_DRIVERS_PATH=/usr/lib/dri
       # export GBM_DRIVERS_PATH=/usr/lib/dri
-
-      eval "$(${lib.getExe pkgs.nixgl.nixGLMesa} printenv)"
     '';
     };
   };
