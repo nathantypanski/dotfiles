@@ -113,7 +113,7 @@ in {
     python313Packages.mcp
 
     (pkgs.writeShellScriptBin "rebuild-home" ''
-      exec /home/ndt/src/github.com/nathantypanski/dotfiles/nix/arch/rebuild.sh
+      exec ${homeDirectory}/src/github.com/nathantypanski/dotfiles/nix/arch/rebuild.sh
     '')
     (pkgs.writeShellScriptBin "which-path" ''
       while IFS= read -r line; do
