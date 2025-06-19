@@ -100,17 +100,17 @@ in {
     rust-analyzer
     nil
     bash-language-server
-    python313
-    python313Packages.pip
-    python313Packages.virtualenv
     python313Packages.python-lsp-server
     python313Packages.pylsp-mypy
     python313Packages.pylsp-rope
     python313Packages.python-lsp-ruff
-    poetry
 
-    #mcp
-    python313Packages.mcp
+    (python313.withPackages (ps: with ps; [
+      mcp
+      pip
+      virtualenv
+    ]))
+    poetry
 
     (pkgs.writeShellScriptBin "rebuild-home" ''
       exec ${homeDirectory}/src/github.com/nathantypanski/dotfiles/nix/arch/rebuild.sh
