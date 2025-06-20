@@ -95,6 +95,7 @@ in {
     # lsps
     tree-sitter
     jq
+    parallel
 
     gopls
     rust-analyzer
@@ -147,6 +148,9 @@ in {
     gitit
 
     claude-code
+    (pkgs.writeShellScriptBin "claude-jailed" ''
+      exec firejail --profile=claude-code ${pkgs.claude-code}/bin/claude "$@"
+    '')
   ];
 
   programs.wofi = {
@@ -215,4 +219,6 @@ in {
   };
 
   systemd.user.enable = true;
+
+  home.file.".config/firejail/claude-code.profile".source = "${homeDirectory}/src/github.com/nathantypanski/dotfiles/nix/home-manager/files/claude-code.profile";
 }
