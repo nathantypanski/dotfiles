@@ -85,6 +85,8 @@ whitelist ${HOME}/src
 whitelist ${HOME}/.claude
 whitelist ${HOME}/.claude.json
 whitelist ${HOME}/.config/claude
+whitelist ${HOME}/.config/git
+whitelist ${HOME}/.config
 whitelist ${HOME}/.local/share/claude
 whitelist ${HOME}/.cache/claude
 whitelist ${HOME}/.nix-profile
