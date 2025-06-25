@@ -17,4 +17,4 @@ nix build ".#darwinConfigurations.${HOSTNAME}.system" --impure
 
 echo >&2 "${SCRIPT_DIR}/result/sw/bin/darwin-rebuild activate"
 
-"${SCRIPT_DIR}/result/sw/bin/darwin-rebuild" "activate"
+sudo "${SCRIPT_DIR}/result/sw/bin/darwin-rebuild" "activate"
