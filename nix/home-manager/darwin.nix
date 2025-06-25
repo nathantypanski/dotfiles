@@ -36,6 +36,10 @@ in {
     pkgs.emacs-git
     pkgs.nix-search
     pkgs.silver-searcher
+    pkgs.tig
+    pkgs.utm
+    pkgs.transmission_4-qt5
+    pkgs.claude-code
   ];
 
   # Let Home Manager install and manage itself.
