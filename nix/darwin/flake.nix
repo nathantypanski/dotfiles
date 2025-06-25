@@ -43,11 +43,13 @@
 
       # Declare the user that will be running `nix-darwin`.
       users.users.ndt = {
-          name = "ndt";
-          home = "/Users/ndt";
+        name = username;
+        home = "/Users/${username}";
       };
 
       ids.gids.nixbld = 350;
+
+      system.primaryUser = username;
 
       environment.systemPackages = with pkgs; [
         neovim
