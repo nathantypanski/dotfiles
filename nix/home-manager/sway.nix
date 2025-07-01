@@ -344,6 +344,11 @@ in
           { command = "${swayPackage}/bin/swaymsg workspace 1"; always = true; }
           { command = "swaybg -c #2b2b2b"; always = true; }
           { command = "${pkgs.swayidle}/bin/swayidle -w before-sleep '/usr/bin/waylock'"; always = false; }
+          { command = "${lib.getExe pkgs.foot} --app-id=home -e tmux new-session -A -s home"; always = false; }
+          { command = "${lib.getExe pkgs.foot} --app-id=sys -e tmux new-session -A -s sys"; always = false; }
+          { command = "${lib.getExe pkgs.foot} --app-id=mon -e tmux new-session -A -s mon"; always = false; }
+          { command = "${lib.getExe config.ndt-home.firefox-jailed}"; always = false; }
+          { command = "${lib.getExe pkgs.foot} --app-id=scratchpad -e tmux new-session -A -s scratch"; always = false; }
         ];
       };
       extraConfig = ''
@@ -357,9 +362,14 @@ in
       output eDP-1 scale 2
       for_window [app_id="popup-term"] floating enable, move position center, border pixel 3
       for_window [app_id="launcher"] floating enable, move position center, border pixel 3, focus
+      for_window [app_id="home"] move to workspace 1
+      for_window [app_id="sys"] move to workspace 2
+      for_window [app_id="mon"] move to workspace 0
+      for_window [app_id="scratchpad"] move scratchpad
       workspace_auto_back_and_forth yes
       default_border pixel 1
       default_floating_border pixel 3
+      titlebar_border_thickness 0
     '';
       extraSessionCommands = ''
       # force software rendering - broken hardware rendering on arch
