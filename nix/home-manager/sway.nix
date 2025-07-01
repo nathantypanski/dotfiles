@@ -227,7 +227,7 @@ in
           "2362:628:PIXA3854:00_093A:0274_Touchpad" = {
             scroll_factor = "0.5";
             accel_profile = "adaptive";
-            pointer_accel = "0.2";
+            pointer_accel = "0.1";
             dwt = "disabled";
             click_method = "clickfinger";
           };
