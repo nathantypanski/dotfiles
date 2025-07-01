@@ -333,7 +333,7 @@ in
             "${mod}+Shift+r" = "exec ${swayPackage}/bin/swaymsg reload";
             "--release Print" = "exec --no-startup-id ${lib.getExe pkgs.sway-contrib.grimshot} copy area";
             # nix swaylock is broken
-            "${mod}+Shift+semicolon" = "exec /usr/bin/swaylock -f -c 000000";
+            "${mod}+Shift+semicolon" = "exec /usr/bin/swaylock -f -c 3f3f3f";
             "${mod}+p" = "exec --no-startup-id pick-foot";
             "${mod}+Shift+q" = "exec ${swayPackage}/bin/swaynag -t warning -m 'Exit Sway?' -b 'Yes' '${swayPackage}/bin/swaymsg exit'";
             "XF86MonBrightnessUp" = "exec --no-startup-id ${lib.getExe pkgs.brightnessctl} s 10+";
