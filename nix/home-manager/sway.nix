@@ -343,10 +343,9 @@ in
         startup = [
           { command = "${swayPackage}/bin/swaymsg workspace 1"; always = true; }
           { command = "swaybg -c #2b2b2b"; always = true; }
-          { command = "${pkgs.swayidle}/bin/swayidle -w before-sleep '/usr/bin/waylock'"; always = false; }
-          { command = "${lib.getExe pkgs.foot} --app-id=home -e tmux new-session -A -s home"; always = false; }
+          { command = "${lib.getExe pkgs.foot} --app-id=home -e tmux new-session -A -s home -c ${homeDirectory}/src/github.com/nathantypanski/dotfiles"; always = false; }
           { command = "${lib.getExe pkgs.foot} --app-id=sys -e tmux new-session -A -s sys"; always = false; }
-          { command = "${lib.getExe pkgs.foot} --app-id=mon -e tmux new-session -A -s mon"; always = false; }
+          { command = "${lib.getExe pkgs.foot} --app-id=mon -e bash -c 'tmux new-session -A -s mon \\; send-keys htop Enter'"; always = false; }
           { command = "${lib.getExe config.ndt-home.firefox-jailed}"; always = false; }
           { command = "${lib.getExe pkgs.foot} --app-id=scratchpad -e tmux new-session -A -s scratch"; always = false; }
         ];
