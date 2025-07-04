@@ -1,0 +1,17 @@
+[Unit]
+Description=Measure filesystem integrity into PCR 15
+DefaultDependencies=no
+After=cryptsetup.target
+After=systemd-pcrphase-initrd.service
+Before=initrd-switch-root.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/bin/check-pcr15.sh
+StandardOutput=journal+console
+StandardError=journal+console
+
+[Install]
+WantedBy=initrd.target
+RequiredBy=initrd-switch-root.target

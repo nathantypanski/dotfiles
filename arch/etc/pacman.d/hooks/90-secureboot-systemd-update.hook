@@ -1,0 +1,10 @@
+[Trigger]
+Operation = Upgrade
+Type = Package
+Target = systemd # systemd-boot is part of the systemd package
+
+[Action]
+Description = Updating and signing systemd-boot on ESP for Secure Boot...
+When = PostTransaction
+Exec = /usr/local/bin/update-signed-bootloader
+NeedsTargets
