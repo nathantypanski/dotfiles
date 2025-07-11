@@ -2,7 +2,7 @@
 
 
 let
-  _ = builtins.trace "withNixGL is: ${toString withNixGL}" null;
+  # Remove debug trace for production
 
   swayPackageWithNixGL = pkgs.sway.overrideAttrs (old: {
     nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ pkgs.makeWrapper ];
@@ -161,9 +161,8 @@ in
       xwayland
       # libnotify provides `notify-send`
       libnotify
-      mesa
+      mesa  # Graphics drivers (replaces deprecated mesa.drivers)
       wayland
-      xwayland
       swayidle
       dconf-editor
       adwaita-icon-theme
@@ -183,6 +182,10 @@ in
       signal-desktop
 
       userSway
+      # System swaylock wrapper (finds system binary)
+      (pkgs.writeShellScriptBin "system-swaylock" ''
+        exec "$(command -v swaylock || echo /usr/bin/swaylock)" "$@"
+      '')
       (pkgs.writeShellScriptBin "pick-foot" ''
         exec ${pkgs.foot}/bin/foot --app-id=launcher --title=launcher \
              -e 'bash' '-c' \
@@ -332,8 +335,8 @@ in
             "${mod}+Shift+apostrophe" = "exec ${lib.getExe pkgs.foot} --font '${termFont}:size=9' --window-size-chars=100x50 --app-id=popup-term -- bash -i -c \"rebuild-home; read -n 1 -s -r -p '[ press any key to continue ]'\"";
             "${mod}+Shift+r" = "exec ${swayPackage}/bin/swaymsg reload";
             "--release Print" = "exec --no-startup-id ${lib.getExe pkgs.sway-contrib.grimshot} copy area";
-            # nix swaylock is broken
-            "${mod}+Shift+semicolon" = "exec /usr/bin/swaylock -f -c 3f3f3f";
+            # Use system swaylock (Arch package) instead of Nix version
+            "${mod}+Shift+semicolon" = "exec system-swaylock -f -c 3f3f3f";
             "${mod}+p" = "exec --no-startup-id pick-foot";
             "${mod}+Shift+q" = "exec ${swayPackage}/bin/swaynag -t warning -m 'Exit Sway?' -b 'Yes' '${swayPackage}/bin/swaymsg exit'";
             "XF86MonBrightnessUp" = "exec --no-startup-id ${lib.getExe pkgs.brightnessctl} s 10+";
@@ -343,7 +346,7 @@ in
         startup = [
           { command = "${swayPackage}/bin/swaymsg workspace 1"; always = true; }
           { command = "swaybg -c #2b2b2b"; always = true; }
-          { command = "${lib.getExe pkgs.swayidle} -w timeout 300 '/usr/bin/swaylock -f -c 3f3f3f' before-sleep '/usr/bin/swaylock -f -c 3f3f3f'"; always = false; }
+          { command = "${lib.getExe pkgs.swayidle} -w timeout 300 'system-swaylock -f -c 3f3f3f' before-sleep 'system-swaylock -f -c 3f3f3f'"; always = false; }
           { command = "${lib.getExe pkgs.foot} --app-id=home -e tmux new-session -A -s home -c ${homeDirectory}/src/github.com/nathantypanski/dotfiles"; always = false; }
           { command = "${lib.getExe pkgs.foot} --app-id=sys -e tmux new-session -A -s sys"; always = false; }
           { command = "${lib.getExe pkgs.foot} --app-id=mon -e bash -c 'tmux new-session -A -s mon \\; send-keys htop Enter'"; always = false; }
@@ -372,7 +375,7 @@ in
       titlebar_border_thickness 0
     '';
       extraSessionCommands = ''
-      # force software rendering - broken hardware rendering on arch
+      # Hardware rendering workaround for Arch (commented out - using nixGL instead)
       # export WLR_RENDERER=pixman
       # export LIBGL_DRIVERS_PATH=/usr/lib/dri
       # export GBM_DRIVERS_PATH=/usr/lib/dri
