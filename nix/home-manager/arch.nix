@@ -161,7 +161,7 @@ in {
 
   programs.emacs = {
     enable = true;
-    package = pkgs.emacs-git-pgtk;
+    package = pkgs.emacs-unstable-pgtk;
   };
 
   programs.keychain = {
