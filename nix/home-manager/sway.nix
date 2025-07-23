@@ -213,7 +213,10 @@ in
       systemd = {
         enable = true;
       };
+
       wrapperFeatures.gtk = true;
+      xwayland = true;
+
       config = {
         window = {
           border = 3;
@@ -344,6 +347,7 @@ in
           }
         ];
         startup = [
+          { command = "${lib.getExe pkgs.xwayland}"; always = true; }
           { command = "${swayPackage}/bin/swaymsg workspace 1"; always = true; }
           { command = "swaybg -c #2b2b2b"; always = true; }
           { command = "${lib.getExe pkgs.swayidle} -w timeout 300 'system-swaylock -f -c 3f3f3f' before-sleep 'system-swaylock -f -c 3f3f3f'"; always = false; }

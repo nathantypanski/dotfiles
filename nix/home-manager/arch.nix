@@ -105,6 +105,7 @@ in {
     python313Packages.pylsp-mypy
     python313Packages.pylsp-rope
     python313Packages.python-lsp-ruff
+    python313Packages.flake8
 
     (python313.withPackages (ps: with ps; [
       mcp
@@ -150,6 +151,10 @@ in {
     (pkgs.writeShellScriptBin "claude-jailed" ''
       exec firejail --profile=claude-code ${pkgs.claude-code}/bin/claude "$@"
     '')
+    xwayland
+    xwayland-run
+    xorg.xhost
+    xorg.xauth
   ];
 
   programs.wofi = {

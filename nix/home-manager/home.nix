@@ -91,7 +91,7 @@
     wl-clipboard
     mako
     # so things like virt-manager don't break
-    adwaita-icon-theme 
+    adwaita-icon-theme
     alacritty
     wofi
     # haskell.compiler.ghc921
