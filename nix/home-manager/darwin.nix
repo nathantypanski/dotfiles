@@ -7,6 +7,7 @@ let
 in {
   imports = [
     ./zsh.nix
+    ./scripts.nix
     (import ./tmux.nix { inherit config pkgs copyCommand; })
     (import ./neovim.nix { inherit config pkgs; })
     (import ./git.nix {

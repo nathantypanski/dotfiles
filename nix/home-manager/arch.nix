@@ -16,6 +16,7 @@ in {
   imports = [
     (import ./neovim.nix { inherit config pkgs; })
     (import ./tmux.nix { inherit config pkgs copyCommand; })
+    ./scripts.nix
     (import ./sway.nix {
       inherit config pkgs lib mod termFont homeDirectory;
       withNixGL = true;
