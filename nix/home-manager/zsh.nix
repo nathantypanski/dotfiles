@@ -60,6 +60,18 @@ in
 
       setopt vi
       bindkey '^R' history-incremental-search-backward
+
+      function gptemacs() {
+        if ! [[ -n "''${OPENAI_API_KEY}" && -n "''${ANTHROPIC_API_KEY}" ]]; then
+          echo >&2 "setting OPENAI_API_KEY and ANTHROPIC_API_KEY using passage"
+          export OPENAI_API_KEY="$(passage openai-api-key-redbow)"
+          export ANTHROPIC_API_KEY="$(passage console.anthropic.com/api-redbow)"
+        else
+          echo >&2 "OPENAI_API_KEY, ANTHROPIC_API_KEY already set"
+        fi
+        echo >&2 "launching emacs ..."
+        emacs -nw "$@"
+      }
     '';
   };
 }
