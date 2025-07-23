@@ -174,6 +174,9 @@ in {
     enable = true;
     enableZshIntegration = true;
     extraFlags = [ "--noask" "--quiet" ];
+    keys = [
+      "id_ed25519"
+    ];
   };
 
   programs.gpg = {
