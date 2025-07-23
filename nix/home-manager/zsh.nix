@@ -46,16 +46,16 @@ in
 
       # I'm currently relying on system-provided grml prompts.
       #
-      # PROMPT="%F{red}%n%F{white}@%B%F{blue}%m%b %F{white}[%F{yellow}%5~%F{white}]%F %F{white}$ "
+      # PROMPT="%F{red}%n%F{white}@%B%F{blue}%m%b %F{white}[%F{yellow}%5~%F{white}]%F %F{white}''$ "
 
       # source grml zshrc
-      if [[ -f "${grmlZshrc}" ]]; then
-        source "${grmlZshrc}"
+      if [[ -f "''${grmlZshrc}" ]]; then
+        source "''${grmlZshrc}"
       fi
 
       # TODO: remove this from nix if running on Linux
-      if [[ -f "${brewShell}" ]]; then
-            eval "$(${brewShell} shellenv)"
+      if [[ -f "''${brewShell}" ]]; then
+            eval "$(''${brewShell} shellenv)"
       fi
 
       setopt vi
