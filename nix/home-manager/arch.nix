@@ -102,11 +102,6 @@ in {
     rust-analyzer
     nil
     bash-language-server
-    python313Packages.python-lsp-server
-    python313Packages.pylsp-mypy
-    python313Packages.pylsp-rope
-    python313Packages.python-lsp-ruff
-    python313Packages.flake8
 
     (python313.withPackages (ps: with ps; [
       mcp
