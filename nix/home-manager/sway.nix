@@ -29,6 +29,18 @@ let
       # Use plain sway
       exec systemd-run --user --scope ${pkgs.sway}/bin/sway "$@"
     '');
+
+  startupScript = pkgs.writeShellScript "sway-startup" ''
+    set -euo pipefail
+
+    sleep 2
+
+    ${lib.getExe pkgs.foot} --app-id=home -e tmux new-session -A -s home -c "${homeDirectory}/src/github.com/nathantypanski/dotfiles"
+    ${lib.getExe pkgs.foot} --app-id=sys -e tmux new-session -A -s sys
+    ${lib.getExe pkgs.foot} --app-id=mon -e bash -c 'tmux new-session -A -s mon \\; send-keys htop Enter'
+    ${lib.getExe config.ndt-home.firefox-jailed}
+    ${lib.getExe pkgs.foot} --app-id=scratchpad -e tmux new-session -A -s scratch
+  '';
 in
 {
   options.ndt-home.sway = {
@@ -351,11 +363,7 @@ in
           { command = "${swayPackage}/bin/swaymsg workspace 1"; always = true; }
           { command = "swaybg -c #2b2b2b"; always = true; }
           { command = "${lib.getExe pkgs.swayidle} -w timeout 300 'system-swaylock -f -c 3f3f3f' before-sleep 'system-swaylock -f -c 3f3f3f'"; always = false; }
-          { command = "${lib.getExe pkgs.foot} --app-id=home -e tmux new-session -A -s home -c ${homeDirectory}/src/github.com/nathantypanski/dotfiles"; always = false; }
-          { command = "${lib.getExe pkgs.foot} --app-id=sys -e tmux new-session -A -s sys"; always = false; }
-          { command = "${lib.getExe pkgs.foot} --app-id=mon -e bash -c 'tmux new-session -A -s mon \\; send-keys htop Enter'"; always = false; }
-          { command = "${lib.getExe config.ndt-home.firefox-jailed}"; always = false; }
-          { command = "${lib.getExe pkgs.foot} --app-id=scratchpad -e tmux new-session -A -s scratch"; always = false; }
+          { command = "${startupScript}"; always = false; }
         ];
       };
       extraConfig = ''
