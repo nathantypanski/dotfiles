@@ -116,6 +116,7 @@
         secrets = secrets;
         username = username;
         homeDirectory = homeDirectory;
+        home-manager.backupFileExtension = "bk";
       };
     };
   in {

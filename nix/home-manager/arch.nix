@@ -3,7 +3,7 @@
 let
   copyCommand = "wl-copy";
   mod = "Mod4";
-  envPrintScript = pkgs.writeShellScript "test" ''
+  envPrintScript = pkgs.writeShellScript "xdg-test" ''
     #!${pkgs.bash}/bin/bash
     printf '(systemd)=(envvar)\n'
     printf '%s=%s\n' XDG_CACHE_HOME "$XDG_CACHE_HOME"
@@ -62,6 +62,9 @@ in {
     terminus_font
     terminus_font_ttf
     libglvnd
+    wayland-utils
+    vulkan-tools
+    glxinfo
 
     wl-clipboard
     mako
@@ -227,6 +230,27 @@ in {
     XDG_CACHE_HOME = "${homeDirectory}/.cache";
     XDG_STATE_HOME = "${homeDirectory}/.local/state";
   };
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "application/pdf" = "zathura.desktop";
+      "application/x-extension-htm" = "firefox.desktop";
+      "application/x-extension-html" = "firefox.desktop";
+      "application/x-extension-shtml" = "firefox.desktop";
+      "application/x-extension-xht" = "firefox.desktop";
+      "application/x-extension-xhtml" = "firefox.desktop";
+      "application/xhtml+xml" = "firefox.desktop";
+      "text/html" = "firefox.desktop";
+      "x-scheme-handler/chrome" = "firefox.desktop";
+      "x-scheme-handler/http" = "firefox.desktop";
+      "x-scheme-handler/https" = "firefox.desktop";
+      # "x-scheme-handler/magnet" = "userapp-transmission-gtk-CUDW72.desktop";
+      "x-scheme-handler/sgnl" = "signal.desktop";
+      "x-scheme-handler/signalcaptcha" = "signal.desktop";
+      "x-scheme-handler/magnet" = "transmission-gtk.desktop";
+    };
+  };
+
 
   fonts.fontconfig = {
     enable = true;
@@ -235,4 +259,5 @@ in {
   systemd.user.enable = true;
 
   home.file.".config/firejail/claude-code.profile".source = "${homeDirectory}/src/github.com/nathantypanski/dotfiles/nix/home-manager/files/claude-code.profile";
+
 }

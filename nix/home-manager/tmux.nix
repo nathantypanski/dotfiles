@@ -75,8 +75,17 @@ set-option -ga terminal-overrides ",xterm-256color:Tc"
 # source config file
 bind r source-file ~/.config/tmux/tmux.conf \; display "Reloaded!"
 
-# history
-set -g history-limit 9999
+# history - maximum practical scrollback
+set -g history-limit 1000000
+
+# Buffer limits for copy/paste operations
+set -g buffer-limit 50
+
+# Message display time (milliseconds)
+set -g display-time 4000
+
+# Pane display time for choose-pane
+set -g display-panes-time 2000
 
 # allow terminal scrolling
 set-option -g terminal-overrides 'xterm*:smcup@:rmcup@'

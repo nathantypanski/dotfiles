@@ -354,8 +354,8 @@ in
             "${mod}+Shift+semicolon" = "exec system-swaylock -f -c 3f3f3f";
             "${mod}+p" = "exec --no-startup-id pick-foot";
             "${mod}+Shift+q" = "exec ${swayPackage}/bin/swaynag -t warning -m 'Exit Sway?' -b 'Yes' '${swayPackage}/bin/swaymsg exit'";
-            "XF86MonBrightnessUp" = "exec --no-startup-id ${lib.getExe pkgs.brightnessctl} s 10+";
-            "XF86MonBrightnessDown" = "exec --no-startup-id ${lib.getExe pkgs.brightnessctl} s 10-";
+            "XF86MonBrightnessUp" = "exec --no-startup-id ${lib.getExe pkgs.brightnessctl} s '+5%'";
+            "XF86MonBrightnessDown" = "exec --no-startup-id ${lib.getExe pkgs.brightnessctl} s '-5'";
           }
         ];
         startup = [
