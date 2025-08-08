@@ -37,6 +37,7 @@ in {
     (import ./firefox.nix {
       inherit config pkgs lib;
     })
+    (import ./emacs.nix { inherit config pkgs; })
   ];
 
   # Let Home Manager install and manage itself.
@@ -141,13 +142,7 @@ in {
     tpm-fido
     tomb
     passExtensions.pass-tomb
-    pinentry-emacs
     rage
-    (pkgs.writeShellScriptBin "rage-emacs" ''
-      export PINENTRY_PROGRAM=${pkgs.pinentry-emacs}/bin/pinentry-emacs
-      export PATH=${pkgs.age-plugin-yubikey}/bin:${pkgs.age-plugin-tpm}/bin:${pkgs.pinentry-emacs}/bin}:$PATH
-      exec ${pkgs.rage}/bin/rage "$@"
-    '')
     (pkgs.writeShellScriptBin "signal" ''
       ${signal-desktop}/bin/signal-desktop \
           --enable-features=UseOzonePlatform \
@@ -176,10 +171,6 @@ in {
     };
   };
 
-  programs.emacs = {
-    enable = true;
-    package = pkgs.emacs-unstable-pgtk;
-  };
 
   programs.keychain = {
     enable = true;
@@ -199,7 +190,6 @@ in {
     extraConfig = ''
       pinentry-program ${pkgs.pinentry-tty}/bin/pinentry-tty
       allow-loopback-pinentry
-      allow-emacs-pinentry
     '';
   };
 
