@@ -15,7 +15,7 @@
   services.swayidle = {
     enable = true;
     timeouts = [
-      { timeout = 60; command = "${pkgs.swaylock}/bin/swaylock -fF"; }
+      { timeout = 300; command = "${pkgs.swaylock}/bin/swaylock -fF"; }
     ];
     events = [
       { event = "lock"; command = "lock"; }
@@ -91,7 +91,7 @@
     wl-clipboard
     mako
     # so things like virt-manager don't break
-    adwaita-icon-theme 
+    adwaita-icon-theme
     alacritty
     wofi
     # haskell.compiler.ghc921

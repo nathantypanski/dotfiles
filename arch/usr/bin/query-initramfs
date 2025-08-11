@@ -1,0 +1,64 @@
+#!/usr/bin/env python3
+
+import subprocess
+import os
+import sys
+from sys import stderr
+from tempfile import TemporaryDirectory, mkdtemp
+from argparse import ArgumentParser
+from pathlib import Path
+
+def parse_args():
+    parser = ArgumentParser()
+    parser.add_argument('binaries', nargs='+', type=Path,
+                        help='binaries for which to find deps')
+    return parser.parse_args()
+
+def ldd(b: Path):
+    c = Path('/usr/bin/ldd')
+    cmd = [c, b]
+    print(f'running "{c}" against "{b}"', file=stderr)
+    result = subprocess.run(cmd, capture_output=True,
+                            text=True, check=True)
+    dependencies = []
+    # Parse the output of 'ldd' to extract dependencies
+    for line in result.stdout.splitlines():
+        # Each line contains a dependency after '=>', ending with a path
+        parts = [s.strip() for s in line.split('=>')]
+        if len(parts) > 1:
+            dep_path = parts[1].split()[0]
+            dependencies.append(Path(dep_path))
+        else:
+            dependencies.append(Path(line.split(' ')[0].strip()))
+    return dependencies
+
+def extract_boot_img(boot_image, target):
+    print(f'extracting {boot_image} to {target}')
+    # Extract the initramfs image contents
+    lsi_result = subprocess.run(
+        ['lsinitcpio', '-x', boot_image],
+        capture_output=True, text=True, cwd=target)
+
+def main():
+    args = parse_args()
+
+    # with TemporaryDirectory(prefix='initramfs_query_') as tmpdir:
+    tmpdir = mkdtemp(prefix='initramfsquery_', suffix='extract')
+    print(f"Temporary directory created at: {tmpdir}", file=stderr)
+    extract_boot_img('/boot/initramfs-linux.img', tmpdir)
+    for b in args.binaries:
+        print('='*55)
+        print(f'checking for deps for "{b}"', file=stderr)
+        deps = ldd(b)
+        if not deps:
+            print(f'no deps found for "{b}"!', file=stderr)
+        for dep_path in deps:
+            trimmed_path = Path(str(dep_path)[1:])
+            x_dep = tmpdir / trimmed_path
+            if not x_dep.exists():
+                print(f'\tcould not find:\t\t{dep_path}', file=stderr)
+            else:
+                print(f'\t         found:\t\t{dep_path}', file=stderr)
+
+if __name__ == '__main__':
+    main()

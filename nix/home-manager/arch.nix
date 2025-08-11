@@ -3,7 +3,7 @@
 let
   copyCommand = "wl-copy";
   mod = "Mod4";
-  envPrintScript = pkgs.writeShellScript "test" ''
+  envPrintScript = pkgs.writeShellScript "xdg-test" ''
     #!${pkgs.bash}/bin/bash
     printf '(systemd)=(envvar)\n'
     printf '%s=%s\n' XDG_CACHE_HOME "$XDG_CACHE_HOME"
@@ -16,6 +16,7 @@ in {
   imports = [
     (import ./neovim.nix { inherit config pkgs; })
     (import ./tmux.nix { inherit config pkgs copyCommand; })
+    ./scripts.nix
     (import ./sway.nix {
       inherit config pkgs lib mod termFont homeDirectory;
       withNixGL = true;
@@ -36,6 +37,7 @@ in {
     (import ./firefox.nix {
       inherit config pkgs lib;
     })
+    (import ./emacs.nix { inherit config pkgs; })
   ];
 
   # Let Home Manager install and manage itself.
@@ -61,6 +63,9 @@ in {
     terminus_font
     terminus_font_ttf
     libglvnd
+    wayland-utils
+    vulkan-tools
+    glxinfo
 
     wl-clipboard
     mako
@@ -93,7 +98,6 @@ in {
     go
     gotools
     # lsps
-    tree-sitter
     jq
     parallel
 
@@ -101,15 +105,25 @@ in {
     rust-analyzer
     nil
     bash-language-server
-    python313Packages.python-lsp-server
-    python313Packages.pylsp-mypy
-    python313Packages.pylsp-rope
-    python313Packages.python-lsp-ruff
-
     (python313.withPackages (ps: with ps; [
       mcp
       pip
       virtualenv
+      python-lsp-server
+      pylsp-mypy
+      pylsp-rope
+      python-lsp-ruff
+      flake8
+
+      tree-sitter
+      tree-sitter-grammars.tree-sitter-python
+      tree-sitter-grammars.tree-sitter-go
+      tree-sitter-grammars.tree-sitter-rust
+      tree-sitter-grammars.tree-sitter-javascript
+      tree-sitter-grammars.tree-sitter-typescript
+      tree-sitter-grammars.tree-sitter-yaml
+      tree-sitter-grammars.tree-sitter-bash
+      tree-sitter-grammars.tree-sitter-c
     ]))
     poetry
 
@@ -128,13 +142,7 @@ in {
     tpm-fido
     tomb
     passExtensions.pass-tomb
-    pinentry-emacs
     rage
-    (pkgs.writeShellScriptBin "rage-emacs" ''
-      export PINENTRY_PROGRAM=${pkgs.pinentry-emacs}/bin/pinentry-emacs
-      export PATH=${pkgs.age-plugin-yubikey}/bin:${pkgs.age-plugin-tpm}/bin:${pkgs.pinentry-emacs}/bin}:$PATH
-      exec ${pkgs.rage}/bin/rage "$@"
-    '')
     (pkgs.writeShellScriptBin "signal" ''
       ${signal-desktop}/bin/signal-desktop \
           --enable-features=UseOzonePlatform \
@@ -150,6 +158,10 @@ in {
     (pkgs.writeShellScriptBin "claude-jailed" ''
       exec firejail --profile=claude-code ${pkgs.claude-code}/bin/claude "$@"
     '')
+    xwayland
+    xwayland-run
+    xorg.xhost
+    xorg.xauth
   ];
 
   programs.wofi = {
@@ -159,15 +171,14 @@ in {
     };
   };
 
-  programs.emacs = {
-    enable = true;
-    package = pkgs.emacs-git-pgtk;
-  };
 
   programs.keychain = {
     enable = true;
     enableZshIntegration = true;
     extraFlags = [ "--noask" "--quiet" ];
+    keys = [
+      "id_ed25519"
+    ];
   };
 
   programs.gpg = {
@@ -179,7 +190,6 @@ in {
     extraConfig = ''
       pinentry-program ${pkgs.pinentry-tty}/bin/pinentry-tty
       allow-loopback-pinentry
-      allow-emacs-pinentry
     '';
   };
 
@@ -210,6 +220,27 @@ in {
     XDG_CACHE_HOME = "${homeDirectory}/.cache";
     XDG_STATE_HOME = "${homeDirectory}/.local/state";
   };
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "application/pdf" = "zathura.desktop";
+      "application/x-extension-htm" = "firefox.desktop";
+      "application/x-extension-html" = "firefox.desktop";
+      "application/x-extension-shtml" = "firefox.desktop";
+      "application/x-extension-xht" = "firefox.desktop";
+      "application/x-extension-xhtml" = "firefox.desktop";
+      "application/xhtml+xml" = "firefox.desktop";
+      "text/html" = "firefox.desktop";
+      "x-scheme-handler/chrome" = "firefox.desktop";
+      "x-scheme-handler/http" = "firefox.desktop";
+      "x-scheme-handler/https" = "firefox.desktop";
+      # "x-scheme-handler/magnet" = "userapp-transmission-gtk-CUDW72.desktop";
+      "x-scheme-handler/sgnl" = "signal.desktop";
+      "x-scheme-handler/signalcaptcha" = "signal.desktop";
+      "x-scheme-handler/magnet" = "transmission-gtk.desktop";
+    };
+  };
+
 
   fonts.fontconfig = {
     enable = true;
@@ -218,4 +249,5 @@ in {
   systemd.user.enable = true;
 
   home.file.".config/firejail/claude-code.profile".source = "${homeDirectory}/src/github.com/nathantypanski/dotfiles/nix/home-manager/files/claude-code.profile";
+
 }

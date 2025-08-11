@@ -1,0 +1,12 @@
+[Trigger]
+Operation = Upgrade
+Type = Package
+Target = linux
+Target = linux-hardened
+Target = amd-ucode # Add other relevant packages like 'systemd' if its updates affect initramfs build
+
+[Action]
+Description = Rebuilding UKIs and signing with sbctl...
+When = PostTransaction
+Exec = /usr/local/bin/rebuild-ukis-for-sbctl.sh
+NeedsTargets

@@ -2,7 +2,7 @@
 
 
 let
-  _ = builtins.trace "withNixGL is: ${toString withNixGL}" null;
+  # Remove debug trace for production
 
   swayPackageWithNixGL = pkgs.sway.overrideAttrs (old: {
     nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ pkgs.makeWrapper ];
@@ -29,6 +29,18 @@ let
       # Use plain sway
       exec systemd-run --user --scope ${pkgs.sway}/bin/sway "$@"
     '');
+
+  startupScript = pkgs.writeShellScript "sway-startup" ''
+    set -euo pipefail
+
+    sleep 2
+
+    ${lib.getExe pkgs.foot} --app-id=home -e tmux new-session -A -s home -c "${homeDirectory}/src/github.com/nathantypanski/dotfiles"
+    ${lib.getExe pkgs.foot} --app-id=sys -e tmux new-session -A -s sys
+    ${lib.getExe pkgs.foot} --app-id=mon -e bash -c 'tmux new-session -A -s mon \\; send-keys htop Enter'
+    ${lib.getExe config.ndt-home.firefox-jailed}
+    ${lib.getExe pkgs.foot} --app-id=scratchpad -e tmux new-session -A -s scratch
+  '';
 in
 {
   options.ndt-home.sway = {
@@ -161,9 +173,8 @@ in
       xwayland
       # libnotify provides `notify-send`
       libnotify
-      mesa
+      mesa  # Graphics drivers (replaces deprecated mesa.drivers)
       wayland
-      xwayland
       swayidle
       dconf-editor
       adwaita-icon-theme
@@ -183,6 +194,10 @@ in
       signal-desktop
 
       userSway
+      # System swaylock wrapper (finds system binary)
+      (pkgs.writeShellScriptBin "system-swaylock" ''
+        exec "$(command -v swaylock || echo /usr/bin/swaylock)" "$@"
+      '')
       (pkgs.writeShellScriptBin "pick-foot" ''
         exec ${pkgs.foot}/bin/foot --app-id=launcher --title=launcher \
              -e 'bash' '-c' \
@@ -210,7 +225,10 @@ in
       systemd = {
         enable = true;
       };
+
       wrapperFeatures.gtk = true;
+      xwayland = true;
+
       config = {
         window = {
           border = 3;
@@ -225,9 +243,9 @@ in
         input = {
           # framework laptop touchpad
           "2362:628:PIXA3854:00_093A:0274_Touchpad" = {
-            scroll_factor = "0.5";
+            scroll_factor = "0.3";
             accel_profile = "adaptive";
-            pointer_accel = "0.1";
+            pointer_accel = "0.05";
             dwt = "disabled";
             click_method = "clickfinger";
           };
@@ -332,23 +350,20 @@ in
             "${mod}+Shift+apostrophe" = "exec ${lib.getExe pkgs.foot} --font '${termFont}:size=9' --window-size-chars=100x50 --app-id=popup-term -- bash -i -c \"rebuild-home; read -n 1 -s -r -p '[ press any key to continue ]'\"";
             "${mod}+Shift+r" = "exec ${swayPackage}/bin/swaymsg reload";
             "--release Print" = "exec --no-startup-id ${lib.getExe pkgs.sway-contrib.grimshot} copy area";
-            # nix swaylock is broken
-            "${mod}+Shift+semicolon" = "exec /usr/bin/swaylock -f -c 000000";
+            # Use system swaylock (Arch package) instead of Nix version
+            "${mod}+Shift+semicolon" = "exec system-swaylock -f -c 3f3f3f";
             "${mod}+p" = "exec --no-startup-id pick-foot";
             "${mod}+Shift+q" = "exec ${swayPackage}/bin/swaynag -t warning -m 'Exit Sway?' -b 'Yes' '${swayPackage}/bin/swaymsg exit'";
-            "XF86MonBrightnessUp" = "exec --no-startup-id ${lib.getExe pkgs.brightnessctl} s 10+";
-            "XF86MonBrightnessDown" = "exec --no-startup-id ${lib.getExe pkgs.brightnessctl} s 10-";
+            "XF86MonBrightnessUp" = "exec --no-startup-id ${lib.getExe pkgs.brightnessctl} s '+5%'";
+            "XF86MonBrightnessDown" = "exec --no-startup-id ${lib.getExe pkgs.brightnessctl} s '-5'";
           }
         ];
         startup = [
+          { command = "${lib.getExe pkgs.xwayland}"; always = true; }
           { command = "${swayPackage}/bin/swaymsg workspace 1"; always = true; }
           { command = "swaybg -c #2b2b2b"; always = true; }
-          { command = "${pkgs.swayidle}/bin/swayidle -w before-sleep '/usr/bin/waylock'"; always = false; }
-          { command = "${lib.getExe pkgs.foot} --app-id=home -e tmux new-session -A -s home"; always = false; }
-          { command = "${lib.getExe pkgs.foot} --app-id=sys -e tmux new-session -A -s sys"; always = false; }
-          { command = "${lib.getExe pkgs.foot} --app-id=mon -e tmux new-session -A -s mon"; always = false; }
-          { command = "${lib.getExe config.ndt-home.firefox-jailed}"; always = false; }
-          { command = "${lib.getExe pkgs.foot} --app-id=scratchpad -e tmux new-session -A -s scratch"; always = false; }
+          { command = "${lib.getExe pkgs.swayidle} -w timeout 300 'system-swaylock -f -c 3f3f3f' before-sleep 'system-swaylock -f -c 3f3f3f'"; always = false; }
+          { command = "${startupScript}"; always = false; }
         ];
       };
       extraConfig = ''
@@ -372,7 +387,7 @@ in
       titlebar_border_thickness 0
     '';
       extraSessionCommands = ''
-      # force software rendering - broken hardware rendering on arch
+      # Hardware rendering workaround for Arch (commented out - using nixGL instead)
       # export WLR_RENDERER=pixman
       # export LIBGL_DRIVERS_PATH=/usr/lib/dri
       # export GBM_DRIVERS_PATH=/usr/lib/dri

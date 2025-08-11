@@ -20,8 +20,8 @@ blacklist ${HOME}/.mozilla
 blacklist ${HOME}/.tor
 blacklist ${HOME}/.electrum
 blacklist ${HOME}/.*history
-blacklist ${HOME}/.bash*
-blacklist ${HOME}/.zsh*
+blacklist ${HOME}/.bash_history
+blacklist ${HOME}/.zsh_history
 
 # Cryptocurrency & Financial
 blacklist ${HOME}/.bitcoin

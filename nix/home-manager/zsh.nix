@@ -30,6 +30,7 @@ in
       ll = "ls -l";
       la = "ls -a";
       userctl = "systemctl --user";
+      psh = "ps -eo pid,vsz,rss,comm --sort=-vsz | awk 'NR==1{printf \"%-8s %7s %7s %s\\n\", \"PID\", \"VSZ\", \"RSS\", \"COMMAND\"; next} {printf \"%-8s %7.1fG %4dM %s\\n\", $1, $2/1024/1024, $3/1024, $4}' | head -20";
     };
     profileExtra = ''
       umask 027
@@ -46,20 +47,32 @@ in
 
       # I'm currently relying on system-provided grml prompts.
       #
-      # PROMPT="%F{red}%n%F{white}@%B%F{blue}%m%b %F{white}[%F{yellow}%5~%F{white}]%F %F{white}$ "
+      # PROMPT="%F{red}%n%F{white}@%B%F{blue}%m%b %F{white}[%F{yellow}%5~%F{white}]%F %F{white}''$ "
 
       # source grml zshrc
-      if [[ -f "${grmlZshrc}" ]]; then
-        source "${grmlZshrc}"
+      if [[ -f "''${grmlZshrc}" ]]; then
+        source "''${grmlZshrc}"
       fi
 
       # TODO: remove this from nix if running on Linux
-      if [[ -f "${brewShell}" ]]; then
-            eval "$(${brewShell} shellenv)"
+      if [[ -f "''${brewShell}" ]]; then
+            eval "$(''${brewShell} shellenv)"
       fi
 
       setopt vi
       bindkey '^R' history-incremental-search-backward
+
+      function gptemacs() {
+        if ! [[ -n "''${OPENAI_API_KEY}" && -n "''${ANTHROPIC_API_KEY}" ]]; then
+          echo >&2 "setting OPENAI_API_KEY and ANTHROPIC_API_KEY using passage"
+          export OPENAI_API_KEY="$(passage openai-api-key-redbow)"
+          export ANTHROPIC_API_KEY="$(passage console.anthropic.com/api-redbow)"
+        else
+          echo >&2 "OPENAI_API_KEY, ANTHROPIC_API_KEY already set"
+        fi
+        echo >&2 "launching emacs ..."
+        emacs -nw "$@"
+      }
     '';
   };
 }
