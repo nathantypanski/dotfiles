@@ -4,9 +4,17 @@
   programs.emacs = {
     enable = true;
     package = pkgs.emacs-unstable-pgtk;
+    extraPackages = epkgs: with epkgs; [
+      vterm
+    ];
   };
 
   home.packages = with pkgs; [
+    # System dependencies for vterm
+    libvterm
+    cmake
+    libtool
+    
     pinentry-emacs
     (pkgs.writeShellScriptBin "rage-emacs" ''
       export PINENTRY_PROGRAM=${pkgs.pinentry-emacs}/bin/pinentry-emacs
