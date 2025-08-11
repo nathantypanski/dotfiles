@@ -26,6 +26,7 @@
     secrets = {
       userEmail = builtins.getEnv "USER_EMAIL";
     };
+    security.pam.enableSudoTouchIdAuth = true;
     homeDirectory = "/Users/${username}";
     configuration = {pkgs, ... }: {
       # Necessary for using flakes on this system.
@@ -60,7 +61,7 @@
       ];
 
       homebrew = {
-        enable = true;
+        enable = false;
         # onActivation.cleanup = "uninstall";
 
         taps = [ ];

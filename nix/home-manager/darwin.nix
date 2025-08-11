@@ -31,32 +31,50 @@ in {
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
-  home.packages = [
-    pkgs.tmux
-    pkgs.emacs-git
-    pkgs.nix-search
-    pkgs.silver-searcher
-    pkgs.tig
-    pkgs.utm
-    pkgs.transmission_4-qt5
-    pkgs.claude-code
+  home.packages = with pkgs; [
+    tmux
+    emacs-git
+    nix-search
+    silver-searcher
+    tig
+    utm
+    transmission_4-qt5
+    claude-code
+    ripgrep
+    niv
+    tree-sitter-grammars.tree-sitter-typescript
+    javascript-typescript-langserver
+    electrum
+    electrum-ltc
+    solana-cli
+    go-ethereum
+    yubikey-manager
+    uefi-firmware-parser
+    uefi-run
+    uefitool
+    nix-search
+    utm
+    go
+    bazel
+    beancount_2
+    beancount-language-server
+    fava
+    ledger2beancount
+    xan
+    pass
+    claude-code
+    (aspellWithDicts
+      (dicts: with dicts; [ de en en-computers en-science es fr la ]))
+    awk-language-server
+    pentestgpt
+    kanha
+    python312Packages.sectools
   ];
 
-  # Let Home Manager install and manage itself.
-  # programs.home-manager.enable = true;
+  home.sessionVariables = {
+    PATH = "${pkgs.beancount}/bin:$PATH";
+  };
 
-  # programs.git = {
-  #   enable = true;
-  #   userName = username;
-  #   userEmail = secrets.userEmail;
-  #   # home-manager only supports gnupg, so try to workaround
-  #   signing = {
-  #     signByDefault = true;
-  #   };
-  #   extraConfig = {
-  #     gpg.format = "ssh";
-  #     gpg."ssh".allowedSignersFile = "/Users/ndt/.git_allowed_signers";
-  #     user.signingkey = "/Users/ndt/.ssh/id_ed25519.pub";
-  #   };
-  # };
+  # Let Home Manager install and manage itself.
+  programs.home-manager.enable = true;
 }
