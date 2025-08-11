@@ -1,3 +1,6 @@
 .DS_Store
 bin/spotify
 nix/.config/*/secrets.sh
+nix/*/result
+nix/*/secrets.sh
+nix/*/secrets.nix
