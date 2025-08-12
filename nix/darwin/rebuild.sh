@@ -6,6 +6,10 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 . "$SCRIPT_DIR/secrets.sh"
 
+export NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1
+
+sudo true
+
 ## Previously
 #
 # nix run nix-darwin -- switch --impure --flake "${SCRIPT_DIR}"

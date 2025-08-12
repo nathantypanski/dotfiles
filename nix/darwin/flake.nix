@@ -58,6 +58,7 @@
         pass
         gopls
         grml-zsh-config
+        (emacs.override { withNativeCompilation = true; })
       ];
 
       homebrew = {

@@ -10,6 +10,7 @@ in {
     ./scripts.nix
     (import ./tmux.nix { inherit config pkgs copyCommand; })
     (import ./neovim.nix { inherit config pkgs; })
+    (import ./emacs.nix { inherit config pkgs; })
     (import ./git.nix {
       inherit homeDirectory username secrets;
       userEmail = secrets.userEmail;
@@ -34,7 +35,6 @@ in {
   # environment.
   home.packages = with pkgs; [
     tmux
-    emacs-git
     nix-search
     silver-searcher
     tig
@@ -76,6 +76,6 @@ in {
     PATH = "${pkgs.beancount}/bin:$PATH";
   };
 
-  # Let Home Manager install and manage itself.
+  # Let Home Manager install and manage itself
   programs.home-manager.enable = true;
 }
