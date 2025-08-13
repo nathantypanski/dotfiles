@@ -21,7 +21,7 @@ let
       exec firejail ${lib.getExe pkgs.firefox-devedition} "$@"
     ''));
   tor-jailed = (pkgs.writeShellScriptBin "tor-jailed" (firefox-graphics + ''
-      exec firejail --profile tor-browser ${lib.getExe pkgs.tor-browser} "$@"
+      exec firejail ${lib.getExe pkgs.tor-browser} "$@"
     ''));
 in
 {
