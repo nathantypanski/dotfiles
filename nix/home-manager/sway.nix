@@ -1,6 +1,12 @@
 { config, pkgs, lib, mod, termFont, homeDirectory, withNixGL, ... }:
 
 
+# - 2880×1920×4 bytes (RGBA) = ~22MB per frame buffer
+# - Multiple buffers (front, back, compositor) = ~100MB+ base
+# - 2x scaling means quadruple memory for app textures
+# - 120Hz means constant buffer allocation/deallocation
+# - Over 30+ hours = massive leak accumulation
+
 let
   # Remove debug trace for production
 
@@ -21,7 +27,8 @@ let
   # Create user-sway based on whether nixGL is enabled
   userSway = if withNixGL == true
     then (pkgs.writeShellScriptBin "user-sway" ''
-      # Set up nixGL environment and pass it to systemd-run
+      # Clear conflicting GL paths before nixGL sets its own
+      unset LIBGL_DRIVERS_PATH LD_LIBRARY_PATH __EGL_VENDOR_LIBRARY_FILENAMES LIBVA_DRIVERS_PATH GBM_BACKENDS_PATH
       exec systemd-run --user --scope \
         ${lib.getExe pkgs.nixgl.nixGLMesa} ${pkgs.sway}/bin/sway "$@"
     '')
