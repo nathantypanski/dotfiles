@@ -38,6 +38,7 @@ in {
       inherit config pkgs lib;
     })
     (import ./emacs.nix { inherit config pkgs; })
+    (import ./languages.nix { inherit config pkgs; })
   ];
 
   # Let Home Manager install and manage itself.
@@ -101,29 +102,10 @@ in {
     jq
     parallel
 
-    gopls
-    rust-analyzer
     nil
-    bash-language-server
     (python313.withPackages (ps: with ps; [
-      mcp
       pip
       virtualenv
-      python-lsp-server
-      pylsp-mypy
-      pylsp-rope
-      python-lsp-ruff
-      flake8
-
-      tree-sitter
-      tree-sitter-grammars.tree-sitter-python
-      tree-sitter-grammars.tree-sitter-go
-      tree-sitter-grammars.tree-sitter-rust
-      tree-sitter-grammars.tree-sitter-javascript
-      tree-sitter-grammars.tree-sitter-typescript
-      tree-sitter-grammars.tree-sitter-yaml
-      tree-sitter-grammars.tree-sitter-bash
-      tree-sitter-grammars.tree-sitter-c
     ]))
     poetry
 
@@ -143,11 +125,15 @@ in {
     tomb
     passExtensions.pass-tomb
     rage
+
+    # signal rust client
+    gurk-rs
     (pkgs.writeShellScriptBin "signal" ''
       ${signal-desktop}/bin/signal-desktop \
           --enable-features=UseOzonePlatform \
           --ozone-platform=wayland $@
     '')
+
     passage
     yubikey-manager
 
