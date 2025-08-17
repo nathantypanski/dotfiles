@@ -17,10 +17,13 @@ in {
     (import ./neovim.nix { inherit config pkgs; })
     (import ./tmux.nix { inherit config pkgs copyCommand; })
     ./scripts.nix
-    (import ./sway.nix {
+    (import ./river.nix {
       inherit config pkgs lib mod termFont homeDirectory;
-      withNixGL = true;
     })
+    # (import ./sway.nix {
+    #   inherit config pkgs lib mod termFont homeDirectory;
+    #   withNixGL = true;
+    # })
     (import ./zsh.nix { inherit pkgs; })
     (import ./foot.nix { inherit termFont; })
     (import ./newsboat.nix {
@@ -58,11 +61,7 @@ in {
     foot
     tailscale
 
-    fontconfig
-    font-manager
     adwaita-icon-theme
-    terminus_font
-    terminus_font_ttf
     libglvnd
     wayland-utils
     vulkan-tools
@@ -148,6 +147,18 @@ in {
     xwayland-run
     xorg.xhost
     xorg.xauth
+
+    fontconfig
+    font-manager
+    ultimate-oldschool-pc-font-pack
+    terminus_font
+    terminus_font_ttf
+    termsyn
+    departure-mono
+    dina-font
+
+    gbdfed
+    fontforge
   ];
 
   programs.wofi = {
