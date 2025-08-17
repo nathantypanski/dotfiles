@@ -177,19 +177,20 @@ in
     };
 
     home.packages = with pkgs; [
+      vlc
       xwayland
       # libnotify provides `notify-send`
       libnotify
       mesa  # Graphics drivers (replaces deprecated mesa.drivers)
       wayland
-      swayidle
+      # swayidle
       dconf-editor
       adwaita-icon-theme
 
       # sway tools (bound)
       wl-clipboard
       brightnessctl
-      swayidle
+      # swayidle
       swaybg
       sway-contrib.grimshot
       swayimg
@@ -369,7 +370,7 @@ in
           { command = "${lib.getExe pkgs.xwayland}"; always = true; }
           { command = "${swayPackage}/bin/swaymsg workspace 1"; always = true; }
           { command = "swaybg -c #2b2b2b"; always = true; }
-          { command = "${lib.getExe pkgs.swayidle} -w timeout 300 'system-swaylock -f -c 3f3f3f' before-sleep 'system-swaylock -f -c 3f3f3f'"; always = false; }
+          # { command = "${lib.getExe pkgs.swayidle} -w timeout 300 'system-swaylock -f -c 3f3f3f' before-sleep 'system-swaylock -f -c 3f3f3f'"; always = false; }
           { command = "${startupScript}"; always = false; }
         ];
       };
