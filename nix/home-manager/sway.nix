@@ -183,14 +183,13 @@ in
       libnotify
       mesa  # Graphics drivers (replaces deprecated mesa.drivers)
       wayland
-      # swayidle
+      swayidle
       dconf-editor
       adwaita-icon-theme
 
       # sway tools (bound)
       wl-clipboard
       brightnessctl
-      # swayidle
       swaybg
       sway-contrib.grimshot
       swayimg
@@ -363,14 +362,14 @@ in
             "${mod}+p" = "exec --no-startup-id pick-foot";
             "${mod}+Shift+q" = "exec ${swayPackage}/bin/swaynag -t warning -m 'Exit Sway?' -b 'Yes' '${swayPackage}/bin/swaymsg exit'";
             "XF86MonBrightnessUp" = "exec --no-startup-id ${lib.getExe pkgs.brightnessctl} s '+5%'";
-            "XF86MonBrightnessDown" = "exec --no-startup-id ${lib.getExe pkgs.brightnessctl} s '-5'";
+            "XF86MonBrightnessDown" = "exec --no-startup-id ${lib.getExe pkgs.brightnessctl} s '5%-'";
           }
         ];
         startup = [
           { command = "${lib.getExe pkgs.xwayland}"; always = true; }
           { command = "${swayPackage}/bin/swaymsg workspace 1"; always = true; }
           { command = "swaybg -c #2b2b2b"; always = true; }
-          # { command = "${lib.getExe pkgs.swayidle} -w timeout 300 'system-swaylock -f -c 3f3f3f' before-sleep 'system-swaylock -f -c 3f3f3f'"; always = false; }
+          { command = "${lib.getExe pkgs.swayidle} -w timeout 600 'system-swaylock -f -c 3f3f3f' before-sleep 'system-swaylock -f -c 3f3f3f'"; always = false; }
           { command = "${startupScript}"; always = false; }
         ];
       };
