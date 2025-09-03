@@ -11,18 +11,18 @@ let
     printf '%s=%s\n' XDG_STATE_HOME "$XDG_STATE_HOME"
     printf '%s=%s\n' XDG_RUNTIME_DIR "$XDG_RUNTIME_DIR"
   '';
-  termFont = "Terminus";
+  termFont = "Departure Mono";
 in {
   imports = [
     (import ./neovim.nix { inherit config pkgs; })
     (import ./tmux.nix { inherit config pkgs copyCommand; })
-    # (import ./river.nix {
-    #   inherit config pkgs lib mod termFont homeDirectory;
-    # })
-    (import ./sway.nix {
+    (import ./river.nix {
       inherit config pkgs lib mod termFont homeDirectory;
-      withNixGL = true;
     })
+    # (import ./sway.nix {
+    #   inherit config pkgs lib mod termFont homeDirectory;
+    #   withNixGL = true;
+    # })
     (import ./zsh.nix { inherit pkgs; })
     (import ./foot.nix { inherit termFont; })
     (import ./newsboat.nix {
@@ -98,12 +98,18 @@ in {
     aspellDicts.en
 
     go
-    gotools
+    go-tools
     # lsps
     jq
     parallel
+    proverif
 
-    nil
+    ruby
+    ruby-lsp
+    rubyfmt
+    rubyPackages.sorbet-runtime
+
+    nixd # alternative nix lsp
     (python313.withPackages (ps: with ps; [
       pip
       virtualenv
@@ -152,11 +158,11 @@ in {
 
     fontconfig
     font-manager
-    ultimate-oldschool-pc-font-pack
     terminus_font
     terminus_font_ttf
     termsyn
     departure-mono
+    nerd-fonts.departure-mono
     dina-font
 
     gbdfed
