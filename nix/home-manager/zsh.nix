@@ -31,6 +31,7 @@ in
       la = "ls -a";
       userctl = "systemctl --user";
       psh = "ps -eo pid,vsz,rss,comm --sort=-vsz | awk 'NR==1{printf \"%-8s %7s %7s %s\\n\", \"PID\", \"VSZ\", \"RSS\", \"COMMAND\"; next} {printf \"%-8s %7.1fG %4dM %s\\n\", $1, $2/1024/1024, $3/1024, $4}' | head -20";
+      p = "passage";
     };
     profileExtra = ''
       umask 027
