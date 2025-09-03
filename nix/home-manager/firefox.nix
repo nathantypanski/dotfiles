@@ -14,14 +14,14 @@ let
     '';
   firefox-jailed = (pkgs.writeShellScriptBin "firefox-jailed"
     (firefox-graphics + ''
-      exec firejail ${lib.getExe pkgs.firefox} "$@"
+      exec firejail --profile=firefox-common ${lib.getExe pkgs.firefox} "$@"
     ''));
   firefox-devedition-jailed = (pkgs.writeShellScriptBin
     "firefox-devedition-jailed" (firefox-graphics + ''
-      exec firejail ${lib.getExe pkgs.firefox-devedition} "$@"
+      exec firejail --profile=firefox-common ${lib.getExe pkgs.firefox-devedition} "$@"
     ''));
   tor-jailed = (pkgs.writeShellScriptBin "tor-jailed" (firefox-graphics + ''
-      exec firejail ${lib.getExe pkgs.tor-browser} "$@"
+      exec firejail --profile=firefox-common ${lib.getExe pkgs.tor-browser} "$@"
     ''));
 in
 {
