@@ -18,6 +18,8 @@
       url = "github:guibou/nixGL";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-latest.url = "github:NixOS/nix/master";
+    nix-latest.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = { self, nixpkgs, home-manager, emacs-overlay, nixgl, ... }: let
