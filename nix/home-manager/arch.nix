@@ -16,14 +16,13 @@ in {
   imports = [
     (import ./neovim.nix { inherit config pkgs; })
     (import ./tmux.nix { inherit config pkgs copyCommand; })
-    ./scripts.nix
-    (import ./river.nix {
-      inherit config pkgs lib mod termFont homeDirectory;
-    })
-    # (import ./sway.nix {
+    # (import ./river.nix {
     #   inherit config pkgs lib mod termFont homeDirectory;
-    #   withNixGL = true;
     # })
+    (import ./sway.nix {
+      inherit config pkgs lib mod termFont homeDirectory;
+      withNixGL = true;
+    })
     (import ./zsh.nix { inherit pkgs; })
     (import ./foot.nix { inherit termFont; })
     (import ./newsboat.nix {
