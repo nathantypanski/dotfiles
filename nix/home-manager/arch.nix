@@ -66,6 +66,9 @@ in {
     vulkan-tools
     glxinfo
 
+    floorp
+    vivaldi
+
     wl-clipboard
     mako
     adwaita-icon-theme
