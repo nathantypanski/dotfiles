@@ -168,6 +168,9 @@ in {
     uw-ttyp0
     gbdfed
     fontforge
+
+    slack
+    discord
   ];
 
   programs.wofi = {
