@@ -117,7 +117,8 @@ in {
     poetry
 
     (pkgs.writeShellScriptBin "rebuild-home" ''
-      exec ${homeDirectory}/src/github.com/nathantypanski/dotfiles/nix/arch/rebuild.sh
+      ${homeDirectory}/src/github.com/nathantypanski/dotfiles/nix/arch/rebuild.sh
+      [[ "''${?}" -eq 0 ]] || read -n 1 -s -r -p '[ press any key to continue ]'
     '')
     (pkgs.writeShellScriptBin "which-path" ''
       while IFS= read -r line; do
@@ -155,16 +156,16 @@ in {
     xwayland-run
     xorg.xhost
     xorg.xauth
-
     fontconfig
     font-manager
     terminus_font
     terminus_font_ttf
     termsyn
+    quinze
+    gohufont
     departure-mono
     nerd-fonts.departure-mono
-    dina-font
-
+    uw-ttyp0
     gbdfed
     fontforge
   ];
@@ -175,7 +176,6 @@ in {
       font = "Terminus:size=12";
     };
   };
-
 
   programs.keychain = {
     enable = true;
@@ -206,6 +206,7 @@ in {
     XDG_STATE_HOME = "${homeDirectory}/.local/state";
     PINENTRY_PROGRAM = "${pkgs.pinentry-tty}/bin/pinentry-tty";
     PAGER = "less -R --use-color";
+    LIBSEAT_BACKEND = "seatd";
   };
 
   home.sessionPath = [
@@ -220,6 +221,7 @@ in {
     Service.Type = "oneshot";
     Service.ExecStart = envPrintScript;
   };
+
   systemd.user.sessionVariables = {
     XDG_CONFIG_HOME = "${homeDirectory}/.config";
     XDG_CACHE_HOME = "${homeDirectory}/.cache";
