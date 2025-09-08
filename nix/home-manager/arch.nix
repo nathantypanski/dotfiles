@@ -41,6 +41,7 @@ in {
     })
     (import ./emacs.nix { inherit config pkgs; })
     (import ./languages.nix { inherit config pkgs; })
+    (import ./weechat.nix { inherit config pkgs lib; })
   ];
 
   # Let Home Manager install and manage itself.
@@ -169,8 +170,20 @@ in {
     gbdfed
     fontforge
 
-    slack
-    discord
+    (pkgs.writeShellScriptBin "slack-wayland" ''
+      exec ${pkgs.slack}/bin/slack \
+        --enable-features=UseOzonePlatform,WaylandWindowDecorations \
+        --ozone-platform=wayland \
+        --disable-gpu-sandbox \
+        --disable-software-rasterizer "$@"
+    '')
+    (pkgs.writeShellScriptBin "discord-wayland" ''
+      exec ${pkgs.discord}/bin/discord \
+        --enable-features=UseOzonePlatform,WaylandWindowDecorations \
+        --ozone-platform=wayland \
+        --disable-gpu-sandbox \
+        --disable-software-rasterizer "$@"
+    '')
   ];
 
   programs.wofi = {
