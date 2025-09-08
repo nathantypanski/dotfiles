@@ -18,6 +18,7 @@ in {
     (import ./tmux.nix { inherit config pkgs copyCommand; })
     (import ./river.nix {
       inherit config pkgs lib mod termFont homeDirectory;
+      withNixGL = true;
     })
     # (import ./sway.nix {
     #   inherit config pkgs lib mod termFont homeDirectory;

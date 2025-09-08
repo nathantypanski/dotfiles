@@ -1,11 +1,25 @@
-{ config, pkgs, lib, mod, termFont, homeDirectory, ... }:
+{ config, pkgs, lib, mod, termFont, homeDirectory, withNixGL, ... }:
 
+let
+  # Create user-river based on whether nixGL is enabled
+  userRiver = if withNixGL == true
+    then (pkgs.writeShellScriptBin "user-river" ''
+      # Clear conflicting GL paths before nixGL sets its own
+      unset LIBGL_DRIVERS_PATH LD_LIBRARY_PATH __EGL_VENDOR_LIBRARY_FILENAMES LIBVA_DRIVERS_PATH GBM_BACKENDS_PATH
+      exec systemd-run --user --scope \
+        ${lib.getExe pkgs.nixgl.nixGLMesa} ${lib.getExe pkgs.river-classic} "$@"
+    '')
+    else (pkgs.writeShellScriptBin "user-river" ''
+      # Use plain river
+      exec systemd-run --user --scope ${lib.getExe pkgs.river-classic} "$@"
+    '');
+in
 {
-  options.ndt-home.sway = {
+  options.ndt-home.river = {
     modifier = lib.mkOption {
       type = lib.types.str;
       default = "Mod4";
-      description = "Modifier key for sway shortcuts";
+      description = "Modifier key for river shortcuts";
     };
 
     terminalFont = lib.mkOption {
@@ -13,12 +27,19 @@
       default = "Terminus";
       description = "Terminal font name (not size!)";
     };
+
+    withNixGL = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Whether to wrap river with nixGL";
+    };
   };
   config = {
 
     # Enable River wayland compositor
     wayland.windowManager.river = {
       enable = true;
+      package = pkgs.river-classic;
 
       # River configuration
       extraConfig = ''
@@ -65,6 +86,10 @@
       riverctl map normal Super+Shift R spawn "sh ~/.config/river/init"
       riverctl map normal Super+Shift S spawn "wlr-randr --output eDP-1 --scale 2.0"
       riverctl map normal Super space spawn "notify-send -t 1000 'River' 'Tag Mode: Press 0-9' && riverctl enter-mode tag"
+
+      # Brightness controls
+      riverctl map normal None XF86MonBrightnessUp spawn "${pkgs.brightnessctl}/bin/brightnessctl s '+5%'"
+      riverctl map normal None XF86MonBrightnessDown spawn "${pkgs.brightnessctl}/bin/brightnessctl s '5%-'"
 
       # Focus controls
       riverctl map normal Super J focus-view next
@@ -340,6 +365,8 @@
       swayimg
       imv
       signal-desktop
+
+      userRiver
       (pkgs.writeShellScriptBin "emacs-tiling" ''
         exec emacs --batch -l "${homeDirectory}/.config/river/layout.el"
       '')
@@ -355,6 +382,8 @@
                   fzf --layout=reverse |
                   xargs -r riverctl spawn'
     '')
+    ] ++ lib.optionals withNixGL [
+      nixgl.nixGLMesa
     ];
   };
 }
