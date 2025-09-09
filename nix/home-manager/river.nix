@@ -2,17 +2,32 @@
 
 let
   # Create user-river based on whether nixGL is enabled
-  userRiver = if withNixGL == true
-    then (pkgs.writeShellScriptBin "user-river" ''
-      # Clear conflicting GL paths before nixGL sets its own
-      unset LIBGL_DRIVERS_PATH LD_LIBRARY_PATH __EGL_VENDOR_LIBRARY_FILENAMES LIBVA_DRIVERS_PATH GBM_BACKENDS_PATH
-      exec systemd-run --user --scope \
-        ${lib.getExe pkgs.nixgl.nixGLMesa} ${lib.getExe pkgs.river-classic} "$@"
-    '')
-    else (pkgs.writeShellScriptBin "user-river" ''
-      # Use plain river
-      exec systemd-run --user --scope ${lib.getExe pkgs.river-classic} "$@"
-    '');
+  userRiver = pkgs.writeShellScriptBin "user-river" ''
+    # Start the river session target (includes river + mako + scaling)
+    systemctl --user start river-custom-session.target
+
+    # Wait for river to start and attach to it
+    echo "Starting River session..."
+
+    # Wait for river service to be active
+    while ! systemctl --user is-active --quiet river-custom.service; do
+      if systemctl --user is-failed --quiet river-custom.service; then
+        echo "River service failed to start!"
+        systemctl --user status river-custom.service
+        exit 1
+      fi
+      sleep 0.1
+    done
+
+    echo "River session started. Use 'systemctl --user stop river-custom-session.target' to stop."
+
+    # Keep the script running and monitor river
+    while systemctl --user is-active --quiet river-custom.service; do
+      sleep 1
+    done
+
+    echo "River session ended."
+  '';
 in
 {
   options.ndt-home.river = {
@@ -69,7 +84,7 @@ in
       riverctl input pointer pointer-accel 0.5
 
       # Touchpad settings - Framework laptop
-      riverctl input "pointer-2362-628-PIXA3854:00_093A:0274_Touchpad" tap enabled
+      riverctl input "pointer-2362-628-PIXA3854:00_093A:0274_Touchpad" tap disabled
       riverctl input "pointer-2362-628-PIXA3854:00_093A:0274_Touchpad" tap-button-map lrm
       riverctl input "pointer-2362-628-PIXA3854:00_093A:0274_Touchpad" click-method clickfinger
       riverctl input "pointer-2362-628-PIXA3854:00_093A:0274_Touchpad" scroll-method two-finger
@@ -169,7 +184,8 @@ in
         mainBar = {
           layer = "top";
           position = "top";
-          height = 24;
+          # minimum height required by waybar modules
+          height = 28;
           modules-left = [ "river/tags" "river/mode" ];
           modules-center = [ "river/window" ];
           modules-right = [ "memory" "clock" "battery" "network" ];
@@ -203,6 +219,10 @@ in
 
           battery = {
             format = "{icon} {capacity}%";
+            states = {
+              warning = 30;
+              critical = 15;
+            };
             format-icons = [ "󰁺" "󰁻" "󰁼" "󰁽" "󰁾" "󰁿" "󰂀" "󰂁" "󰂂" "󰁹" ];
             format-charging = "󰂄 {capacity}%";
             format-plugged = "󰂄 {capacity}%";
@@ -310,11 +330,48 @@ in
       };
     };
 
+    # River custom session target - groups all river-related services
+    systemd.user.targets.river-custom-session = {
+      Unit = {
+        Description = "River custom session";
+        Requires = [ "graphical-session.target" ];
+        After = [ "graphical-session.target" ];
+        Wants = [ "river-custom.service" "mako.service" "river-scale.service" ];
+      };
+    };
+
+    # River compositor service
+    systemd.user.services.river-custom = {
+      Unit = {
+        Description = "River custom compositor";
+        PartOf = [ "river-custom-session.target" ];
+        After = [ "graphical-session.target" ];
+      };
+      Service = {
+        Type = "simple";
+        ExecStart = if withNixGL
+          then "${lib.getExe pkgs.nixgl.nixGLMesa} ${lib.getExe pkgs.river-classic}"
+          else "${lib.getExe pkgs.river-classic}";
+        Restart = "on-failure";
+        RestartSec = 1;
+        # Ensure proper environment
+        Environment = [
+          "XDG_CURRENT_DESKTOP=river"
+          "XDG_SESSION_DESKTOP=river"
+          "XDG_SESSION_TYPE=wayland"
+        ];
+      };
+      Install = {
+        WantedBy = [ "river-custom-session.target" ];
+      };
+    };
+
     systemd.user.services.mako = {
       Unit = {
         Description = "Mako notification daemon";
-        PartOf = "sway-session.target";
-        After = "sway-session.target";
+        PartOf = [ "river-custom-session.target" ];
+        After = [ "river-custom.service" ];
+        Requires = [ "river-custom.service" ];
       };
 
       Service = {
@@ -325,13 +382,16 @@ in
       };
 
       Install = {
-        WantedBy = [ "sway-session.target" ];
+        WantedBy = [ "river-custom-session.target" ];
       };
     };
+
     systemd.user.services.river-scale = {
       Unit = {
         Description = "Apply River display scaling";
-        After = "suspend.target";
+        PartOf = [ "river-custom-session.target" ];
+        After = [ "river-custom.service" ];
+        Requires = [ "river-custom.service" ];
       };
       Service = {
         Type = "oneshot";
@@ -339,7 +399,7 @@ in
         RemainAfterExit = true;
       };
       Install = {
-        WantedBy = [ "suspend.target" ];
+        WantedBy = [ "river-custom-session.target" ];
       };
     };
 
