@@ -1,32 +1,27 @@
 { config, pkgs, lib, mod, termFont, homeDirectory, withNixGL, ... }:
 
 let
-  # Create user-river based on whether nixGL is enabled
+  # Create nixGL-wrapped river package if needed
+  riverPackage = if withNixGL
+    then pkgs.river-classic.overrideAttrs (old: {
+      nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ pkgs.makeWrapper ];
+      postInstall = (old.postInstall or "") + ''
+        wrapProgram $out/bin/river \
+          --run 'eval "$(${lib.getExe pkgs.nixgl.nixGLMesa} printenv)"'
+      '';
+    })
+    else pkgs.river-classic;
+
+  # Create user-river script - the built-in module handles session management automatically
   userRiver = pkgs.writeShellScriptBin "user-river" ''
-    # Start the river session target (includes river + mako + scaling)
-    systemctl --user start river-custom-session.target
+    echo "Starting River compositor with session management..."
 
-    # Wait for river to start and attach to it
-    echo "Starting River session..."
+    # The built-in river module will automatically:
+    # 1. Stop river-session.target
+    # 2. Start river-session.target (which starts mako, river-scale, etc.)
+    # 3. Start river with proper nixGL integration (if enabled)
 
-    # Wait for river service to be active
-    while ! systemctl --user is-active --quiet river-custom.service; do
-      if systemctl --user is-failed --quiet river-custom.service; then
-        echo "River service failed to start!"
-        systemctl --user status river-custom.service
-        exit 1
-      fi
-      sleep 0.1
-    done
-
-    echo "River session started. Use 'systemctl --user stop river-custom-session.target' to stop."
-
-    # Keep the script running and monitor river
-    while systemctl --user is-active --quiet river-custom.service; do
-      sleep 1
-    done
-
-    echo "River session ended."
+    exec ${lib.getExe riverPackage}
   '';
 in
 {
@@ -51,10 +46,24 @@ in
   };
   config = {
 
-    # Enable River wayland compositor
+    # Enable River wayland compositor using built-in Home Manager module
     wayland.windowManager.river = {
       enable = true;
-      package = pkgs.river-classic;
+      package = riverPackage;  # Use nixGL-wrapped package if withNixGL is true
+
+      # Enable systemd integration
+      systemd = {
+        enable = true;
+        # Default extraCommands already handle river-session.target:
+        # - Stop river-session.target
+        # - Start river-session.target
+        # This automatically manages our mako and river-scale services!
+      };
+
+      # Enable Xwayland support
+      xwayland = {
+        enable = true;
+      };
 
       # River configuration
       extraConfig = ''
@@ -330,48 +339,13 @@ in
       };
     };
 
-    # River custom session target - groups all river-related services
-    systemd.user.targets.river-custom-session = {
-      Unit = {
-        Description = "River custom session";
-        Requires = [ "graphical-session.target" ];
-        After = [ "graphical-session.target" ];
-        Wants = [ "river-custom.service" "mako.service" "river-scale.service" ];
-      };
-    };
-
-    # River compositor service
-    systemd.user.services.river-custom = {
-      Unit = {
-        Description = "River custom compositor";
-        PartOf = [ "river-custom-session.target" ];
-        After = [ "graphical-session.target" ];
-      };
-      Service = {
-        Type = "simple";
-        ExecStart = if withNixGL
-          then "${lib.getExe pkgs.nixgl.nixGLMesa} ${lib.getExe pkgs.river-classic}"
-          else "${lib.getExe pkgs.river-classic}";
-        Restart = "on-failure";
-        RestartSec = 1;
-        # Ensure proper environment
-        Environment = [
-          "XDG_CURRENT_DESKTOP=river"
-          "XDG_SESSION_DESKTOP=river"
-          "XDG_SESSION_TYPE=wayland"
-        ];
-      };
-      Install = {
-        WantedBy = [ "river-custom-session.target" ];
-      };
-    };
+    # Additional services that integrate with built-in river-session.target
 
     systemd.user.services.mako = {
       Unit = {
         Description = "Mako notification daemon";
-        PartOf = [ "river-custom-session.target" ];
-        After = [ "river-custom.service" ];
-        Requires = [ "river-custom.service" ];
+        PartOf = [ "river-session.target" ];
+        After = [ "river-session.target" ];
       };
 
       Service = {
@@ -382,16 +356,15 @@ in
       };
 
       Install = {
-        WantedBy = [ "river-custom-session.target" ];
+        WantedBy = [ "river-session.target" ];
       };
     };
 
     systemd.user.services.river-scale = {
       Unit = {
         Description = "Apply River display scaling";
-        PartOf = [ "river-custom-session.target" ];
-        After = [ "river-custom.service" ];
-        Requires = [ "river-custom.service" ];
+        PartOf = [ "river-session.target" ];
+        After = [ "river-session.target" ];
       };
       Service = {
         Type = "oneshot";
@@ -399,7 +372,7 @@ in
         RemainAfterExit = true;
       };
       Install = {
-        WantedBy = [ "river-custom-session.target" ];
+        WantedBy = [ "river-session.target" ];
       };
     };
 
@@ -427,9 +400,6 @@ in
       signal-desktop
 
       userRiver
-      (pkgs.writeShellScriptBin "emacs-tiling" ''
-        exec emacs --batch -l "${homeDirectory}/.config/river/layout.el"
-      '')
       (pkgs.writeShellScriptBin "system-swaylock" ''
         exec "$(command -v swaylock || echo /usr/bin/swaylock)" "$@"
       '')
