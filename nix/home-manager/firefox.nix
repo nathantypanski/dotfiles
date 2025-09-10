@@ -38,11 +38,16 @@ in
     };
 
     home.packages = with pkgs; [
-      firefox-jailed
-      firefox-devedition-jailed
+      ## jailed packages are broken:
+      #
+      # firefox-jailed
+      # firefox-devedition-jailed
+      # tor-jailed
+
       firefox-devedition
       mullvad-browser
-      tor-jailed
+      tor
+      tor-browser
       config.ndt-home.firefox-jailed
     ];
   };
