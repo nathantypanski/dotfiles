@@ -39,8 +39,15 @@ def extract_boot_img(boot_image, target):
         ['lsinitcpio', '-x', boot_image],
         capture_output=True, text=True, cwd=target)
 
+def has_privileges() -> bool:
+    return os.geteuid() == 0
+
 def main():
     args = parse_args()
+
+    if not has_privileges():
+        print(f"your user is running as non-root", file=stderr)
+        sys.exit(1)
 
     # with TemporaryDirectory(prefix='initramfs_query_') as tmpdir:
     tmpdir = mkdtemp(prefix='initramfsquery_', suffix='extract')
