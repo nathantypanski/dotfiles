@@ -11,7 +11,9 @@ let
     printf '%s=%s\n' XDG_STATE_HOME "$XDG_STATE_HOME"
     printf '%s=%s\n' XDG_RUNTIME_DIR "$XDG_RUNTIME_DIR"
   '';
-  termFont = "Departure Mono";
+  # I really like Departure Mono, but trying out Terminus again for some comparison.
+  # termFont = "Departure Mono";
+  termFont = "Terminus";
 in {
   imports = [
     (import ./neovim.nix { inherit config pkgs; })
