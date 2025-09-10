@@ -60,9 +60,10 @@ in {
   home.keyboard.options = ["ctrl:nocaps"];
 
   home.packages = with pkgs; [
-    tmux
+    zellij
     foot
     tailscale
+    yazi  # Terminal file manager
 
     adwaita-icon-theme
     libglvnd
