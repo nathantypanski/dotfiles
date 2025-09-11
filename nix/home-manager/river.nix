@@ -23,8 +23,116 @@ let
 
     exec ${lib.getExe riverPackage}
   '';
-in
-{
+  # Ruby launcher script
+  rubyLauncher = pkgs.writeText "launcher.rb" ''
+  #!/usr/bin/env ruby
+  # typed: strict
+
+  require 'sorbet-runtime'
+
+  class Launcher
+    extend T::Sig
+
+    sig { returns(T::Array[String]) }
+    def self.commands
+      # Get actual executables from PATH
+      paths = ENV['PATH'].split(':')
+      commands = []
+
+      paths.each do |path|
+        next unless File.directory?(path)
+        Dir.foreach(path) do |file|
+          filepath = File.join(path, file)
+          if File.executable?(filepath) && File.file?(filepath)
+            commands << file
+          end
+        end
+      end
+
+      commands.uniq.sort.reject { |cmd| cmd.include?('fzf') }
+    end
+
+    sig { void }
+    def self.run
+      commands.each { |cmd| puts cmd }
+    end
+  end
+
+  Launcher.run if __FILE__ == $0
+  '';
+  # Ruby wifi menu script
+  rubyWifiMenu = pkgs.writeText "wifi-menu.rb" ''
+    #!/usr/bin/env ruby
+    # typed: strict
+
+    require 'sorbet-runtime'
+
+    class WifiMenu
+      extend T::Sig
+
+      sig { returns(T::Array[String]) }
+      def self.networks
+        `nmcli -t -f SSID dev wifi`.split("\n")
+          .reject(&:empty?)
+          .uniq
+          .sort
+      end
+
+      sig { void }
+      def self.run
+        networks.each { |ssid| puts ssid }
+      end
+    end
+
+    WifiMenu.run if __FILE__ == $0
+  '';
+
+  # Ruby system info menu
+  rubySystemMenu = pkgs.writeText "system-menu.rb" ''
+    #!/usr/bin/env ruby
+    # typed: strict
+
+    require 'sorbet-runtime'
+
+    class SystemMenu
+      extend T::Sig
+
+      ACTIONS = T.let({
+        "Lock Screen" => "system-swaylock",
+        "Suspend" => "systemctl suspend",
+        "Reboot" => "systemctl reboot",
+        "Shutdown" => "systemctl poweroff",
+        "Reload River" => "sh ~/.config/river/init",
+        "Rebuild Home" => "rebuild-home"
+      }.freeze, T::Hash[String, String])
+
+      sig { void }
+      def self.run
+        ACTIONS.keys.each { |action| puts action }
+      end
+
+      sig { params(action: String).void }
+      def self.execute(action)
+        command = ACTIONS[action]
+        if command
+          if command == "rebuild-home"
+            system("foot --title=rebuild-home -e #{command}")
+          else
+            system(command)
+          end
+        end
+      end
+    end
+
+    if ARGV.empty?
+      SystemMenu.run
+    else
+      SystemMenu.execute(ARGV[0])
+    end
+  '';
+
+in {
+  # Add fuzzel configuration
   options.ndt-home.river = {
     modifier = lib.mkOption {
       type = lib.types.str;
@@ -45,7 +153,38 @@ in
     };
   };
   config = {
+    programs.fuzzel = {
+      enable = true;
+      settings = {
+        main = {
+          font = "DepartureMono Nerd Font:size=12";
+          dpi-aware = "yes";
+          show-actions = "yes";
+          terminal = "${pkgs.foot}/bin/foot";
 
+          # Appearance
+          width = 40;
+          horizontal-pad = 20;
+          vertical-pad = 10;
+          inner-pad = 10;
+        };
+
+        colors = {
+          background = "121212ff";
+          text = "dcdcccff";
+          match = "60b48aff";
+          selection = "3f3f3fff";
+          selection-match = "dfaf8fff";
+          selection-text = "dcdcccff";
+          border = "506070ff";
+        };
+
+        border = {
+          width = 2;
+          radius = 0;
+        };
+      };
+    };
     # Enable River wayland compositor using built-in Home Manager module
     wayland.windowManager.river = {
       enable = true;
@@ -79,6 +218,7 @@ in
       # Display scaling - 2x zoom for most apps, normal for foot
       riverctl rule-add -app-id "foot" ssd
       riverctl rule-add -app-id "launcher" float
+      riverctl rule-add -app-id "yazi-popup" float
       riverctl rule-add -title "rebuild-home" tags 512
 
       # New windows spawn on focused tags only (not all visible tags)
@@ -101,12 +241,16 @@ in
 
       # Basic keybinds
       riverctl map normal Super Return spawn "${pkgs.foot}/bin/foot"
-      riverctl map normal Super P spawn pick-foot
+      riverctl map normal Super P spawn pick-ruby
+      riverctl map normal Super W spawn wifi-menu
+      riverctl map normal Super+Shift P spawn system-menu
+      riverctl map normal Super Tab spawn window-menu
       riverctl map normal Super Q close
       riverctl map normal Super+Shift E exit
       riverctl map normal Super+Shift T toggle-float
       riverctl map normal Super+Shift semicolon spawn system-swaylock
       riverctl map normal Super+Shift apostrophe spawn "${pkgs.foot}/bin/foot --title=rebuild-home -e rebuild-home"
+      riverctl map normal Super Y spawn yazi-popup
       riverctl map normal Super+Shift R spawn "sh ~/.config/river/init"
       riverctl map normal Super+Shift S spawn "wlr-randr --output eDP-1 --scale 2.0"
       riverctl map normal Super space spawn "notify-send -t 1000 'River' 'Tag Mode: Press 0-9' && riverctl enter-mode tag"
@@ -149,7 +293,6 @@ in
 
             # Switch to tag
             riverctl map normal "Super+Alt" "$i" set-focused-tags "$tags"
-
       done
 
       # Declare modes
@@ -164,8 +307,8 @@ in
       riverctl map normal Super G enter-mode layout
       riverctl map layout None h send-layout-cmd rivertile "main-ratio -0.05"
       riverctl map layout None l send-layout-cmd rivertile "main-ratio +0.05"
-      riverctl map layout None i send-layout-cmd rivertile "main-count +1"
-      riverctl map layout None d send-layout-cmd rivertile "main-count -1"
+      riverctl map layout None plus send-layout-cmd rivertile "main-count +1"
+      riverctl map layout None hyphen send-layout-cmd rivertile "main-count -1"
       riverctl map layout None v send-layout-cmd rivertile "main-location left"
       riverctl map layout None V send-layout-cmd rivertile "main-location right"
       riverctl map layout None b send-layout-cmd rivertile "main-location top"
@@ -255,7 +398,7 @@ in
           border-bottom: 2px solid #3f3f3f;
           color: #dcdccc;
           padding: 0 2px;
-        }
+                   }
         .modules-left, .modules-center, .modules-right {
           margin: 0 5px;
         }
@@ -411,6 +554,46 @@ in
                   sort -u |
                   fzf --layout=reverse |
                   xargs -r riverctl spawn'
+    '')
+      (pkgs.writeShellScriptBin "yazi-popup" ''
+        exec ${pkgs.foot}/bin/foot --app-id=yazi-popup --title=yazi-popup \
+             -e ${pkgs.yazi}/bin/yazi
+    '')
+
+      fuzzel
+
+      # Ruby environment
+      ruby
+      rubyPackages.sorbet-runtime
+      (pkgs.writeShellScriptBin "setup-ruby-env" ''
+      gem install sorbet sorbet-runtime --user-install
+    '')
+
+      # Ruby-powered launchers
+      (pkgs.writeShellScriptBin "pick-ruby" ''
+      export GEM_PATH="${pkgs.rubyPackages.sorbet-runtime}/${pkgs.ruby.gemPath}"
+      ${lib.getExe pkgs.ruby} ${rubyLauncher} | fuzzel --dmenu | xargs -r riverctl spawn
+    '')
+
+      (pkgs.writeShellScriptBin "wifi-menu" ''
+      export GEM_PATH="${pkgs.rubyPackages.sorbet-runtime}/${pkgs.ruby.gemPath}"
+      selected=$(${lib.getExe pkgs.ruby} ${rubyWifiMenu} | fuzzel --dmenu --prompt="WiFi: ")
+      if [ -n "$selected" ]; then
+        riverctl spawn "foot -e nmtui-connect '$selected'"
+      fi
+    '')
+
+      (pkgs.writeShellScriptBin "system-menu" ''
+      export GEM_PATH="${pkgs.rubyPackages.sorbet-runtime}/${pkgs.ruby.gemPath}"
+      selected=$(${lib.getExe pkgs.ruby} ${rubySystemMenu} | fuzzel --dmenu --prompt="System: ")
+      if [ -n "$selected" ]; then
+        ${lib.getExe pkgs.ruby} ${rubySystemMenu} "$selected"
+      fi
+    '')
+
+      # Quick window/app switcher
+      (pkgs.writeShellScriptBin "window-menu" ''
+      riverctl spawn "fuzzel"
     '')
     ] ++ lib.optionals withNixGL [
       nixgl.nixGLMesa
