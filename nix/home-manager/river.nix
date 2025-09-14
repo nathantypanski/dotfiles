@@ -19,115 +19,9 @@ let
 
     exec ${lib.getExe riverPackage}
   '';
-  # Ruby launcher script
-  rubyLauncher = pkgs.writeText "launcher.rb" ''
-  #!/usr/bin/env ruby
-  # typed: strict
-
-  require 'sorbet-runtime'
-
-  class Launcher
-    extend T::Sig
-
-    sig { returns(T::Array[String]) }
-    def self.commands
-      # Get actual executables from PATH
-      paths = ENV['PATH'].split(':')
-      commands = []
-
-      paths.each do |path|
-        next unless File.directory?(path)
-        Dir.foreach(path) do |file|
-          filepath = File.join(path, file)
-          if File.executable?(filepath) && File.file?(filepath)
-            commands << file
-          end
-        end
-      end
-
-      commands.uniq.sort.reject { |cmd| cmd.include?('fzf') }
-    end
-
-    sig { void }
-    def self.run
-      commands.each { |cmd| puts cmd }
-    end
-  end
-
-  Launcher.run if __FILE__ == $0
-  '';
-  # Ruby wifi menu script
-  rubyWifiMenu = pkgs.writeText "wifi-menu.rb" ''
-    #!/usr/bin/env ruby
-    # typed: strict
-
-    require 'sorbet-runtime'
-
-    class WifiMenu
-      extend T::Sig
-
-      sig { returns(T::Array[String]) }
-      def self.networks
-        `nmcli -t -f SSID dev wifi`.split("\n")
-          .reject(&:empty?)
-          .uniq
-          .sort
-      end
-
-      sig { void }
-      def self.run
-        networks.each { |ssid| puts ssid }
-      end
-    end
-
-    WifiMenu.run if __FILE__ == $0
-  '';
-
-  # Ruby system info menu
-  rubySystemMenu = pkgs.writeText "system-menu.rb" ''
-    #!/usr/bin/env ruby
-    # typed: strict
-
-    require 'sorbet-runtime'
-
-    class SystemMenu
-      extend T::Sig
-
-      ACTIONS = T.let({
-        "Lock Screen" => "system-swaylock",
-        "Suspend" => "systemctl suspend",
-        "Reboot" => "systemctl reboot",
-        "Shutdown" => "systemctl poweroff",
-        "Reload River" => "sh ~/.config/river/init",
-        "Rebuild Home" => "rebuild-home"
-      }.freeze, T::Hash[String, String])
-
-      sig { void }
-      def self.run
-        ACTIONS.keys.each { |action| puts action }
-      end
-
-      sig { params(action: String).void }
-      def self.execute(action)
-        command = ACTIONS[action]
-        if command
-          if command == "rebuild-home"
-            system("foot --title=rebuild-home -e #{command}")
-          else
-            system(command)
-          end
-        end
-      end
-    end
-
-    if ARGV.empty?
-      SystemMenu.run
-    else
-      SystemMenu.execute(ARGV[0])
-    end
-  '';
 
 in {
+
   # Add fuzzel configuration
   options.ndt-home.river = {
     modifier = lib.mkOption {
@@ -599,25 +493,41 @@ in {
       gem install sorbet sorbet-runtime --user-install
     '')
 
-      # Ruby-powered launchers
+      # Ruby script binaries using readFile from bin directory
+      (pkgs.writeScriptBin "launcher.rb" ''
+        #!${lib.getExe pkgs.ruby}
+        ${builtins.readFile ./../../../bin/launcher.rb}
+      '')
+
+      (pkgs.writeScriptBin "wifi-menu.rb" ''
+        #!${lib.getExe pkgs.ruby}
+        ${builtins.readFile ./../../../bin/wifi-menu.rb}
+      '')
+
+      (pkgs.writeScriptBin "system-menu.rb" ''
+        #!${lib.getExe pkgs.ruby}
+        ${builtins.readFile ./../../../bin/system-menu.rb}
+      '')
+
+      # Ruby-powered launchers using the script binaries
       (pkgs.writeShellScriptBin "pick-ruby" ''
       export GEM_PATH="${pkgs.rubyPackages.sorbet-runtime}/${pkgs.ruby.gemPath}"
-      ${lib.getExe pkgs.ruby} ${rubyLauncher} | fuzzel --dmenu | xargs -r ${pkgs.river-classic}/bin/riverctl spawn
+      launcher.rb | fuzzel --dmenu | xargs -r ${pkgs.river-classic}/bin/riverctl spawn
     '')
 
       (pkgs.writeShellScriptBin "wifi-menu" ''
       export GEM_PATH="${pkgs.rubyPackages.sorbet-runtime}/${pkgs.ruby.gemPath}"
-      selected=$(${lib.getExe pkgs.ruby} ${rubyWifiMenu} | fuzzel --dmenu --prompt="WiFi: ")
+      selected=$(wifi-menu.rb | fuzzel --dmenu --prompt="WiFi: ")
       if [ -n "$selected" ]; then
-        ${pkgs.river-classic}/bin/riverctl spawn "foot -e nmtui-connect '$selected'"
+        ${pkgs.river-classic}/bin/riverctl spawn "foot -e iwctl --passphrase-command 'read -s -p \"Password: \" pwd && echo \$pwd' station wlan0 connect '$selected'"
       fi
     '')
 
       (pkgs.writeShellScriptBin "system-menu" ''
       export GEM_PATH="${pkgs.rubyPackages.sorbet-runtime}/${pkgs.ruby.gemPath}"
-      selected=$(${lib.getExe pkgs.ruby} ${rubySystemMenu} | fuzzel --dmenu --prompt="System: ")
+      selected=$(system-menu.rb | fuzzel --dmenu --prompt="System: ")
       if [ -n "$selected" ]; then
-        ${lib.getExe pkgs.ruby} ${rubySystemMenu} "$selected"
+        system-menu.rb "$selected"
       fi
     '')
 

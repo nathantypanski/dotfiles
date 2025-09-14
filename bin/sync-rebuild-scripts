@@ -1,0 +1,59 @@
+#!/usr/bin/env ruby
+
+require 'fileutils'
+
+# Base paths
+DOTFILES_ROOT = File.expand_path('..', __dir__)
+ARCH_DIR = File.join(DOTFILES_ROOT, 'arch')
+
+def ensure_directory_exists(dir)
+  FileUtils.mkdir_p(dir) unless Dir.exist?(dir)
+end
+
+def sync_arch_files
+  # Find all files in the arch directory (excluding README.md)
+  arch_files = Dir.glob(File.join(ARCH_DIR, '**', '*')).select do |file|
+    File.file?(file) && !file.end_with?('README.md')
+  end
+
+  if arch_files.empty?
+    puts "No files found in #{ARCH_DIR}"
+    return
+  end
+
+  copied_count = 0
+  skipped_count = 0
+
+  arch_files.each do |arch_file|
+    # Get the relative path from arch/
+    relative_path = arch_file.sub("#{ARCH_DIR}/", '')
+
+    # Construct the system path (prepend / to make it absolute)
+    system_path = "/#{relative_path}"
+
+    if File.exist?(system_path)
+      begin
+        # Ensure the target directory exists
+        target_dir = File.dirname(arch_file)
+        ensure_directory_exists(target_dir)
+
+        # Copy from system to arch
+        FileUtils.cp(system_path, arch_file)
+        puts "✓ Synced #{relative_path}"
+        copied_count += 1
+      rescue => e
+        puts "✗ Error syncing #{relative_path}: #{e.message}"
+      end
+    else
+      puts "- Skipped #{relative_path} (not found in system)"
+      skipped_count += 1
+    end
+  end
+
+  puts "\nSync complete: #{copied_count} files copied, #{skipped_count} files skipped."
+end
+
+# Main execution
+if __FILE__ == $0
+  sync_arch_files
+end

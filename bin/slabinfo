@@ -1,0 +1,91 @@
+#!/usr/bin/env python3
+
+def parse_slabinfo():
+    data = []
+    try:
+        with open('/proc/slabinfo', 'r') as f:
+            for count, line in enumerate(f):
+                if count >= 2:
+                    fields = line.split()
+                    if len(fields) >= 6:
+                        name = fields[0]
+                        active_objs = int(fields[1])
+                        num_objs = int(fields[2])
+                        objsize = int(fields[3])
+                        objperslab = int(fields[4])
+                        pagesperslab = int(fields[5])
+
+                        # Calculate memory usage
+                        total_size = num_objs * objsize
+                        active_size = active_objs * objsize
+                        if num_objs > 0:
+                            utilization = (active_objs / num_objs * 100)
+                        else:
+                            utilization = 0
+                        data.append({
+                            'name': name,
+                            'active_objs': active_objs,
+                            'total_objs': num_objs,
+                            'obj_size': objsize,
+                            'obj_per_slab': objperslab,
+                            'pages_per_slab': pagesperslab,
+                            'total_memory': total_size,
+                            'active_memory': active_size,
+                            'utilization': utilization,
+                        })
+    except PermissionError:
+        print("Error: Need root permissions to read /proc/slabinfo")
+        print("Run with: sudo python3 slabinfo.py")
+        return
+
+    return data
+
+
+def format_bytes(bytes_val):
+    """Convert bytes to human readable format"""
+    for unit in ['B', 'KB', 'MB', 'GB']:
+        if bytes_val < 1024.0:
+            return f"{bytes_val:.1f}{unit}"
+        bytes_val /= 1024.0
+    return f"{bytes_val:.1f}TB"
+
+
+def print_slabinfo():
+    data = parse_slabinfo()
+    if not data:
+        return
+
+    # Sort by total memory usage
+    data.sort(key=lambda x: x['total_memory'], reverse=True)
+
+    print(f"{'Name':<25} {'Total Mem':<10} {'Active Mem':<10} "
+          f"{'Objects':<12} {'Util%':<6} {'Obj Per Slab':<10} "
+          f"{'Pages Per Slab':<10} "
+          f"{'Obj Size':<10}")
+    print("-" * 80)
+
+    total_memory = 0
+    for slab in data[:20]:  # Top 20
+        total_memory += slab['total_memory']
+        print(f"{slab['name']:<25} "
+              f"{format_bytes(slab['total_memory']):<10} "
+              f"{format_bytes(slab['active_memory']):<10} "
+              f"{slab['active_objs']:>6}/{slab['total_objs']:<5} "
+              f"{slab['utilization']:>5.1f} "
+              f"{slab['obj_per_slab']:>5.1f} "
+              f"{slab['pages_per_slab']:>5.1f} "
+              f"{format_bytes(slab['obj_size']):<10}")
+
+    print("-" * 80)
+    print(f"Top 20 slabs total: {format_bytes(total_memory)}")
+
+    # Summary stats
+    total_all = sum(s['total_memory'] for s in data)
+    active_all = sum(s['active_memory'] for s in data)
+    print(f"All slabs total: {format_bytes(total_all)}")
+    print(f"All slabs active: {format_bytes(active_all)}")
+    print(f"Overall utilization: {(active_all/total_all*100):.1f}%")
+
+
+if __name__ == "__main__":
+    print_slabinfo()
