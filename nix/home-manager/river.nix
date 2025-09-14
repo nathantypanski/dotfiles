@@ -3,13 +3,9 @@
 let
   # Create nixGL-wrapped river package if needed
   riverPackage = if withNixGL
-    then pkgs.river-classic.overrideAttrs (old: {
-      nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ pkgs.makeWrapper ];
-      postInstall = (old.postInstall or "") + ''
-        wrapProgram $out/bin/river \
-          --run 'eval "$(${lib.getExe pkgs.nixgl.nixGLMesa} printenv)"'
-      '';
-    })
+    then pkgs.writeShellScriptBin "river" ''
+      exec ${lib.getExe pkgs.nixgl.nixGLMesa} ${lib.getExe pkgs.river-classic} "$@"
+    ''
     else pkgs.river-classic;
 
   # Create user-river script - the built-in module handles session management automatically
@@ -206,132 +202,148 @@ in {
 
       # River configuration
       extraConfig = ''
+      # Debug logging
+      echo "$(date): River config starting" >> /tmp/river-debug.log
+
       # Start rivertile layout generator in background
-      rivertile -view-padding 2 -outer-padding 1 &
+      echo "$(date): Starting rivertile" >> /tmp/river-debug.log
+      ${pkgs.river-classic}/bin/rivertile -view-padding 2 -outer-padding 1 &
 
       # Set rivertile as default layout
-      riverctl default-layout rivertile
+      echo "$(date): Setting default layout" >> /tmp/river-debug.log
+      ${pkgs.river-classic}/bin/riverctl default-layout rivertile
 
-      # Start waybar
-      pkill waybar >& /dev/null; waybar &
+      # waybar and swayidle are now managed by systemd services
+      echo "$(date): Services (waybar, swayidle, scaling) managed by river-session.target" >> /tmp/river-debug.log
 
-      # Display scaling - 2x zoom for most apps, normal for foot
-      riverctl rule-add -app-id "foot" ssd
-      riverctl rule-add -app-id "launcher" float
-      riverctl rule-add -app-id "yazi-popup" float
-      riverctl rule-add -title "rebuild-home" tags 512
+      # Launch initial foot terminal for debugging
+      echo "$(date): Starting debug terminal" >> /tmp/river-debug.log
+      ${pkgs.foot}/bin/foot &
+
+      echo "$(date): Setting up rules and scaling" >> /tmp/river-debug.log
+      ${pkgs.river-classic}/bin/riverctl rule-add -app-id "foot" ssd
+      ${pkgs.river-classic}/bin/riverctl rule-add -app-id "launcher" float
+      ${pkgs.river-classic}/bin/riverctl rule-add -app-id "yazi-popup" float
+      ${pkgs.river-classic}/bin/riverctl rule-add -title "rebuild-home" tags 512
 
       # New windows spawn on focused tags only (not all visible tags)
-      riverctl spawn-tagmask 0
-      riverctl spawn "wlr-randr --output eDP-1 --scale 2.0"
+      ${pkgs.river-classic}/bin/riverctl spawn-tagmask 0
 
       # Remap Caps Lock to Control
-      riverctl keyboard-layout -options ctrl:nocaps us
+      ${pkgs.river-classic}/bin/riverctl keyboard-layout -options ctrl:nocaps us
 
       # Mouse/pointer settings
-      riverctl input pointer accel-profile adaptive
-      riverctl input pointer pointer-accel 0.5
+      ${pkgs.river-classic}/bin/riverctl input pointer accel-profile adaptive
+      ${pkgs.river-classic}/bin/riverctl input pointer pointer-accel 0.5
 
       # Touchpad settings - Framework laptop
-      riverctl input "pointer-2362-628-PIXA3854:00_093A:0274_Touchpad" tap disabled
-      riverctl input "pointer-2362-628-PIXA3854:00_093A:0274_Touchpad" tap-button-map lrm
-      riverctl input "pointer-2362-628-PIXA3854:00_093A:0274_Touchpad" click-method clickfinger
-      riverctl input "pointer-2362-628-PIXA3854:00_093A:0274_Touchpad" scroll-method two-finger
-      riverctl input "pointer-2362-628-PIXA3854:00_093A:0274_Touchpad" scroll-factor 0.3
+      ${pkgs.river-classic}/bin/riverctl input "pointer-2362-628-PIXA3854:00_093A:0274_Touchpad" tap disabled
+      ${pkgs.river-classic}/bin/riverctl input "pointer-2362-628-PIXA3854:00_093A:0274_Touchpad" tap-button-map lrm
+      ${pkgs.river-classic}/bin/riverctl input "pointer-2362-628-PIXA3854:00_093A:0274_Touchpad" click-method clickfinger
+      ${pkgs.river-classic}/bin/riverctl input "pointer-2362-628-PIXA3854:00_093A:0274_Touchpad" scroll-method two-finger
+      ${pkgs.river-classic}/bin/riverctl input "pointer-2362-628-PIXA3854:00_093A:0274_Touchpad" scroll-factor 0.3
 
       # Basic keybinds
-      riverctl map normal Super Return spawn "${pkgs.foot}/bin/foot"
-      riverctl map normal Super P spawn pick-ruby
-      riverctl map normal Super W spawn wifi-menu
-      riverctl map normal Super+Shift P spawn system-menu
-      riverctl map normal Super Tab spawn window-menu
-      riverctl map normal Super Q close
-      riverctl map normal Super+Shift E exit
-      riverctl map normal Super+Shift T toggle-float
-      riverctl map normal Super+Shift semicolon spawn system-swaylock
-      riverctl map normal Super+Shift apostrophe spawn "${pkgs.foot}/bin/foot --title=rebuild-home -e rebuild-home"
-      riverctl map normal Super Y spawn yazi-popup
-      riverctl map normal Super+Shift R spawn "sh ~/.config/river/init"
-      riverctl map normal Super+Shift S spawn "wlr-randr --output eDP-1 --scale 2.0"
-      riverctl map normal Super space spawn "notify-send -t 1000 'River' 'Tag Mode: Press 0-9' && riverctl enter-mode tag"
+      echo "$(date): Setting up keybindings" >> /tmp/river-debug.log
+      ${pkgs.river-classic}/bin/riverctl map normal Super Return spawn "${pkgs.foot}/bin/foot"
+      ${pkgs.river-classic}/bin/riverctl map normal Super P spawn pick-ruby
+      ${pkgs.river-classic}/bin/riverctl map normal Super W spawn wifi-menu
+      ${pkgs.river-classic}/bin/riverctl map normal Super+Shift P spawn system-menu
+      ${pkgs.river-classic}/bin/riverctl map normal Super Tab spawn window-menu
+      ${pkgs.river-classic}/bin/riverctl map normal Super Q close
+      ${pkgs.river-classic}/bin/riverctl map normal Super+Shift E exit
+      ${pkgs.river-classic}/bin/riverctl map normal Super+Shift T toggle-float
+      ${pkgs.river-classic}/bin/riverctl map normal Super+Shift semicolon spawn system-swaylock
+      ${pkgs.river-classic}/bin/riverctl map normal Super+Shift apostrophe spawn "${pkgs.foot}/bin/foot --title=rebuild-home -e rebuild-home"
+      ${pkgs.river-classic}/bin/riverctl map normal Super Y spawn yazi-popup
+      ${pkgs.river-classic}/bin/riverctl map normal Super+Shift R spawn "sh ~/.config/river/init"
+      ${pkgs.river-classic}/bin/riverctl map normal Super+Shift S spawn "wlr-randr --output eDP-1 --scale 2.0"
+      ${pkgs.river-classic}/bin/riverctl map normal Super space spawn "notify-send -t 1000 'River' 'Tag Mode: Press 0-9' && ${pkgs.river-classic}/bin/riverctl enter-mode tag"
 
       # Brightness controls
-      riverctl map normal None XF86MonBrightnessUp spawn "${pkgs.brightnessctl}/bin/brightnessctl s '+5%'"
-      riverctl map normal None XF86MonBrightnessDown spawn "${pkgs.brightnessctl}/bin/brightnessctl s '5%-'"
+      ${pkgs.river-classic}/bin/riverctl map normal None XF86MonBrightnessUp spawn "${pkgs.brightnessctl}/bin/brightnessctl s '+5%'"
+      ${pkgs.river-classic}/bin/riverctl map normal None XF86MonBrightnessDown spawn "${pkgs.brightnessctl}/bin/brightnessctl s '5%-'"
 
       # Focus controls
-      riverctl map normal Super J focus-view next
-      riverctl map normal Super K focus-view previous
-      riverctl map normal Super+Shift J swap next
-      riverctl map normal Super+Shift K swap previous
+      ${pkgs.river-classic}/bin/riverctl map normal Super J focus-view next
+      ${pkgs.river-classic}/bin/riverctl map normal Super K focus-view previous
+      ${pkgs.river-classic}/bin/riverctl map normal Super+Shift J swap next
+      ${pkgs.river-classic}/bin/riverctl map normal Super+Shift K swap previous
 
       # Layout controls - for rivertile
-      riverctl map normal Super H send-layout-cmd rivertile "main-ratio -0.05"
-      riverctl map normal Super L send-layout-cmd rivertile "main-ratio +0.05"
-      riverctl map normal Super I send-layout-cmd rivertile "main-count +1"
-      riverctl map normal Super D send-layout-cmd rivertile "main-count -1"
+      ${pkgs.river-classic}/bin/riverctl map normal Super H send-layout-cmd rivertile "main-ratio -0.05"
+      ${pkgs.river-classic}/bin/riverctl map normal Super L send-layout-cmd rivertile "main-ratio +0.05"
+      ${pkgs.river-classic}/bin/riverctl map normal Super I send-layout-cmd rivertile "main-count +1"
+      ${pkgs.river-classic}/bin/riverctl map normal Super D send-layout-cmd rivertile "main-count -1"
 
       # Layout orientation
-      riverctl map normal Super V send-layout-cmd rivertile "main-location left"
-      riverctl map normal Super+Shift V send-layout-cmd rivertile "main-location right"
-      riverctl map normal Super B send-layout-cmd rivertile "main-location top"
-      riverctl map normal Super+Shift B send-layout-cmd rivertile "main-location bottom"
+      ${pkgs.river-classic}/bin/riverctl map normal Super V send-layout-cmd rivertile "main-location left"
+      ${pkgs.river-classic}/bin/riverctl map normal Super+Shift V send-layout-cmd rivertile "main-location right"
+      ${pkgs.river-classic}/bin/riverctl map normal Super B send-layout-cmd rivertile "main-location top"
+      ${pkgs.river-classic}/bin/riverctl map normal Super+Shift B send-layout-cmd rivertile "main-location bottom"
 
       # Switch layout generators
-      riverctl map normal Super M spawn "pkill rivertile; rivertile -view-padding 2 -outer-padding 1 &"
-      riverctl map normal Super+Shift M spawn "riverctl default-layout rivertile"
+      ${pkgs.river-classic}/bin/riverctl map normal Super M spawn "pkill rivertile; ${pkgs.river-classic}/bin/rivertile -view-padding 2 -outer-padding 1 &"
+      ${pkgs.river-classic}/bin/riverctl map normal Super+Shift M spawn "riverctl default-layout rivertile"
 
       # Tag operations - Super+0-9 for quick access
       for i in $(seq 0 9); do
             tags=$(( i == 0 ? (1 << 9) : (1 << (i - 1)) ))
 
             # Switch to tag
-            riverctl map normal "Super" "$i" toggle-focused-tags "$tags"
+            ${pkgs.river-classic}/bin/riverctl map normal "Super" "$i" toggle-focused-tags "$tags"
 
             # Move window to tag
-            riverctl map normal "Super+Shift" "$i" set-view-tags "$tags"
+            ${pkgs.river-classic}/bin/riverctl map normal "Super+Shift" "$i" set-view-tags "$tags"
 
             # Switch to tag
-            riverctl map normal "Super+Alt" "$i" set-focused-tags "$tags"
+            ${pkgs.river-classic}/bin/riverctl map normal "Super+Alt" "$i" set-focused-tags "$tags"
+
       done
 
       # Declare modes
-      riverctl declare-mode tag
-      riverctl declare-mode layout
+      ${pkgs.river-classic}/bin/riverctl declare-mode tag
+      ${pkgs.river-classic}/bin/riverctl declare-mode layout
 
       # Tag mode - for moving windows to tags
-      riverctl map normal Super T enter-mode tag
-      riverctl map tag None Escape enter-mode normal
+      ${pkgs.river-classic}/bin/riverctl map normal Super T enter-mode tag
+      ${pkgs.river-classic}/bin/riverctl map tag None Escape enter-mode normal
 
       # Layout mode - for layout operations
-      riverctl map normal Super G enter-mode layout
-      riverctl map layout None h send-layout-cmd rivertile "main-ratio -0.05"
-      riverctl map layout None l send-layout-cmd rivertile "main-ratio +0.05"
-      riverctl map layout None plus send-layout-cmd rivertile "main-count +1"
-      riverctl map layout None hyphen send-layout-cmd rivertile "main-count -1"
-      riverctl map layout None v send-layout-cmd rivertile "main-location left"
-      riverctl map layout None V send-layout-cmd rivertile "main-location right"
-      riverctl map layout None b send-layout-cmd rivertile "main-location top"
-      riverctl map layout None B send-layout-cmd rivertile "main-location bottom"
-      riverctl map layout None Escape enter-mode normal
+      ${pkgs.river-classic}/bin/riverctl map normal Super G enter-mode layout
+      ${pkgs.river-classic}/bin/riverctl map layout None h send-layout-cmd rivertile "main-ratio -0.05"
+      ${pkgs.river-classic}/bin/riverctl map layout None l send-layout-cmd rivertile "main-ratio +0.05"
+      ${pkgs.river-classic}/bin/riverctl map layout None i send-layout-cmd rivertile "main-count +1"
+      ${pkgs.river-classic}/bin/riverctl map layout None d send-layout-cmd rivertile "main-count -1"
+      ${pkgs.river-classic}/bin/riverctl map layout None v send-layout-cmd rivertile "main-location left"
+      ${pkgs.river-classic}/bin/riverctl map layout None V send-layout-cmd rivertile "main-location right"
+      ${pkgs.river-classic}/bin/riverctl map layout None b send-layout-cmd rivertile "main-location top"
+      ${pkgs.river-classic}/bin/riverctl map layout None B send-layout-cmd rivertile "main-location bottom"
+      ${pkgs.river-classic}/bin/riverctl map layout None Escape enter-mode normal
 
       # Mouse bindings
-      # riverctl map-pointer normal Super BTN_LEFT move-view
-      riverctl map-pointer normal Super BTN_RIGHT resize-view
+      # ${pkgs.river-classic}/bin/riverctl map-pointer normal Super BTN_LEFT move-view
+      ${pkgs.river-classic}/bin/riverctl map-pointer normal Super BTN_RIGHT resize-view
 
       # Set repeat rate
-      riverctl set-repeat 50 300
+      ${pkgs.river-classic}/bin/riverctl set-repeat 50 300
 
       # Cursor theme
-      riverctl xcursor-theme ${config.gtk.cursorTheme.name or "Adwaita"} ${toString (config.gtk.cursorTheme.size or 12)}
+      ${pkgs.river-classic}/bin/riverctl xcursor-theme ${config.gtk.cursorTheme.name or "Adwaita"} ${toString (config.gtk.cursorTheme.size or 12)}
 
       # Set background color to match waybar
-      riverctl background-color 0x121212
+      ${pkgs.river-classic}/bin/riverctl background-color 0x121212
+
+      echo "$(date): River config completed" >> /tmp/river-debug.log
     '';
     };
 
     programs.waybar = {
       enable = true;
+      systemd = {
+        enable = true;
+        target = "river-session.target";
+      };
       settings = {
         mainBar = {
           layer = "top";
@@ -503,6 +515,8 @@ in {
       };
     };
 
+# waybar systemd integration is handled automatically by programs.waybar.enable
+
     systemd.user.services.river-scale = {
       Unit = {
         Description = "Apply River display scaling";
@@ -513,6 +527,22 @@ in {
         Type = "oneshot";
         ExecStart = "${pkgs.wlr-randr}/bin/wlr-randr --output eDP-1 --scale 2.0";
         RemainAfterExit = true;
+      };
+      Install = {
+        WantedBy = [ "river-session.target" ];
+      };
+    };
+
+    systemd.user.services.swayidle = {
+      Unit = {
+        Description = "swayidle - idle management daemon for Wayland";
+        PartOf = [ "river-session.target" ];
+        After = [ "river-session.target" ];
+      };
+      Service = {
+        Type = "simple";
+        ExecStart = "${pkgs.swayidle}/bin/swayidle -w timeout 600 'system-swaylock -f -c 3f3f3f' before-sleep 'system-swaylock -f -c 3f3f3f'";
+        Restart = "on-failure";
       };
       Install = {
         WantedBy = [ "river-session.target" ];
@@ -553,7 +583,7 @@ in {
                   grep -v fzf |
                   sort -u |
                   fzf --layout=reverse |
-                  xargs -r riverctl spawn'
+                  xargs -r ${pkgs.river-classic}/bin/riverctl spawn'
     '')
       (pkgs.writeShellScriptBin "yazi-popup" ''
         exec ${pkgs.foot}/bin/foot --app-id=yazi-popup --title=yazi-popup \
@@ -572,14 +602,14 @@ in {
       # Ruby-powered launchers
       (pkgs.writeShellScriptBin "pick-ruby" ''
       export GEM_PATH="${pkgs.rubyPackages.sorbet-runtime}/${pkgs.ruby.gemPath}"
-      ${lib.getExe pkgs.ruby} ${rubyLauncher} | fuzzel --dmenu | xargs -r riverctl spawn
+      ${lib.getExe pkgs.ruby} ${rubyLauncher} | fuzzel --dmenu | xargs -r ${pkgs.river-classic}/bin/riverctl spawn
     '')
 
       (pkgs.writeShellScriptBin "wifi-menu" ''
       export GEM_PATH="${pkgs.rubyPackages.sorbet-runtime}/${pkgs.ruby.gemPath}"
       selected=$(${lib.getExe pkgs.ruby} ${rubyWifiMenu} | fuzzel --dmenu --prompt="WiFi: ")
       if [ -n "$selected" ]; then
-        riverctl spawn "foot -e nmtui-connect '$selected'"
+        ${pkgs.river-classic}/bin/riverctl spawn "foot -e nmtui-connect '$selected'"
       fi
     '')
 
@@ -593,7 +623,7 @@ in {
 
       # Quick window/app switcher
       (pkgs.writeShellScriptBin "window-menu" ''
-      riverctl spawn "fuzzel"
+      ${pkgs.river-classic}/bin/riverctl spawn "fuzzel"
     '')
     ] ++ lib.optionals withNixGL [
       nixgl.nixGLMesa

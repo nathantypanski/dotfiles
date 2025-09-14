@@ -71,7 +71,7 @@ in {
     vulkan-tools
     glxinfo
 
-    floorp
+    floorp-bin
     vivaldi
 
     wl-clipboard
@@ -91,7 +91,7 @@ in {
         "--ozone-platform-hint=auto"
         "--use-gl=egl"
         "--gtk-version=4"
-        "--enable-features=WaylandPerSurfaceScale,WaylandUiScale"
+        # "--enable-features=WaylandPerSurfaceScale,WaylandUiScale"
       ];
     })
 
