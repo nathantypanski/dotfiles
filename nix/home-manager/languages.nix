@@ -13,9 +13,13 @@ let
     "c"
     "hcl"
     "sql"
+    "ruby"
   ];
 
-  treeSitterFor = langs: p: map (lang: p.${"tree-sitter-" + lang}) langs;
+  treeSitterFor = langs: p: map (lang:
+    let grammarName = "tree-sitter-" + lang;
+    in p.tree-sitter-grammars.${grammarName} or null
+  ) langs;
 
   lspServers = builtins.filter (x: x != null) (map (lang:
     pkgs.${"${lang}-language-server"} or null
@@ -35,7 +39,7 @@ in
     python313Packages.python-lsp-ruff
     python313Packages.flake8
 
-    (tree-sitter.withPlugins (treeSitterFor langs))
+    (tree-sitter.withPlugins (p: builtins.filter (x: x != null) (treeSitterFor langs p)))
   ] ++ lspServers;
 
 
