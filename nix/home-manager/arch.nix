@@ -94,6 +94,29 @@ in {
         # "--enable-features=WaylandPerSurfaceScale,WaylandUiScale"
       ];
     })
+    (pkgs.writeShellScriptBin "signal-desktop" ''
+      exec ${lib.getExe pkgs.slack} \
+        --enable-features=UseOzonePlatform,WaylandWindowDecorations \
+        --ozone-platform=wayland \
+        --disable-gpu-sandbox \
+        --disable-software-rasterizer "$@"
+    '')
+    (pkgs.writeShellScriptBin "slack-wayland" ''
+      exec ${lib.getExe pkgs.slack} \
+        --enable-features=UseOzonePlatform,WaylandWindowDecorations \
+        --ozone-platform=wayland \
+        --disable-gpu-sandbox \
+        --disable-software-rasterizer \
+        --max-old-space-size=8192 "$@"
+    '')
+    (pkgs.writeShellScriptBin "discord-wayland" ''
+      exec ${lib.getExe pkgs.discord} \
+        --enable-features=UseOzonePlatform,WaylandWindowDecorations \
+        --ozone-platform=wayland \
+        --disable-gpu-sandbox \
+        --disable-software-rasterizer \
+        --max-old-space-size=8192 "$@"
+    '')
 
     procps
     fzf
@@ -141,11 +164,6 @@ in {
 
     # signal rust client
     gurk-rs
-    (pkgs.writeShellScriptBin "signal" ''
-      ${signal-desktop}/bin/signal-desktop \
-          --enable-features=UseOzonePlatform \
-          --ozone-platform=wayland $@
-    '')
 
     passage
     yubikey-manager
@@ -174,20 +192,6 @@ in {
     gbdfed
     fontforge
 
-    (pkgs.writeShellScriptBin "slack-wayland" ''
-      exec ${pkgs.slack}/bin/slack \
-        --enable-features=UseOzonePlatform,WaylandWindowDecorations \
-        --ozone-platform=wayland \
-        --disable-gpu-sandbox \
-        --disable-software-rasterizer "$@"
-    '')
-    (pkgs.writeShellScriptBin "discord-wayland" ''
-      exec ${pkgs.discord}/bin/discord \
-        --enable-features=UseOzonePlatform,WaylandWindowDecorations \
-        --ozone-platform=wayland \
-        --disable-gpu-sandbox \
-        --disable-software-rasterizer "$@"
-    '')
   ];
 
   programs.wofi = {
