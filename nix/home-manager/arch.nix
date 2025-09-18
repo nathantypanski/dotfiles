@@ -136,6 +136,8 @@ in {
     ruby-lsp
     rubyfmt
     rubyPackages.sorbet-runtime
+    rubyPackages.psych
+    libyaml # required for ruby
 
     nixd # alternative nix lsp
     (python313.withPackages (ps: with ps; [
