@@ -193,7 +193,7 @@ in {
   programs.wofi = {
     enable = true;
     settings = {
-      font = "Terminus:size=12";
+      font = "${termFont}";
     };
   };
 
