@@ -32,6 +32,11 @@ in
   ] else [
     # Linux-specific packages
     libvterm
+    ruby
+    rubyPackages.sorbet-runtime
+    rubyPackages.ruby-lsp
+    rubyPackages.psych
+    libyaml
   ]);
 
   services.gpg-agent = {
