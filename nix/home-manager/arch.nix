@@ -147,8 +147,15 @@ in {
     poetry
 
     (pkgs.writeShellScriptBin "rebuild-home" ''
+      log() {
+            echo >&2 ">>>> $@"
+      }
+      log 'rebuilding home-manager!'
       ${homeDirectory}/src/github.com/nathantypanski/dotfiles/nix/arch/rebuild.sh
-      [[ "''${?}" -eq 0 ]] || read -n 1 -s -r -p '[ press any key to continue ]'
+      rebuild_status="$?"
+      log 'successfully built home-manager dotfiles!'
+      [[ "''${rebuild_status}" -eq 0 ]] \
+          || read -n 1 -s -r -p '[ press any key to continue ]'
     '')
     (pkgs.writeShellScriptBin "which-path" ''
       while IFS= read -r line; do

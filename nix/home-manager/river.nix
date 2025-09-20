@@ -1,6 +1,23 @@
 { config, pkgs, lib, mod, termFont, homeDirectory, withNixGL, ... }:
 
 let
+  # Use simple Ruby with gem install approach
+  ruby = pkgs.ruby;
+  # Inline Gemfile
+  gemfile = pkgs.writeText "Gemfile" ''
+    source "https://rubygems.org"
+
+    gem "sorbet-runtime", "~> 0.5"
+    gem "ruby-lsp"
+  '';
+  rubyEnv = pkgs.bundlerEnv {
+    name = "river-ruby-env";
+    inherit ruby;
+    gemdir = ./.;      # fake path, we’ll point Gemfile explicitly
+    gemfile = gemfile; # use inline Gemfile
+    lockfile = null;   # omit if you don’t want to pin Gemfile.lock
+  };
+
   # Create nixGL-wrapped river package if needed
   riverPackage = if withNixGL
     then pkgs.writeShellScriptBin "river" ''
@@ -90,7 +107,7 @@ in {
       extraConfig = ''
       logfile='/tmp/river-debug.log'
       term='${lib.getExe pkgs.foot}'
-      layout='${riverPackage}/bin/rivertile'
+      layoutBin='${pkgs.river-classic}/bin/rivertile'
       riverctl='${pkgs.river-classic}/bin/riverctl'
 
       scratchpadTag=$(( 1 << 31 ))
@@ -104,7 +121,9 @@ in {
 
       # Start rivertile layout generator in background
       log "Starting rivertile"
-      "$layout" -view-padding 2 -outer-padding 1 &
+      log "Command: $layoutBin -view-padding 2 -outer-padding 1"
+      nohup "$layoutBin" -view-padding 2 -outer-padding 1 >/dev/null 2>&1 &
+      sleep 0.1  # Give rivertile time to start
 
       # Set rivertile as default layout
       log "Setting default layout"
@@ -117,7 +136,7 @@ in {
       "$riverctl" rule-add -app-id "foot" ssd
       "$riverctl" rule-add -app-id "launcher" float
       "$riverctl" rule-add -app-id "yazi-popup" float
-      "$riverctl" rule-add -title "rebuild-home" tags 512
+      "$riverctl" rule-add -title "rebuild-river" tags 512
 
       # Make Firefox use server-side decorations (i.e., via tiling WM)
       "$riverctl" rule-add -app-id "firefox*" ssd
@@ -154,14 +173,14 @@ in {
       "$riverctl" map normal Super+Shift Space toggle-float
       "$riverctl" map normal Super F toggle-fullscreen
       "$riverctl" map normal Super+Shift semicolon spawn system-swaylock
-      "$riverctl" map normal Super+Shift apostrophe spawn "$term --title=rebuild-home -e 'rebuild-home'"
+      "$riverctl" map normal Super+Shift apostrophe spawn "$term --title=rebuild-river -e 'rebuild-river'"
       "$riverctl" map normal Super Y spawn yazi-popup
       "$riverctl" map normal Super+Shift R spawn "sh ~/.config/river/init"
       "$riverctl" map normal Super+Shift S spawn "wlr-randr --output eDP-1 --scale 2.0"
 
       # Scratchpad functionality (like Sway)
       "$riverctl" map normal Super+Shift minus set-view-tags "$scratchpadTag" # Move window to scratchpad
-      "$riverctl" map normal Super minus toggle-focused-tags "$scratchpadTag"       # Focus scratchpad
+      "$riverctl" map normal Super minus toggle-focused-tags "$scratchpadTag" # Focus scratchpad
 
       # Brightness controls
       "$riverctl" map normal None XF86MonBrightnessUp spawn "${lib.getExe pkgs.brightnessctl} s '+5%'"
@@ -212,7 +231,7 @@ in {
       "$riverctl" map normal Super T enter-mode tag
       "$riverctl" map tag None Escape enter-mode normal
 
-      "$riverctl" map normal Super space spawn "notify-send -t 1000 'River' 'Tag Mode: Press 0-9' && "$riverctl" enter-mode tag"
+      "$riverctl" map normal Super space spawn "sh -c 'notify-send -t 1000 \"River\" \"Tag Mode: Press 0-9\"; $riverctl enter-mode tag'"
       # Tag mode bindings (0-9 for tag operations)
       for i in $(seq 0 9); do
             tags=$(( i == 0 ? (1 << 9) : (1 << (i - 1)) ))
@@ -273,7 +292,7 @@ in {
 
           "river/tags" = {
             num-tags = 10;
-            tag-labels = [ "1" "2" "3" "4" "5" "6" "7" "8" "chat" "0" ];
+            tag-labels = [ "1" "2" "web" "4" "5" "6" "7" "8" "chat" "0" ];
           };
 
           "river/window" = {
@@ -411,8 +430,7 @@ in {
       };
     };
 
-    # Additional services that integrate with built-in river-session.target
-
+    # Tie mako service to river-session.target:
     systemd.user.services.mako = {
       Unit = {
         Description = "Mako notification daemon";
@@ -482,7 +500,6 @@ in {
       sway-contrib.grimshot
 
       # programs
-      dconf-editor
       swayimg
       imv
 
@@ -510,11 +527,11 @@ in {
 
       # Ruby environment
       ruby
-      rubyPackages.sorbet-runtime
-      rubyPackages.ruby-lsp
       (pkgs.writeShellScriptBin "setup-ruby-env" ''
-      gem install sorbet sorbet-runtime --user-install
-    '')
+        export GEM_HOME="$HOME/.gems"
+        export PATH="$GEM_HOME/bin:$PATH"
+        gem install sorbet-runtime ruby-lsp --user-install
+      '')
 
       # Ruby script binaries using readFile from bin directory
       (pkgs.writeScriptBin "launcher.rb" ''
@@ -531,33 +548,69 @@ in {
 
       # Ruby-powered launchers using the script binaries
       (pkgs.writeShellScriptBin "pick-ruby" ''
-      export GEM_PATH="${pkgs.rubyPackages.sorbet-runtime}/${pkgs.ruby.gemPath}"
-      launcher.rb | fuzzel --dmenu | xargs -r ${pkgs.river-classic}/bin/riverctl spawn
+      export GEM_HOME="$HOME/.gems"
+      export PATH="$GEM_HOME/bin:$PATH"
+      river-ruby-env launcher.rb | fuzzel --dmenu | xargs -r ${pkgs.river-classic}/bin/riverctl spawn
     '')
 
       (pkgs.writeShellScriptBin "wifi-menu" ''
-      export GEM_PATH="${pkgs.rubyPackages.sorbet-runtime}/${pkgs.ruby.gemPath}"
-      selected=$(wifi-menu.rb | fuzzel --dmenu --prompt="WiFi: ")
+      export GEM_HOME="$HOME/.gems"
+      export PATH="$GEM_HOME/bin:$PATH"
+      selected=$(river-ruby-env wifi-menu.rb | fuzzel --dmenu --prompt="WiFi: ")
       if [ -n "$selected" ]; then
-        ${pkgs.river-classic}/bin/riverctl spawn "foot -e iwctl --passphrase-command 'read -s -p \"Password: \" pwd && echo \$pwd' station wlan0 connect '$selected'"
+        ${pkgs.river-classic}/bin/riverctl spawn "foot -e sh -c 'iwctl station wlan0 connect \"$selected\"'"
       fi
     '')
 
       (pkgs.writeShellScriptBin "system-menu" ''
-      export GEM_PATH="${pkgs.rubyPackages.sorbet-runtime}/${pkgs.ruby.gemPath}"
-      selected=$(system-menu.rb | fuzzel --dmenu --prompt="System: ")
+      export GEM_HOME="$HOME/.gems"
+      export PATH="$GEM_HOME/bin:$PATH"
+      selected=$(river-ruby-env system-menu.rb | fuzzel --dmenu --prompt="System: ")
       if [ -n "$selected" ]; then
-        system-menu.rb "$selected"
+        river-ruby-env system-menu.rb "$selected"
       fi
     '')
 
       # Quick window/app switcher
       (pkgs.writeShellScriptBin "window-menu" ''
-      ${pkgs.river-classic}/bin/riverctl spawn "fuzzel"
+        ${pkgs.river-classic}/bin/riverctl spawn "fuzzel" '')
+      river-classic
+
+      (pkgs.writeShellScriptBin "rebuild-river" ''
+      log() {
+            echo >&2 ">>>> $@"
+      }
+
+      if rebuild-home; then
+        log "checking if river is running"
+        # if river is running, reload its config
+        if pgrep -x river >/dev/null; then
+          ~/.config/river/init
+          log 'reloaded river'
+        else
+          log 'river not running, skipping reload'
+        fi
+      else
+        log "rebuild failed - not reloading river"
+        exit 1
+      fi
     '')
     ] ++ lib.optionals withNixGL [
       nixgl.nixGLMesa
       (lib.hiPrio riverPackage)  # nixGL-wrapped river takes precedence in PATH
     ]);
+
+
+    home.sessionVariablesExtra = ''
+      if [[ -z "$XDG_DATA_HOME" ]]; then
+        export XDG_DATA_HOME="$HOME/.local/share"
+      fi
+    '';
+
+    home.sessionVariables = {
+      GEM_HOME = "$XDG_DATA_HOME/gems/ruby/${pkgs.ruby.version}";
+      GEM_PATH = "$XDG_DATA_HOME/gems/ruby/${pkgs.ruby.version}";
+      PATH     = "$XDG_DATA_HOME/gems/ruby/${pkgs.ruby.version}/bin:$PATH";
+    };
   };
 }
