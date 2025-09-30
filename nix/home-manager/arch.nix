@@ -132,9 +132,9 @@ in {
     parallel
     proverif
 
-    ruby
-    ruby-lsp
-    rubyfmt
+    # ruby
+    # ruby-lsp
+    # rubyfmt
 
     nixd # alternative nix lsp
     (python313.withPackages (ps: with ps; [

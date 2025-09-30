@@ -1,22 +1,63 @@
 { config, pkgs, lib, mod, termFont, homeDirectory, withNixGL, ... }:
 
 let
-  # Use simple Ruby with gem install approach
-  ruby = pkgs.ruby;
-  # Inline Gemfile
-  gemfile = pkgs.writeText "Gemfile" ''
-    source "https://rubygems.org"
-
-    gem "sorbet-runtime", "~> 0.5"
-    gem "ruby-lsp"
-  '';
+  # Ruby configuration
+  rubyVersion = pkgs.ruby_3_4;
   rubyEnv = pkgs.bundlerEnv {
     name = "river-ruby-env";
-    inherit ruby;
-    gemdir = ./.;      # fake path, we’ll point Gemfile explicitly
-    gemfile = gemfile; # use inline Gemfile
-    lockfile = null;   # omit if you don’t want to pin Gemfile.lock
+    ruby = rubyVersion;
+    gemdir = ./gems;
   };
+
+  # Common binaries
+  riverctl = "${pkgs.river-classic}/bin/riverctl";
+  fuzzelBin = "${pkgs.fuzzel}/bin/fuzzel";
+  foot = "${lib.getExe pkgs.foot}";
+  iwctl = "${pkgs.iwd}/bin/iwctl";
+
+  # Ruby script paths as Nix variables
+  launcherScript = pkgs.writeScriptBin "launcher.rb" ''
+    ${builtins.readFile ./../../bin/launcher.rb}
+  '';
+
+  wifiMenuScript = pkgs.writeScriptBin "wifi-menu.rb" ''
+    ${builtins.readFile ./../../bin/wifi-menu.rb}
+  '';
+
+  systemMenuScript = pkgs.writeScriptBin "system-menu.rb" ''
+    ${builtins.readFile ./../../bin/system-menu.rb}
+  '';
+
+  # Helper to run Ruby scripts with the bundlerEnv
+  runRubyScript = script: ''
+    export PATH="${rubyEnv}/bin:$PATH"
+    export GEM_PATH="${rubyEnv}/${rubyEnv.ruby.gemPath}:$GEM_PATH"
+    ${lib.getExe rubyVersion} "${script}/bin/${script.name}" "$@"
+  '';
+
+  # Fuzzel menu helper
+  fuzzelMenu = prompt:
+    if prompt != "" then
+      "${fuzzelBin} --dmenu --prompt=\"${prompt}\""
+    else
+      "${fuzzelBin} --dmenu";
+
+  # Create a launcher that pipes to fuzzel and spawns with riverctl
+  mkLauncher = { name, script, prompt ? "" }: pkgs.writeShellScriptBin name ''
+    export PATH="${rubyEnv}/bin:$PATH"
+    export GEM_PATH="${rubyEnv}/${rubyEnv.ruby.gemPath}:$GEM_PATH"
+    ${lib.getExe rubyVersion} "${script}/bin/${script.name}" | ${fuzzelMenu prompt} | xargs -r ${riverctl} spawn
+  '';
+
+  # Create a menu selector with custom action
+  mkMenuSelector = { name, script, prompt ? "", action }: pkgs.writeShellScriptBin name ''
+    export PATH="${rubyEnv}/bin:$PATH"
+    export GEM_PATH="${rubyEnv}/${rubyEnv.ruby.gemPath}:$GEM_PATH"
+    selected=$(${lib.getExe rubyVersion} "${script}/bin/${script.name}" | ${fuzzelMenu prompt})
+    if [ -n "$selected" ]; then
+      ${action}
+    fi
+  '';
 
   # Create nixGL-wrapped river package if needed
   riverPackage = if withNixGL
@@ -65,7 +106,7 @@ in {
           font = "DepartureMono Nerd Font:size=12";
           dpi-aware = "yes";
           show-actions = "yes";
-          terminal = "${lib.getExe pkgs.foot}";
+          terminal = foot;
 
           # Appearance
           width = 40;
@@ -106,9 +147,9 @@ in {
 
       extraConfig = ''
       logfile='/tmp/river-debug.log'
-      term='${lib.getExe pkgs.foot}'
+      term='${foot}'
       layoutBin='${pkgs.river-classic}/bin/rivertile'
-      riverctl='${pkgs.river-classic}/bin/riverctl'
+      riverctl='${riverctl}'
 
       scratchpadTag=$(( 1 << 31 ))
 
@@ -118,6 +159,9 @@ in {
 
       # Debug logging
       log "River config starting"
+
+      # Start the systemd river-session.target
+      systemctl --user start river-session.target &
 
       # Start rivertile layout generator in background
       log "Starting rivertile"
@@ -510,70 +554,53 @@ in {
         exec "$(command -v swaylock || echo /usr/bin/swaylock)" "$@"
       '')
       (pkgs.writeShellScriptBin "pick-foot" ''
-        exec ${pkgs.foot}/bin/foot --app-id=launcher --title=launcher \
+        exec ${foot} --app-id=launcher --title=launcher \
              -e 'bash' '-c' \
                  'compgen -c |
                   grep -v fzf |
                   sort -u |
                   fzf --layout=reverse |
-                  xargs -r ${pkgs.river-classic}/bin/riverctl spawn'
+                  xargs -r ${riverctl} spawn'
     '')
       (pkgs.writeShellScriptBin "yazi-popup" ''
-        exec ${pkgs.foot}/bin/foot --app-id=yazi-popup --title=yazi-popup \
+        exec ${foot} --app-id=yazi-popup --title=yazi-popup \
              -e ${pkgs.yazi}/bin/yazi
     '')
 
-      fuzzel
+      pkgs.fuzzel
 
-      # Ruby environment
-      ruby
-      (pkgs.writeShellScriptBin "setup-ruby-env" ''
-        export GEM_HOME="$HOME/.gems"
-        export PATH="$GEM_HOME/bin:$PATH"
-        gem install sorbet-runtime ruby-lsp --user-install
-      '')
+      # Ruby scripts (added to packages for availability in PATH)
+      launcherScript
+      wifiMenuScript
+      systemMenuScript
 
-      # Ruby script binaries using readFile from bin directory
-      (pkgs.writeScriptBin "launcher.rb" ''
-        ${builtins.readFile ./../../bin/launcher.rb}
-      '')
+      # Launcher commands using the factored helpers
+      (mkLauncher {
+        name = "pick-ruby";
+        script = launcherScript;
+      })
 
-      (pkgs.writeScriptBin "wifi-menu.rb" ''
-        ${builtins.readFile ./../../bin/wifi-menu.rb}
-      '')
+      (mkMenuSelector {
+        name = "wifi-menu";
+        script = wifiMenuScript;
+        prompt = "WiFi: ";
+        action = ''
+          ${riverctl} spawn "${foot} -e sh -c '${iwctl} station wlan0 connect \"$selected\"'"
+        '';
+      })
 
-      (pkgs.writeScriptBin "system-menu.rb" ''
-        ${builtins.readFile ./../../bin/system-menu.rb}
-      '')
-
-      # Ruby-powered launchers using the script binaries
-      (pkgs.writeShellScriptBin "pick-ruby" ''
-      export GEM_HOME="$HOME/.gems"
-      export PATH="$GEM_HOME/bin:$PATH"
-      river-ruby-env launcher.rb | fuzzel --dmenu | xargs -r ${pkgs.river-classic}/bin/riverctl spawn
-    '')
-
-      (pkgs.writeShellScriptBin "wifi-menu" ''
-      export GEM_HOME="$HOME/.gems"
-      export PATH="$GEM_HOME/bin:$PATH"
-      selected=$(river-ruby-env wifi-menu.rb | fuzzel --dmenu --prompt="WiFi: ")
-      if [ -n "$selected" ]; then
-        ${pkgs.river-classic}/bin/riverctl spawn "foot -e sh -c 'iwctl station wlan0 connect \"$selected\"'"
-      fi
-    '')
-
-      (pkgs.writeShellScriptBin "system-menu" ''
-      export GEM_HOME="$HOME/.gems"
-      export PATH="$GEM_HOME/bin:$PATH"
-      selected=$(river-ruby-env system-menu.rb | fuzzel --dmenu --prompt="System: ")
-      if [ -n "$selected" ]; then
-        river-ruby-env system-menu.rb "$selected"
-      fi
-    '')
+      (mkMenuSelector {
+        name = "system-menu";
+        script = systemMenuScript;
+        prompt = "System: ";
+        action = ''
+          ${lib.getExe rubyVersion} "${systemMenuScript}/bin/${systemMenuScript.name}" "$selected"
+        '';
+      })
 
       # Quick window/app switcher
       (pkgs.writeShellScriptBin "window-menu" ''
-        ${pkgs.river-classic}/bin/riverctl spawn "fuzzel" '')
+        ${riverctl} spawn "${fuzzelBin}" '')
       river-classic
 
       (pkgs.writeShellScriptBin "rebuild-river" ''
@@ -606,11 +633,5 @@ in {
         export XDG_DATA_HOME="$HOME/.local/share"
       fi
     '';
-
-    home.sessionVariables = {
-      GEM_HOME = "$XDG_DATA_HOME/gems/ruby/${pkgs.ruby.version}";
-      GEM_PATH = "$XDG_DATA_HOME/gems/ruby/${pkgs.ruby.version}";
-      PATH     = "$XDG_DATA_HOME/gems/ruby/${pkgs.ruby.version}/bin:$PATH";
-    };
   };
 }

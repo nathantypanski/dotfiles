@@ -32,9 +32,11 @@ in
   ] else [
     # Linux-specific packages
     libvterm
-    ruby
+    "${lib.setPrio 1 ruby}"
     rubyPackages.ruby-lsp
     sshfs
+    # for pdf rendering
+    ghostscript
   ]);
 
   services.gpg-agent = {

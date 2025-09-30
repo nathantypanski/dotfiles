@@ -13,7 +13,7 @@ let
     "c"
     "hcl"
     "sql"
-    "ruby"
+    # "ruby"
   ];
 
   treeSitterFor = langs: p: map (lang:
