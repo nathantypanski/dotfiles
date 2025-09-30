@@ -33,10 +33,8 @@ in
     # Linux-specific packages
     libvterm
     ruby
-    rubyPackages.sorbet-runtime
     rubyPackages.ruby-lsp
-    rubyPackages.psych
-    libyaml
+    sshfs
   ]);
 
   services.gpg-agent = {
