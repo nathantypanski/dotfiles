@@ -74,6 +74,19 @@ in
         echo >&2 "launching emacs ..."
         emacs -nw "$@"
       }
+      ggptemacs() {
+              if ! [[ -n "''${OPENAI_API_KEY}" && -n "''${ANTHROPIC_API_KEY}" ]]
+              then
+                      echo "setting OPENAI_API_KEY and ANTHROPIC_API_KEY using passage" >&2
+                      export OPENAI_API_KEY="$(passage openai-api-key-redbow)"
+                      export ANTHROPIC_API_KEY="$(passage console.anthropic.com/api-redbow)"
+              else
+                      echo "OPENAI_API_KEY, ANTHROPIC_API_KEY already set" >&2
+              fi
+              echo "launching emacs ..." >&2
+              nohup emacs "$@" &
+      }
+
     '';
   };
 }
