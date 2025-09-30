@@ -23,6 +23,8 @@
       set cursorline
       set scrolloff=4
 
+      filetype plugin on
+
       lua << EOF
         require('guess-indent').setup {}
       EOF
