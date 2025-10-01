@@ -10,6 +10,7 @@ let
     printf '%s=%s\n' XDG_CONFIG_HOME "$XDG_CONFIG_HOME"
     printf '%s=%s\n' XDG_STATE_HOME "$XDG_STATE_HOME"
     printf '%s=%s\n' XDG_RUNTIME_DIR "$XDG_RUNTIME_DIR"
+    printf '%s=%s\n' XDG_DATA_HOME
   '';
   # I really like Departure Mono, but trying out Terminus again for some comparison.
   # termFont = "Departure Mono";
