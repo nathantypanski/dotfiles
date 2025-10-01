@@ -40,6 +40,10 @@ in {
     (import ./scripts.nix {
       inherit pkgs lib;
     })
+    (import ./email.nix {
+      inherit config pkgs lib username homeDirectory;
+      userEmail = secrets.userEmail;
+    })
     (import ./firefox.nix {
       inherit config pkgs lib;
     })
