@@ -336,7 +336,7 @@ in {
 
           "river/tags" = {
             num-tags = 10;
-            tag-labels = [ "1" "2" "web" "4" "5" "6" "7" "8" "chat" "0" ];
+            tag-labels = [ "edit" "2" "web" "4" "5" "6" "7" "8" "chat" "0" ];
           };
 
           "river/window" = {
