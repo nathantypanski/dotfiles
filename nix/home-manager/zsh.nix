@@ -75,10 +75,6 @@ in
               echo "launching emacs ..." >&2
               nohup emacs "$@" &
       }
-      function gptemacs() {
-        gptemacs -nw "$@"
-      }
-
     '';
   };
 }
