@@ -32,6 +32,11 @@ in
       userctl = "systemctl --user";
       psh = "ps -eo pid,vsz,rss,comm --sort=-vsz | awk 'NR==1{printf \"%-8s %7s %7s %s\\n\", \"PID\", \"VSZ\", \"RSS\", \"COMMAND\"; next} {printf \"%-8s %7.1fG %4dM %s\\n\", $1, $2/1024/1024, $3/1024, $4}' | head -20";
       p = "passage";
+      # lash: Comprehensive ls with long format, all files (no . or
+      # ..), human-readable sizes, sorted by size (largest first),
+      # blocks displayed, no group names, comma separators, and type
+      # indicators
+      lash = "ls -lAshBsNikF";
     };
     profileExtra = ''
       umask 027
