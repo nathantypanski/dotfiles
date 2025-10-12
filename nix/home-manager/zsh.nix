@@ -20,7 +20,14 @@ in
           echo "OPENAI_API_KEY and ANTHROPIC_API_KEY already set" >&2
       fi
       echo "Launching emacs..." >&2
-      emacs "$@" & disown %%
+      if [[ "$*" == *"-nw"* ]]; then
+          # Run in foreground for no-window mode
+          emacs "$@"
+      else
+          # Background for GUI mode
+          emacs "$@" &
+          disown
+      fi
     '')
   ];
   programs.zsh = {
@@ -104,7 +111,8 @@ in
               echo "OPENAI_API_KEY and ANTHROPIC_API_KEY already set" >&2
           fi
           echo "Launching emacs..." >&2
-          emacs "$@" & disown %%
+          emacs "$@" &
+      disown %1
       }
 
       # Source:        /etc/skel/.zshrc
