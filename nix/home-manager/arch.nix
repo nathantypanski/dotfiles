@@ -262,6 +262,27 @@ in {
     XDG_CACHE_HOME = "${homeDirectory}/.cache";
     XDG_STATE_HOME = "${homeDirectory}/.local/state";
   };
+  xdg.portal = {
+    enable = true;
+    extraPortals = with pkgs; [ xdg-desktop-portal-wlr xdg-desktop-portal-gtk ];
+    config = {
+      common = {
+        # fallback order
+        default = [ "wlr" "gtk" ];
+
+        # wlroots for capture
+        "org.freedesktop.impl.portal.Screenshot" = [ "wlr" ];
+        "org.freedesktop.impl.portal.ScreenCast" = [ "wlr" ];
+
+        # “open this URL/file”, settings, file chooser, secrets, etc.
+        # --> gtk
+        "org.freedesktop.impl.portal.OpenURI"    = [ "gtk" ];
+        "org.freedesktop.impl.portal.Settings"   = [ "gtk" ];
+        "org.freedesktop.impl.portal.FileChooser"= [ "gtk" ];
+        "org.freedesktop.impl.portal.Secret"     = [ "gtk" ];
+      };
+    };
+  };
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {
