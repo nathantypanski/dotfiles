@@ -155,6 +155,10 @@ in {
       log 'rebuilding home-manager!'
       ${homeDirectory}/src/github.com/nathantypanski/dotfiles/nix/arch/rebuild.sh
       rebuild_status="$?"
+      if [[ $? -ne 0 ]]; then
+          echo >&2 ">>>> failed to build home-manager dotfiles!"
+          exit 1
+      fi
       log 'successfully built home-manager dotfiles!'
       [[ "''${rebuild_status}" -eq 0 ]] \
           || read -n 1 -s -r -p '[ press any key to continue ]'

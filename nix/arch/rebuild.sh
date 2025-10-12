@@ -28,3 +28,4 @@ mkdir -p "${MANUAL_GCROOTS_DIR}"
 ln -sf "$(readlink "${SCRIPT_DIR}/result")" "${MANUAL_GCROOTS_DIR}"
 
 "${SCRIPT_DIR}/result/activate"
+exit $?
