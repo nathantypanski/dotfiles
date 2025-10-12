@@ -286,7 +286,11 @@ in {
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {
-      "application/pdf" = "zathura.desktop";
+      "application/pdf" = "org.pwmt.zathura.desktop"; # "zathura.desktop";
+      "application/x-pdf" = "org.pwmt.zathura.desktop"; # "zathura.desktop";
+      "application/acrobat" = "org.pwmt.zathura.desktop"; # "zathura.desktop";
+      "image/pdf" = "org.pwmt.zathura.desktop"; # "zathura.desktop";
+      "text/pdf" = "org.pwmt.zathura.desktop"; # "zathura.desktop";
       "application/x-extension-htm" = "firefox.desktop";
       "application/x-extension-html" = "firefox.desktop";
       "application/x-extension-shtml" = "firefox.desktop";
