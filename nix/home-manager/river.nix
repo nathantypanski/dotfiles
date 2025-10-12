@@ -526,6 +526,22 @@ in {
       };
     };
 
+    programs.yazi = {
+      enableZshIntegration = true;
+      settings = {
+        opener.pdf = [
+          { run = "${lib.getExe pkgs.zathura} \"$@\""; orphan = true; desc = "Zathura"; }
+        ];
+        open = {
+          rules = [
+            { mime = "application/pdf"; use = [ "pdf" ]; }
+            { name = "*.{pdf,PDF}";    use = [ "pdf" ]; }
+            { name = "*"; use = [ "open" "reveal" ]; }
+          ];
+        };
+      };
+    };
+
 
     home.packages = with pkgs; ([
       xwayland
