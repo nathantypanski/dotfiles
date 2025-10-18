@@ -67,7 +67,6 @@ in {
   home.packages = with pkgs; [
     zellij
     foot
-    tailscale
     yazi  # Terminal file manager
 
     adwaita-icon-theme
