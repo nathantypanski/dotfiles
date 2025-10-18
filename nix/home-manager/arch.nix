@@ -75,7 +75,6 @@ in {
     vulkan-tools
     glxinfo
 
-    floorp-bin
     vivaldi
 
     wl-clipboard
