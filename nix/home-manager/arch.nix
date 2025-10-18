@@ -205,6 +205,12 @@ in {
     gbdfed
     fontforge
 
+    electrum
+    vlc
+    mpv
+
+    eza
+    uutils-coreutils-noprefix
   ];
 
   programs.wofi = {
