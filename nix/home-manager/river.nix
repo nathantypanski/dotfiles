@@ -306,7 +306,7 @@ in {
       "$riverctl" set-repeat 50 300
 
       # Cursor theme
-      "$riverctl" xcursor-theme ${config.gtk.cursorTheme.name or "Adwaita"} ${toString (config.gtk.cursorTheme.size or 12)}
+      "$riverctl" xcursor-theme ${config.gtk.cursorTheme.name or "Adwaita"} ${toString (config.gtk.cursorTheme.size or 24)}
 
       # Set background color to match waybar
       "$riverctl" background-color 0x121212
