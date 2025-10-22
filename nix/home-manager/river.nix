@@ -15,6 +15,10 @@ let
   term = "${lib.getExe pkgs.foot}";
   iwctl = "${pkgs.iwd}/bin/iwctl";
 
+  # The default display scale is multiplied by $scaleRatio to get
+  # final sizes for windows.
+  scaleRatio = 1.5;
+
   # Ruby script paths as Nix variables
   launcherScript = pkgs.writeScriptBin "launcher.rb" ''
     ${builtins.readFile ./../../bin/launcher.rb}
@@ -221,7 +225,7 @@ in {
       "${riverctl}" map normal Super+Shift apostrophe spawn "$term --title=rebuild-river -e 'rebuild-river'"
       "${riverctl}" map normal Super Y spawn yazi-popup
       "${riverctl}" map normal Super+Shift R spawn "sh ~/.config/river/init"
-      "${riverctl}" map normal Super+Shift S spawn "wlr-randr --output eDP-1 --scale 2.0"
+      "${riverctl}" map normal Super+Shift S spawn "wlr-randr --output eDP-1 --scale ${toString scaleRatio}"
 
       # Scratchpad functionality (like Sway)
       "${riverctl}" rule-add -app-id 'scratch' csd
@@ -508,7 +512,7 @@ ${riverctl}' toggle-focused-tags \"$scratchpadTag\" && "${riverctl} focus-view -
       };
       Service = {
         Type = "oneshot";
-        ExecStart = "${pkgs.wlr-randr}/bin/wlr-randr --output eDP-1 --scale 2.0";
+        ExecStart = "${pkgs.wlr-randr}/bin/wlr-randr --output eDP-1 --scale ${toString scaleRatio}";
         RemainAfterExit = true;
       };
       Install = {
