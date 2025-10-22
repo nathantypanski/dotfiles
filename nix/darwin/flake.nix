@@ -31,6 +31,14 @@
     configuration = {pkgs, ... }: {
       # Necessary for using flakes on this system.
       nix.settings.experimental-features = "nix-command flakes";
+      nix.settings.extra-substituters = [
+        "https://nix-community.cachix.org"
+      ];
+      nix.settings.extra-trusted-public-keys = [
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      ];
+      nix.settings.extra-platforms = ["x86_64-linux" "aarch64-linux"];
+      nix.settings.extra-sandbox-paths = [ "/System/Library/Frameworks" "/System/Library/PrivateFrameworks" ];
 
       system.configurationRevision = self.rev or self.dirtyRev or null;
 
@@ -62,7 +70,7 @@
       ];
 
       homebrew = {
-        enable = false;
+        enable = true;
         # onActivation.cleanup = "uninstall";
 
         taps = [ ];
@@ -72,12 +80,6 @@
 
     };
     nix.config = {
-      extra-substituters = [
-        "https://nix-community.cachix.org"
-      ];
-      extra-trusted-public-keys = [
-        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-      ];
     };
 
   in
