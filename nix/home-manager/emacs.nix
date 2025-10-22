@@ -19,6 +19,7 @@ in
     (aspellWithDicts
       (dicts: with dicts; [ de en en-computers en-science es fr la ]))
 
+    cmake
     pinentry-emacs
     (pkgs.writeShellScriptBin "rage-emacs" ''
       export PINENTRY_PROGRAM=${pkgs.pinentry-emacs}/bin/pinentry-emacs
