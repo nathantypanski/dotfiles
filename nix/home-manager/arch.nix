@@ -96,7 +96,7 @@ in {
       ];
     })
     (pkgs.writeShellScriptBin "signal-desktop" ''
-      exec ${lib.getExe pkgs.slack} \
+      exec ${lib.getExe pkgs.signal-desktop} \
         --enable-features=UseOzonePlatform,WaylandWindowDecorations \
         --ozone-platform=wayland \
         --disable-gpu-sandbox \
