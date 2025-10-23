@@ -73,9 +73,7 @@ in {
     libglvnd
     wayland-utils
     vulkan-tools
-    glxinfo
-
-    vivaldi
+    mesa-demos
 
     wl-clipboard
     mako
