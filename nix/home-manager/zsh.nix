@@ -1,4 +1,4 @@
-{ pkgs, enableCompletion, ... }:
+{ pkgs, lib, enableCompletion, ... }:
 
 let
   isDarwin = pkgs.stdenv.isDarwin;
@@ -62,6 +62,7 @@ in
       darwin-rebuild = "~/dotfiles/nix/darwin/rebuild.sh";
       # Add YubiKey resident keys to agent (prompts for PIN)
       yubi-add = "/etc/profiles/per-user/ndt/bin/ssh-add -K";
+      ns = "${lib.getExe pkgs.nix-search-tv} print | ${lib.getExe pkgs.fzf} --preview '${lib.getExe pkgs.nix-search-tv} preview {}' --scheme history";
     } // (if isDarwin then {
       # Force Nix openssh on macOS (path_helper puts /usr/bin first)
       ssh = "/etc/profiles/per-user/ndt/bin/ssh";

@@ -27,7 +27,7 @@ in {
     #   inherit config pkgs lib mod termFont homeDirectory;
     #   withNixGL = true;
     # })
-    (import ./zsh.nix { inherit pkgs; })
+    (import ./zsh.nix { inherit pkgs lib; })
     (import ./foot.nix { inherit termFont; })
     (import ./newsboat.nix {
       inherit config pkgs;
@@ -122,7 +122,6 @@ in {
     procps
     fzf
     bashInteractive
-    nix-search
     silver-searcher
     aspellDicts.en
 
@@ -138,6 +137,14 @@ in {
     # rubyfmt
 
     nixd # alternative nix lsp
+    nix-search
+    nix-doc
+    nix-search-tv
+    optinix
+    optnix
+    rippkgs
+    manix
+
     (python313.withPackages (ps: with ps; [
       pip
       virtualenv
@@ -158,6 +165,7 @@ in {
       log 'successfully built home-manager dotfiles!'
       [[ "''${rebuild_status}" -eq 0 ]] \
           || read -n 1 -s -r -p '[ press any key to continue ]'
+      exit "$rebuild_status"
     '')
     (pkgs.writeShellScriptBin "which-path" ''
       while IFS= read -r line; do
