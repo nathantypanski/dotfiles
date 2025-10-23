@@ -17,7 +17,7 @@ let
 
   # The default display scale is multiplied by $scaleRatio to get
   # final sizes for windows.
-  scaleRatio = 1.5;
+  scaleRatio = 2.0;
 
   # Ruby script paths as Nix variables
   launcherScript = pkgs.writeScriptBin "launcher.rb" ''
@@ -30,6 +30,15 @@ let
 
   systemMenuScript = pkgs.writeScriptBin "system-menu.rb" ''
     ${builtins.readFile ./../../bin/system-menu.rb}
+  '';
+
+  windowFocus = pkgs.writeShellScriptBin "window-focus" ''
+  # Get list of windows with their IDs/titles
+  # This would need River's window listing capability
+  selected=$(riverctl list-views | ${fuzzelBin} --dmenu --prompt="Focus: ")
+  if [ -n "$selected" ]; then
+    riverctl focus-view "$selected"
+  fi
   '';
 
   # Helper to run Ruby scripts with the bundlerEnv
@@ -62,6 +71,63 @@ let
       ${action}
     fi
   '';
+
+  wgDownScript = pkgs.writeScriptBin "wg-down" ''
+    set -euo pipefail
+    interface="$(sudo wg show | awk 'NR==1 { print $2; }')"
+
+    if ! [[ -z "$interface" ]]; then
+      tput bold
+      tput setaf 1
+      echo -e >&2 "!!! interface $interface is currently connected !!!"
+      echo -e >&2 "bringing it down"
+      sudo wg-quick down "$interface"
+      tput "sgr0"
+    fi
+  '';
+
+  vpnConnectScript = pkgs.writeScriptBin "vpn-connect" ''
+    set -euo pipefail
+    filepath="$1"
+
+    withFont() {
+      tput $1
+      ''${@:2}
+      tput sgr0
+    }
+
+    withFont bold echo >&2 ">>> launching config: $filepath!"
+    # try abspath first
+    if [[ -f "$filepath" ]]; then
+      withFont bold echo >&2 ">>> config exists: $filepath!"
+    elif [[ -f "/etc/wireguard/$filepath" ]]; then
+      filepath="/etc/wireguard/$1"
+      withFont bold echo >&2 ">>> config exists: $filepath!"
+    elif [[ -f "/etc/wireguard/$1.conf" ]]; then
+      filepath="/etc/wireguard/$1.conf"
+      withFont bold echo >&2 ">>> config exists: $filepath!"
+    else
+      withFont bold echo >&2 "the config file you specified does not exist!"
+      exit 1
+    fi
+    echo >&2 "connecting to $filepath"
+    ${lib.getExe wgDownScript}
+    sudo wg-quick up "$filepath"
+  '';
+
+
+  mkTerminalPopup = { name, term, itemsCommand, command, app-id ? "popup" }:
+  pkgs.writeShellScriptBin "${name}" ''
+    ${term} --app-id="${app-id}" -- ${lib.getExe pkgs.bash} -c "${itemsCommand} | ${lib.getExe pkgs.fzf} | xargs ${lib.getExe command}"
+  '';
+
+  wireguard-picker = (mkTerminalPopup {
+    inherit term;
+    name =  "wg-picker";
+    itemsCommand = "ls /etc/wireguard";
+    command = vpnConnectScript;
+    app-id = "popup";
+  });
 
   # Create nixGL-wrapped river package if needed
   riverPackage = if withNixGL
@@ -107,13 +173,16 @@ in {
       enable = true;
       settings = {
         main = {
-          font = "DepartureMono Nerd Font:size=12";
+          font = "DepartureMono Nerd Font:size=6";
           dpi-aware = "yes";
           show-actions = "yes";
           terminal = "${term}";
+          # fuzzy -> levenshtein fuzzy matching (instead of fzf))
+          match-mode = "fuzzy";
 
           # Appearance
-          width = 40;
+          match-counter= true;
+          width = 80;
           horizontal-pad = 20;
           vertical-pad = 10;
           inner-pad = 10;
@@ -130,8 +199,8 @@ in {
         };
 
         border = {
-          width = 2;
-          radius = 2;
+          width = 5;
+          radius = 5;
         };
       };
     };
@@ -151,10 +220,7 @@ in {
 
       extraConfig = ''
       logfile='/tmp/river-debug.log'
-      term='${foot}'
       layoutBin='${pkgs.river-classic}/bin/rivertile'
-      riverctl='${riverctl}'
-
       scratchpadTag=$(( 1 << 31 ))
 
       log() {
@@ -183,17 +249,17 @@ in {
       log "Setting up rules and scaling"
       "${riverctl}" rule-add -app-id "term" ssd
       "${riverctl}" rule-add -app-id "launcher" float
-      "${riverctl}" rule-add -app-id "yazi-popup" float
-      "${riverctl}" rule-add -title "rebuild-river" tags 512
-      "${riverctl}" rule-add -title "rebuild-river" float
+      "${riverctl}" rule-add -app-id popup float
+      "${riverctl}" rule-add -app-id quake float
+      "${riverctl}" rule-add -app-id quake position 50x50
+      "${riverctl}" rule-add -title "rebuild-river" -app-id popup tags $scratchpadTag
 
       # Make Firefox use server-side decorations (i.e., via tiling WM)
       "${riverctl}" rule-add -app-id "firefox*" ssd
       "${riverctl}" rule-add -title "*Firefox*" ssd
 
-
       # New windows spawn on focused tags only (not all visible tags)
-      "${riverctl}" spawn-tagmask 0
+      "${riverctl}" spawn-tagmask "$(( ~$scratchpadTag ))"
 
       # Remap Caps Lock to Control
       "${riverctl}" keyboard-layout -options ctrl:nocaps us
@@ -214,6 +280,8 @@ in {
       log "Setting up keybindings"
       "${riverctl}" map normal Super Return spawn "${term}"
       "${riverctl}" map normal Super P spawn pick-ruby
+      "${riverctl}" map normal Super+Shift V spawn wg-picker
+      "${riverctl}" map normal Super N spawn ns-popup
       "${riverctl}" map normal Super W spawn wifi-menu
       "${riverctl}" map normal Super+Shift P spawn system-menu
       "${riverctl}" map normal Super Tab spawn window-menu
@@ -222,7 +290,7 @@ in {
       "${riverctl}" map normal Super+Shift Space toggle-float
       "${riverctl}" map normal Super F toggle-fullscreen
       "${riverctl}" map normal Super+Shift semicolon spawn system-swaylock
-      "${riverctl}" map normal Super+Shift apostrophe spawn "$term --title=rebuild-river -e 'rebuild-river'"
+      "${riverctl}" map normal Super+Shift apostrophe spawn "${term} --app-id=popup --title=rebuild-river -e 'rebuild-river'"
       "${riverctl}" map normal Super Y spawn yazi-popup
       "${riverctl}" map normal Super+Shift R spawn "sh ~/.config/river/init"
       "${riverctl}" map normal Super+Shift S spawn "wlr-randr --output eDP-1 --scale ${toString scaleRatio}"
@@ -230,9 +298,7 @@ in {
       # Scratchpad functionality (like Sway)
       "${riverctl}" rule-add -app-id 'scratch' csd
       "${riverctl}" map normal Super+Shift minus set-view-tags "$scratchpadTag"
-      "${riverctl}" map normal Super minus "/usr/bin/env bash -c '${scratchpadLaunch}
-
-${riverctl}' toggle-focused-tags \"$scratchpadTag\" && "${riverctl} focus-view --""
+      "${riverctl}" map normal Super minus toggle-focused-tags "$scratchpadTag"
 
       # Brightness controls
       "${riverctl}" map normal None XF86MonBrightnessUp spawn "${lib.getExe pkgs.brightnessctl} s '+5%'"
@@ -271,7 +337,6 @@ ${riverctl}' toggle-focused-tags \"$scratchpadTag\" && "${riverctl} focus-view -
             "${riverctl}" map normal "Super+Shift" "$i" set-view-tags "$tags"
 
             # Switch to tag
-            "${riverctl}" map normal "Super+Alt" "$i" set-focused-tags "$tags"
 
       done
 
@@ -318,8 +383,6 @@ ${riverctl}' toggle-focused-tags \"$scratchpadTag\" && "${riverctl} focus-view -
 
       # Set background color to match waybar
       "${riverctl}" background-color 0x121212
-
-      ${scratchpadLaunch}
 
       log "River config completed"
       tail "$logfile"
@@ -452,14 +515,19 @@ ${riverctl}' toggle-focused-tags \"$scratchpadTag\" && "${riverctl} focus-view -
         #battery {
           margin: 0 5px;
           color: #60b48a;
-          border-right: 1px solid #3f3f3f;
+          border-right: 2px solid #3f3f3f;
           padding-right: 8px;
         }
+
         #battery.charging {
           color: #dfaf8f;
         }
         #battery.critical {
           color: #705050;
+          background-color: #3f2f2f;
+        }
+        #battery.warning {
+          color: #f0dfaf;
         }
         #network {
           margin: 0 5px 0 0;
@@ -579,8 +647,9 @@ ${riverctl}' toggle-focused-tags \"$scratchpadTag\" && "${riverctl} focus-view -
       (pkgs.writeShellScriptBin "system-swaylock" ''
         exec "$(command -v swaylock || echo /usr/bin/swaylock)" "$@"
       '')
-      (pkgs.writeShellScriptBin "pick-foot" ''
-        exec ${foot} --app-id=launcher --title=launcher \
+
+      (pkgs.writeShellScriptBin "spawn-river" ''
+        exec ${term} --app-id=launcher --title=launcher \
              -e 'bash' '-c' \
                  'compgen -c |
                   grep -v fzf |
@@ -589,8 +658,12 @@ ${riverctl}' toggle-focused-tags \"$scratchpadTag\" && "${riverctl} focus-view -
                   xargs -r ${riverctl} spawn'
     '')
       (pkgs.writeShellScriptBin "yazi-popup" ''
-        exec ${foot} --app-id=yazi-popup --title=yazi-popup \
+        exec ${term} --app-id=popup --title=yazi-popup \
              -e ${pkgs.yazi}/bin/yazi
+    '')
+      (pkgs.writeShellScriptBin "ns-popup" ''
+        exec ${term} --app-id=popup --window-size-chars=120x50 \
+             -- ${lib.getExe pkgs.bash} -c "${lib.getExe pkgs.nix-search-tv} print | ${lib.getExe pkgs.fzf} --preview \"${lib.getExe pkgs.nix-search-tv} preview {}\" --scheme history"
     '')
 
       pkgs.fuzzel
@@ -599,6 +672,9 @@ ${riverctl}' toggle-focused-tags \"$scratchpadTag\" && "${riverctl} focus-view -
       launcherScript
       wifiMenuScript
       systemMenuScript
+      windowFocus
+      vpnConnectScript
+      wireguard-picker
 
       # Launcher commands using the factored helpers
       (mkLauncher {
