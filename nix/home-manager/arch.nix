@@ -62,6 +62,8 @@ in {
     enableScDaemon = true;
   };
 
+  services.batsignal.enable = true;
+
   home.keyboard.options = ["ctrl:nocaps"];
 
   home.packages = with pkgs; [
