@@ -34,6 +34,9 @@ in
     enable = true;
     enableCompletion = enableCompletion;
     syntaxHighlighting.enable = true;
+    setOptions = [
+      "HIST_IGNORE_SPACE"
+    ];
     history = {
       save = 10000;
       size = 10000;
