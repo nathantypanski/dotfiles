@@ -19,19 +19,6 @@ let
   # final sizes for windows.
   scaleRatio = 2.0;
 
-  # Ruby script paths as Nix variables
-  launcherScript = pkgs.writeScriptBin "launcher.rb" ''
-    ${builtins.readFile ./../../bin/launcher.rb}
-  '';
-
-  wifiMenuScript = pkgs.writeScriptBin "wifi-menu.rb" ''
-    ${builtins.readFile ./../../bin/wifi-menu.rb}
-  '';
-
-  systemMenuScript = pkgs.writeScriptBin "system-menu.rb" ''
-    ${builtins.readFile ./../../bin/system-menu.rb}
-  '';
-
   windowFocus = pkgs.writeShellScriptBin "window-focus" ''
   # Get list of windows with their IDs/titles
   # This would need River's window listing capability
@@ -67,6 +54,7 @@ let
     export PATH="${rubyEnv}/bin:$PATH"
     export GEM_PATH="${rubyEnv}/${rubyEnv.ruby.gemPath}:$GEM_PATH"
     selected=$(${lib.getExe rubyVersion} "${script}/bin/${script.name}" | ${fuzzelMenu prompt})
+    menu_selector_script_path="${script}/bin/${script.name}"
     if [ -n "$selected" ]; then
       ${action}
     fi
@@ -253,9 +241,11 @@ in {
       "${riverctl}" rule-add -app-id quake float
       "${riverctl}" rule-add -app-id quake position 50x50
       "${riverctl}" rule-add -title "rebuild-river" -app-id popup tags $scratchpadTag
+      "${riverctl}" rule-add -app-id logs tags $scratchpadTag
 
       # Make Firefox use server-side decorations (i.e., via tiling WM)
       "${riverctl}" rule-add -app-id "firefox*" ssd
+
       "${riverctl}" rule-add -title "*Firefox*" ssd
 
       # New windows spawn on focused tags only (not all visible tags)
@@ -280,7 +270,7 @@ in {
       log "Setting up keybindings"
       "${riverctl}" map normal Super Return spawn "${term}"
       "${riverctl}" map normal Super P spawn pick-ruby
-      "${riverctl}" map normal Super+Shift V spawn wg-picker
+      "${riverctl}" map normal Super+Shift W spawn wg-picker
       "${riverctl}" map normal Super N spawn ns-popup
       "${riverctl}" map normal Super W spawn wifi-menu
       "${riverctl}" map normal Super+Shift P spawn system-menu
@@ -298,9 +288,7 @@ in {
       # Scratchpad functionality (like Sway)
       "${riverctl}" rule-add -app-id 'scratch' csd
       "${riverctl}" map normal Super+Shift minus set-view-tags "$scratchpadTag"
-      "${riverctl}" map normal Super minus toggle-focused-tags "$scratchpadTag"
-
-      # Brightness controls
+      "${riverctl}" map normal Super minus toggle-focused-tags "$scratchpadTag"      # Brightness controls
       "${riverctl}" map normal None XF86MonBrightnessUp spawn "${lib.getExe pkgs.brightnessctl} s '+5%'"
       "${riverctl}" map normal None XF86MonBrightnessDown spawn "${lib.getExe pkgs.brightnessctl} s '5%-'"
 
@@ -669,9 +657,6 @@ in {
       pkgs.fuzzel
 
       # Ruby scripts (added to packages for availability in PATH)
-      launcherScript
-      wifiMenuScript
-      systemMenuScript
       windowFocus
       vpnConnectScript
       wireguard-picker
@@ -679,25 +664,31 @@ in {
       # Launcher commands using the factored helpers
       (mkLauncher {
         name = "pick-ruby";
-        script = launcherScript;
+        script = pkgs.writeScriptBin "launcher.rb" ''
+          ${builtins.readFile ./../../bin/launcher.rb}
+       '';
       })
 
       (mkMenuSelector {
         name = "wifi-menu";
-        script = wifiMenuScript;
+        script = pkgs.writeScriptBin "wifi-menu.rb" ''
+          ${builtins.readFile ./../../bin/wifi-menu.rb}
+        '';
         prompt = "WiFi: ";
         action = ''
-          ${riverctl} spawn "${term} -e sh -c '${iwctl} station wlan0 connect \"$selected\"'"
+          ${riverctl} spawn "${iwctl}" station wlan0 connect \"$selected\"
         '';
-      })
+       })
 
       (mkMenuSelector {
         name = "system-menu";
-        script = systemMenuScript;
+        script = pkgs.writeScriptBin "system-menu.rb" ''
+          ${builtins.readFile ./../../bin/system-menu.rb}
+        '';
         prompt = "System: ";
         action = ''
-          ${lib.getExe rubyVersion} "${systemMenuScript}/bin/${systemMenuScript.name}" "$selected"
-        '';
+          ${lib.getExe rubyVersion} "$menu_selector_script_path" "$selected"
+       '';
       })
 
       # Quick window/app switcher
