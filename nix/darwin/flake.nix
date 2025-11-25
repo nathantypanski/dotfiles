@@ -23,12 +23,12 @@
     system = "aarch64-darwin";
 
     username = "ndt";
+    hostname = builtins.getEnv "HOST";
     secrets = {
       userEmail = builtins.getEnv "USER_EMAIL";
     };
-    security.pam.enableSudoTouchIdAuth = true;
     homeDirectory = "/Users/${username}";
-    configuration = {pkgs, ... }: {
+    configuration = {pkgs, lib, ... }: {
       # Necessary for using flakes on this system.
       nix.settings.experimental-features = "nix-command flakes";
       nix.settings.extra-substituters = [
@@ -78,38 +78,55 @@
         casks = [];
       };
 
+      # Prevent nix-darwin from managing /etc/ files
+      environment.etc = {
+        # Disable management of zshrc and other shell configs
+        # TODO: on home machines, keep this enabled. I currently do not have
+        # any home macs.
+        "bashrc".enable = false;
+        "zshrc".enable = false;
+        "zprofile".enable = false;
+        "zshenv".enable = false;  # Keep disabled - Fleet manages this
+      };
+
+      security.pam.services.sudo_local.touchIdAuth = false;
+      security.pam.services.sudo_local = {
+        enable = false;
+      };
     };
     nix.config = {
     };
 
   in
   {
-    darwinConfigurations.H640WQ7FHV = nix-darwin.lib.darwinSystem {
-      system = system;
+    darwinConfigurations = {
+      default = nix-darwin.lib.darwinSystem {
+        system = system;
 
-      modules = [
-        configuration
-        home-manager.darwinModules.home-manager {
-          nixpkgs = {
-            overlays = [
-              inputs.emacs-overlay.overlay
-            ];
-            config.allowUnfree = true;
-          };
+        modules = [
+          configuration
+          home-manager.darwinModules.home-manager {
+            nixpkgs = {
+              overlays = [
+                inputs.emacs-overlay.overlay
+              ];
+              config.allowUnfree = true;
+            };
 
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.extraSpecialArgs = {
-            inherit system secrets nixpkgs homeDirectory username;
-          };
-          # I almost wish I were using a standalone home-manager instead
-          # of it being a darwin module, because it's annoying how modules
-          # can't be imported here.
-          #
-          # If you want home modules, you have to import them in darwin.nix.
-          home-manager.users.ndt = import ../home-manager/darwin.nix;
-        }
-      ];
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = {
+              inherit system secrets nixpkgs homeDirectory username;
+            };
+            # I almost wish I were using a standalone home-manager instead
+            # of it being a darwin module, because it's annoying how modules
+            # can't be imported here.
+            #
+            # If you want home modules, you have to import them in darwin.nix.
+            home-manager.users.ndt = import ../home-manager/darwin.nix;
+          }
+        ];
+      };
     };
   };
 }

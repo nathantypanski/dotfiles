@@ -8,6 +8,8 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 export NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1
 
+# prewarm sudo
+
 sudo true
 
 ## Previously
@@ -16,7 +18,7 @@ sudo true
 #
 echo >&2 "running 'nix build .#darwinConfigurations.${HOSTNAME}.system'"
 
-nix build ".#darwinConfigurations.${HOSTNAME}.system" --impure
+HOST=$(hostname) nix --extra-experimental-features flakes --extra-experimental-features nix-command build "${SCRIPT_DIR}#darwinConfigurations.default.system" --impure
 
 echo >&2 "${SCRIPT_DIR}/result/sw/bin/darwin-rebuild activate"
 

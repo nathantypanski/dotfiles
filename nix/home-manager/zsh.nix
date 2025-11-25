@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, enableCompletion, ... }:
 
 let
   isDarwin = pkgs.stdenv.isDarwin;
@@ -32,7 +32,7 @@ in
   ];
   programs.zsh = {
     enable = true;
-    enableCompletion = true;
+    enableCompletion = enableCompletion;
     syntaxHighlighting.enable = true;
     history = {
       save = 10000;
@@ -59,7 +59,16 @@ in
       # blocks displayed, no group names, comma separators, and type
       # indicators
       lash = "ls -lAshBsNikF --quoting-style=escape";
-    };
+      darwin-rebuild = "~/dotfiles/nix/darwin/rebuild.sh";
+    } // (if isDarwin then {
+      # Force Nix openssh on macOS (path_helper puts /usr/bin first)
+      ssh = "/etc/profiles/per-user/ndt/bin/ssh";
+      ssh-keygen = "/etc/profiles/per-user/ndt/bin/ssh-keygen";
+      ssh-add = "/etc/profiles/per-user/ndt/bin/ssh-add";
+      ssh-agent = "/etc/profiles/per-user/ndt/bin/ssh-agent";
+      scp = "/etc/profiles/per-user/ndt/bin/scp";
+      sftp = "/etc/profiles/per-user/ndt/bin/sftp";
+    } else {});
     profileExtra = ''
       umask 027
       EDITOR=nvim
@@ -75,7 +84,14 @@ in
         . ~/.nix-profile/etc/profile.d/hm-session-vars.sh
       fi
     '';
-    initContent = ''
+    initContent = (if isDarwin then ''
+      # Set up Nix paths on macOS - must run early in .zshrc
+      # (needed because Fleet manages /etc/zshenv)
+      if [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
+        . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+      fi
+
+    '' else "") + ''
       PROMPT="%F{red}%n%F{white}@%B%F{blue}%m%b %F{white}[%F{yellow}%5~%F{white}]%F %F{white}$ "
 
       # I'm currently relying on system-provided grml prompts.
@@ -451,8 +467,6 @@ in
       #vimhelp ()    { vim -c "help $1" -c on -c "au! VimEnter *" }
 
       ## END OF FILE #################################################################
-    '';
-    initExtra = ''
     '';
   };
 }

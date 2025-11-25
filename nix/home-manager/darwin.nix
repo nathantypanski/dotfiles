@@ -6,7 +6,10 @@ let
   copyCommand = "pbcopy";
 in {
   imports = [
-    ./zsh.nix
+    (import ./zsh.nix {
+      inherit pkgs;
+      enableCompletion = true;
+    })
     ./scripts.nix
     (import ./tmux.nix { inherit config pkgs copyCommand; })
     (import ./neovim.nix { inherit config pkgs; })
@@ -72,12 +75,20 @@ in {
     pentestgpt
     kanha
     python312Packages.sectools
+
+    openssh
   ];
 
   home.sessionVariables = {
-    PATH = "${pkgs.beancount}/bin:$PATH";
+    # Note: PATH modifications don't work reliably here on macOS
+    # Use profileExtra in zsh.nix instead for PATH changes
   };
 
+
+  programs.rbenv = {
+    enableZshIntegration = true;
+    enable = true;
+  };
   # Let Home Manager install and manage itself
   programs.home-manager.enable = true;
 }
