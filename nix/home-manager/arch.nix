@@ -134,10 +134,6 @@ in {
     parallel
     proverif
 
-    # ruby
-    # ruby-lsp
-    # rubyfmt
-
     nixd # alternative nix lsp
     nix-search
     nix-doc
@@ -212,6 +208,9 @@ in {
     uw-ttyp0
     gbdfed
     fontforge
+    iosevka
+    iosevka-bin
+    fairfax
 
     electrum
     vlc
