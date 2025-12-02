@@ -18,22 +18,9 @@ let
   # The default display scale is multiplied by $scaleRatio to get
   # final sizes for windows.
   scaleRatio = 2.0;
+  scratchpadTag = "2147483648"; # 1 << 31
 
-  windowFocus = pkgs.writeShellScriptBin "window-focus" ''
-  # Get list of windows with their IDs/titles
-  # This would need River's window listing capability
-  selected=$(riverctl list-views | ${fuzzelBin} --dmenu --prompt="Focus: ")
-  if [ -n "$selected" ]; then
-    riverctl focus-view "$selected"
-  fi
-  '';
-
-  # Helper to run Ruby scripts with the bundlerEnv
-  runRubyScript = script: ''
-    export PATH="${rubyEnv}/bin:$PATH"
-    export GEM_PATH="${rubyEnv}/${rubyEnv.ruby.gemPath}:$GEM_PATH"
-    ${lib.getExe rubyVersion} "${script}/bin/${script.name}" "$@"
-  '';
+  pointer="pointer-2362-628-PIXA3854:00_093A:0274_Touchpad";
 
   # Fuzzel menu helper
   fuzzelMenu = prompt:
@@ -161,7 +148,7 @@ in {
       enable = true;
       settings = {
         main = {
-          font = "DepartureMono Nerd Font:size=6";
+          font = "DepartureMono Nerd Font:size=8";
           dpi-aware = "yes";
           show-actions = "yes";
           terminal = "${term}";
@@ -203,7 +190,59 @@ in {
       };
 
       xwayland = {
-        enable = true;
+        enable = false;
+      };
+
+      settings = {
+        border-width = 2;
+        set-cursor-warp = "on-focus-change";
+        default-layout = "rivertile";
+
+        declare-mode = ["normal" "tag" "layout"];
+        map = {
+          normal = {
+            Tab = "spawn river-tag-history";
+          };
+        };
+
+        rule-add = {
+          "-app-id" = {
+            quake = [ "position 50x50" "float"];
+            popup = "float";
+            "launcher" = "float";
+            "term" = "ssd";
+            "web" = "tags 4";
+            "logs" = "tags ${scratchpadTag}";
+            # Make Firefox use server-side decorations (i.e., via tiling WM)
+            "'firefox*'" = ["ssd" "tags 4"];
+          };
+          "-title" = {
+            "pavucontrol" = "float";
+            "'*Firefox*'" = "ssd";
+            "rebuild-river" = {
+              "-app-id" = {
+                "popup" = "tags $scratchpadTag";
+              };
+            };
+          };
+
+        };
+
+        input = {
+          "${pointer}" = {
+            tap = "disabled";
+            tap-button-map = "lrm";
+            click-method = "clickfinger";
+            scroll-method = "two-finger";
+            scroll-factor = "0.3";
+            accel-profile = "adaptive";
+            pointer-accel = "0.2";
+          };
+        };
+
+        spawn = [
+          "systemctl --user start river-session.target"
+        ];
       };
 
       extraConfig = ''
@@ -215,38 +254,8 @@ in {
             echo <&2 "$(date): " "$@" | tee -a "$logfile"
       }
 
-      # Debug logging
-      log "River config starting"
-
-      # Start the systemd river-session.target
-      systemctl --user start river-session.target &
-
-      # Start rivertile layout generator in background
-      log "Starting rivertile"
-      log "Command: $layoutBin -view-padding 2 -outer-padding 1"
-      nohup "$layoutBin" -view-padding 2 -outer-padding 1 >/dev/null 2>&1 &
-      sleep 0.1  # Give rivertile time to start
-
-      # Set rivertile as default layout
-      log "Setting default layout"
-      "${riverctl}" default-layout rivertile
-
-      # waybar and swayidle are now managed by systemd services
-      log "Services (waybar, swayidle, scaling) managed by river-session.target"
-
-      log "Setting up rules and scaling"
-      "${riverctl}" rule-add -app-id "term" ssd
-      "${riverctl}" rule-add -app-id "launcher" float
-      "${riverctl}" rule-add -app-id popup float
-      "${riverctl}" rule-add -app-id quake float
-      "${riverctl}" rule-add -app-id quake position 50x50
-      "${riverctl}" rule-add -title "rebuild-river" -app-id popup tags $scratchpadTag
-      "${riverctl}" rule-add -app-id logs tags $scratchpadTag
-
-      # Make Firefox use server-side decorations (i.e., via tiling WM)
-      "${riverctl}" rule-add -app-id "firefox*" ssd
-
-      "${riverctl}" rule-add -title "*Firefox*" ssd
+      "${riverctl}" map-pointer normal Super BTN_LEFT move-view
+      "${riverctl}" map-pointer normal Super BTN_RIGHT resize-view
 
       # New windows spawn on focused tags only (not all visible tags)
       "${riverctl}" spawn-tagmask "$(( ~$scratchpadTag ))"
@@ -254,17 +263,8 @@ in {
       # Remap Caps Lock to Control
       "${riverctl}" keyboard-layout -options ctrl:nocaps us
 
-      # Mouse/pointer settings
-      "${riverctl}" input pointer accel-profile adaptive
-      "${riverctl}" input pointer pointer-accel 0.5
-
-      # Touchpad settings - Framework laptop
-      pointer="pointer-2362-628-PIXA3854:00_093A:0274_Touchpad"
-      "${riverctl}" input "$pointer" tap disabled
-      "${riverctl}" input "$pointer" tap-button-map lrm
-      "${riverctl}" input "$pointer" click-method clickfinger
-      "${riverctl}" input "$pointer" scroll-method two-finger
-      "${riverctl}" input "$pointer" scroll-factor 0.3
+      ps auxw | grep "$layoutBin" | grep -v grep \
+          || nohup "$layoutBin" -view-padding 0 -outer-padding 0 &
 
       # Basic keybinds
       log "Setting up keybindings"
@@ -274,7 +274,7 @@ in {
       "${riverctl}" map normal Super N spawn ns-popup
       "${riverctl}" map normal Super W spawn wifi-menu
       "${riverctl}" map normal Super+Shift P spawn system-menu
-      "${riverctl}" map normal Super Tab spawn window-menu
+      # "${riverctl}" map normal Super Tab spawn window-menu
       "${riverctl}" map normal Super Q close
       "${riverctl}" map normal Super+Shift E exit
       "${riverctl}" map normal Super+Shift Space toggle-float
@@ -328,10 +328,6 @@ in {
 
       done
 
-      # Declare modes
-      "${riverctl}" declare-mode tag
-      "${riverctl}" declare-mode layout
-
       # Tag mode - for moving windows to tags
       "${riverctl}" map normal Super T enter-mode tag
       "${riverctl}" map tag None Escape enter-mode normal
@@ -358,10 +354,6 @@ in {
       "${riverctl}" map layout None b send-layout-cmd rivertile "main-location top"
       "${riverctl}" map layout None B send-layout-cmd rivertile "main-location bottom"
       "${riverctl}" map layout None Escape enter-mode normal
-
-      # Mouse bindings
-      "${riverctl}" map-pointer normal Super BTN_LEFT move-view
-      "${riverctl}" map-pointer normal Super BTN_RIGHT resize-view
 
       # Set repeat rate
       "${riverctl}" set-repeat 50 300
@@ -411,7 +403,7 @@ in {
           };
 
           memory = {
-            format = "󰍛 {}%";
+            format = "󰍛 {percentage}%";
             tooltip-format = "Memory: {used:0.1f}GiB / {total:0.1f}GiB";
             interval = 5;
           };
@@ -444,7 +436,7 @@ in {
       style = ''
         * {
           font-family: "DepartureMono Nerd Font", monospace;
-          font-size: 12px;
+          font-size: 13px;
         }
         window#waybar {
           background-color: #121212;
@@ -524,7 +516,7 @@ in {
       '';
     };
     services.mako = {
-      enable = true;
+      enable = false;
       package = pkgs.mako;
       settings = {
         font = "${termFont}";
@@ -636,6 +628,39 @@ in {
         exec "$(command -v swaylock || echo /usr/bin/swaylock)" "$@"
       '')
 
+      # proof of concept
+      (pkgs.writeShellScriptBin "river-tag-history" ''
+        #!/bin/bash
+
+        STATE_FILE="/tmp/river-tag-history"
+
+        # Read current focused tags from river
+        get_current_tags() {
+            # This is tricky - river doesn't expose current tags easily
+            # We'll track it ourselves
+            cat "$STATE_FILE.current" 2>/dev/null || echo "1"
+        }
+
+        case "$1" in
+            save)
+                # Save current as previous, then save new current
+                current=$(cat "$STATE_FILE.current" 2>/dev/null || echo "1")
+                echo "$current" > "$STATE_FILE.previous"
+                echo "$2" > "$STATE_FILE.current"
+                ;;
+            toggle)
+                previous=$(cat "$STATE_FILE.previous" 2>/dev/null || echo "1")
+                current=$(cat "$STATE_FILE.current" 2>/dev/null || echo "1")
+
+                # Swap them
+                echo "$current" > "$STATE_FILE.previous"
+                echo "$previous" > "$STATE_FILE.current"
+
+                riverctl set-focused-tags "$previous"
+                ;;
+        esac
+      '')
+
       (pkgs.writeShellScriptBin "spawn-river" ''
         exec ${term} --app-id=launcher --title=launcher \
              -e 'bash' '-c' \
@@ -657,7 +682,6 @@ in {
       pkgs.fuzzel
 
       # Ruby scripts (added to packages for availability in PATH)
-      windowFocus
       vpnConnectScript
       wireguard-picker
 
@@ -676,7 +700,7 @@ in {
         '';
         prompt = "WiFi: ";
         action = ''
-          ${riverctl} spawn "${iwctl}" station wlan0 connect \"$selected\"
+          ${riverctl} spawn "${term} -e sh -c '${iwctl} station wlan0 connect \"$selected\"'"
         '';
        })
 
@@ -726,5 +750,13 @@ in {
         export XDG_DATA_HOME="$HOME/.local/share"
       fi
     '';
+
+    home.activation = {
+      startScratchTmux = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+        if ! ${pkgs.tmux}/bin/tmux has-session -t scratch 2>/dev/null; then
+          ${pkgs.tmux}/bin/tmux new-session -d -s scratch
+        fi
+      '';
+    };
   };
 }
