@@ -27,7 +27,7 @@ in {
     #   inherit config pkgs lib mod termFont homeDirectory;
     #   withNixGL = true;
     # })
-    (import ./zsh.nix { inherit pkgs lib; })
+    (import ./zsh.nix { inherit homeDirectory pkgs lib; enableCompletion = true; })
     (import ./foot.nix { inherit termFont; })
     (import ./newsboat.nix {
       inherit config pkgs;

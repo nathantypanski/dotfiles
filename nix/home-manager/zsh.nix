@@ -1,4 +1,4 @@
-{ pkgs, lib, enableCompletion, ... }:
+{ homeDirectory, pkgs, lib, enableCompletion, ... }:
 
 let
   isDarwin = pkgs.stdenv.isDarwin;
@@ -37,6 +37,14 @@ in
     setOptions = [
       "HIST_IGNORE_SPACE"
     ];
+
+    dirHashes = {
+      ndt = homeDirectory;
+      src = "${homeDirectory}/src";
+      src-ndt = "${homeDirectory}/src/github.com/nathantypanski";
+    };
+
+
     history = {
       save = 10000;
       size = 10000;
