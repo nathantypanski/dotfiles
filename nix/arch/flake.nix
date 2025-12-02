@@ -114,7 +114,7 @@
         }
       ];
       extraSpecialArgs = {
-        inherit system nixgl;
+        inherit nixgl;
         secrets = secrets;
         username = username;
         homeDirectory = homeDirectory;
