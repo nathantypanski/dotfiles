@@ -4,10 +4,11 @@
 
 let
   copyCommand = "pbcopy";
+  lib = pkgs.lib;
 in {
   imports = [
     (import ./zsh.nix {
-      inherit pkgs;
+      inherit homeDirectory pkgs lib;
       enableCompletion = true;
     })
     ./scripts.nix
