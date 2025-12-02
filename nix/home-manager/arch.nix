@@ -34,7 +34,7 @@ in {
       browser = lib.getExe config.ndt-home.firefox-jailed;
     })
     (import ./git.nix {
-      inherit homeDirectory username;
+      inherit lib pkgs homeDirectory username;
       userEmail = secrets.userEmail;
     })
     (import ./scripts.nix {
