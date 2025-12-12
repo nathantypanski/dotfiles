@@ -76,7 +76,12 @@ in {
     kanha
     python312Packages.sectools
 
-    openssh
+    # OpenSSH with FIDO2/U2F support for YubiKey security keys
+    (openssh.override {
+      withFIDO = true;
+    })
+    keychain  # ssh-agent manager for better YubiKey support
+    git
   ];
 
   home.sessionVariables = {
@@ -89,6 +94,7 @@ in {
     enableZshIntegration = true;
     enable = true;
   };
+
   # Let Home Manager install and manage itself
   programs.home-manager.enable = true;
 }

@@ -1,4 +1,4 @@
-{ homeDirectory, username, userEmail, ... }:
+{ homeDirectory, username, userEmail, secrets, ... }:
 
 {
   programs.git = {
@@ -19,8 +19,10 @@
     extraConfig = {
       gpg.format = "ssh";
       gpg.ssh.allowedSignersFile = "${homeDirectory}/.config/git/allowed_signers";
-      user.signingkey = "${homeDirectory}/.ssh/id_ed25519.pub";
+      user.signingkey = secrets.sshSigningKey;
       url."git@github.com:".insteadOf = "https://github.com/";
+      # Use Nix OpenSSH with FIDO2 support for YubiKey
+      core.sshCommand = "/etc/profiles/per-user/${username}/bin/ssh";
     };
   };
 }

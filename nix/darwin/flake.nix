@@ -26,6 +26,7 @@
     hostname = builtins.getEnv "HOST";
     secrets = {
       userEmail = builtins.getEnv "USER_EMAIL";
+      sshSigningKey = "${homeDirectory}/.ssh/id_ed25519_sk.pub";
     };
     homeDirectory = "/Users/${username}";
     configuration = {pkgs, lib, ... }: {
@@ -92,6 +93,13 @@
       security.pam.services.sudo_local.touchIdAuth = false;
       security.pam.services.sudo_local = {
         enable = false;
+      };
+
+      # Disable macOS's built-in ssh-agent so Nix ssh-agent takes precedence
+      launchd.agents.ssh-agent = {
+        serviceConfig = {
+          Disabled = true;
+        };
       };
     };
     nix.config = {

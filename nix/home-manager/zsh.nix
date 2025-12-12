@@ -60,6 +60,8 @@ in
       # indicators
       lash = "ls -lAshBsNikF --quoting-style=escape";
       darwin-rebuild = "~/dotfiles/nix/darwin/rebuild.sh";
+      # Add YubiKey resident keys to agent (prompts for PIN)
+      yubi-add = "/etc/profiles/per-user/ndt/bin/ssh-add -K";
     } // (if isDarwin then {
       # Force Nix openssh on macOS (path_helper puts /usr/bin first)
       ssh = "/etc/profiles/per-user/ndt/bin/ssh";
@@ -83,7 +85,22 @@ in
       if [ -e ~/.nix-profile/etc/profile.d/hm-session-vars.sh ]; then
         . ~/.nix-profile/etc/profile.d/hm-session-vars.sh
       fi
-    '';
+    '' + (if isDarwin then ''
+
+      # Set up Nix paths early (Fleet manages /etc/zshenv so we do it here)
+      if [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
+        . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+      fi
+
+      # Add home-manager per-user profile to PATH
+      export PATH="/etc/profiles/per-user/ndt/bin:$PATH"
+
+      # Start ssh-agent but DON'T pre-load YubiKey keys
+      # YubiKey resident keys work better when loaded fresh from hardware each use
+      if command -v keychain >/dev/null 2>&1; then
+        eval $(keychain --eval --quiet --absolute --dir "$HOME/.keychain" --noask)
+      fi
+    '' else "");
     initContent = (if isDarwin then ''
       # Set up Nix paths on macOS - must run early in .zshrc
       # (needed because Fleet manages /etc/zshenv)
