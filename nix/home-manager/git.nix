@@ -20,9 +20,10 @@
       gpg.format = "ssh";
       gpg.ssh.allowedSignersFile = "${homeDirectory}/.config/git/allowed_signers";
       user.signingkey = secrets.sshSigningKey;
-      url."git@github.com:".insteadOf = "https://github.com/";
-      # Use Nix OpenSSH with FIDO2 support for YubiKey
+      # Use Nix OpenSSH with FIDO2 support for YubiKey (for both git operations and signing)
+      gpg.ssh.program = "/etc/profiles/per-user/${username}/bin/ssh";
       core.sshCommand = "/etc/profiles/per-user/${username}/bin/ssh";
+      url."git@github.com:".insteadOf = "https://github.com/";
     };
   };
 }
