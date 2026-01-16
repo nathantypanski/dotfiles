@@ -11,6 +11,19 @@ in
     package = emacsPackage;
     extraPackages = (epkgs: with epkgs; [
       vterm
+      (treesit-grammars.with-grammars (grammars: with grammars; [
+        tree-sitter-ruby
+        tree-sitter-python
+        tree-sitter-go
+        tree-sitter-rust
+        tree-sitter-javascript
+        tree-sitter-typescript
+        tree-sitter-yaml
+        tree-sitter-bash
+        tree-sitter-dockerfile
+        tree-sitter-c
+        tree-sitter-sql
+      ]))
     ]);
   };
 
@@ -21,6 +34,9 @@ in
 
     cmake
     pinentry-emacs
+    (pkgs.writeShellScriptBin "bundle-rubocop" ''
+      exec bundle exec rubocop "$@"
+    '')
     (pkgs.writeShellScriptBin "rage-emacs" ''
       export PINENTRY_PROGRAM=${pkgs.pinentry-emacs}/bin/pinentry-emacs
       export PATH=${pkgs.age-plugin-yubikey}/bin:${pkgs.age-plugin-tpm}/bin:${pkgs.pinentry-emacs}/bin}:$PATH

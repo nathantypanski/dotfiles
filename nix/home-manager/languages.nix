@@ -13,7 +13,7 @@ let
     "c"
     "hcl"
     "sql"
-    # "ruby"
+    "ruby"
   ];
 
   treeSitterFor = langs: p: map (lang:
@@ -29,7 +29,7 @@ in
 {
   home.packages = with pkgs; [
     gopls
-    rust-analyzer
+    rustup
     bash-language-server
 
     python313Packages.mcp
@@ -41,6 +41,4 @@ in
 
     (tree-sitter.withPlugins (p: builtins.filter (x: x != null) (treeSitterFor langs p)))
   ] ++ lspServers;
-
-
 }

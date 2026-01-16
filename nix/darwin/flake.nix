@@ -29,6 +29,9 @@
       sshSigningKey = "${homeDirectory}/.ssh/id_ed25519_sk.pub";
     };
     homeDirectory = "/Users/${username}";
+
+    reversing = true;
+
     configuration = {pkgs, lib, ... }: {
       # Necessary for using flakes on this system.
       nix.settings.experimental-features = "nix-command flakes";
@@ -67,7 +70,12 @@
         pass
         gopls
         grml-zsh-config
+        evcxr
+        _1password-cli
         (emacs.override { withNativeCompilation = true; })
+
+        # Reattach to the user's GUI session on macOS during authentication (for Touch ID support in tmux)
+        #pam-reattach
       ];
 
       homebrew = {
@@ -79,20 +87,22 @@
         casks = [];
       };
 
-      # Prevent nix-darwin from managing /etc/ files
+      # Prevent nix-darwin from managing /etc/ files (for work).
+      # These are managed centrally by IT.
       environment.etc = {
-        # Disable management of zshrc and other shell configs
-        # TODO: on home machines, keep this enabled. I currently do not have
-        # any home macs.
+        # Disable Nix management of zshrc and other shell configs
+
+        # TODO: on home machines, keep this enabled.
+        # I currently do not have any home macs.
         "bashrc".enable = false;
         "zshrc".enable = false;
         "zprofile".enable = false;
         "zshenv".enable = false;  # Keep disabled - Fleet manages this
       };
 
-      security.pam.services.sudo_local.touchIdAuth = false;
       security.pam.services.sudo_local = {
         enable = false;
+        touchIdAuth = false;
       };
 
       # Disable macOS's built-in ssh-agent so Nix ssh-agent takes precedence
@@ -124,7 +134,7 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.extraSpecialArgs = {
-              inherit system secrets nixpkgs homeDirectory username;
+              inherit system secrets nixpkgs homeDirectory username reversing;
             };
             # I almost wish I were using a standalone home-manager instead
             # of it being a darwin module, because it's annoying how modules
