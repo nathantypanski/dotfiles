@@ -1,6 +1,6 @@
 # home-manager/darwin.nix
 
-{ config, pkgs, username, homeDirectory, secrets, ... }:
+{ config, pkgs, username, homeDirectory, secrets, reversing, ... }:
 
 let
   copyCommand = "pbcopy";
@@ -14,6 +14,7 @@ in {
     (import ./tmux.nix { inherit config pkgs copyCommand; })
     (import ./neovim.nix { inherit config pkgs; })
     (import ./emacs.nix { inherit config pkgs; })
+    (import ./languages.nix { inherit config pkgs; })
     (import ./git.nix {
       inherit homeDirectory username secrets;
       userEmail = secrets.userEmail;
@@ -82,6 +83,13 @@ in {
     })
     keychain  # ssh-agent manager for better YubiKey support
     git
+    postgresql
+    graphite-cli
+    github-cli
+  ] ++ lib.optionals reversing [
+    cutter
+    rizin
+    ghidra
   ];
 
   home.sessionVariables = {
