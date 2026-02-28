@@ -71,7 +71,7 @@ if-shell "infocmp tmux-256color >/dev/null 2>&1" \
   "set -g default-terminal tmux-256color"  \
   "set -g default-terminal screen-256color"
 if-shell "infocmp tmux-256color >/dev/null 2>&1" \
-  set -as terminal-features ",xterm-256color:RGB"
+  "set -as terminal-features ',xterm-256color:RGB'"
 
 set-option -ga terminal-overrides ",xterm-256color:Tc"
 

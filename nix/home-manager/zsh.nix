@@ -77,6 +77,8 @@ in
     '';
     sessionVariables = {
       NIXPKGS_ALLOW_UNFREE = "1";
+      LANG = "en_US.UTF-8";
+      LC_ALL = "en_US.UTF-8";
     };
     envExtra = ''
       GOROOT="$HOME"

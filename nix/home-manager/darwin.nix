@@ -85,7 +85,7 @@ in {
     git
     postgresql
     graphite-cli
-    github-cli
+    gh
   ] ++ lib.optionals reversing [
     cutter
     rizin

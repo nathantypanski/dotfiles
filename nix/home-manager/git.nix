@@ -15,6 +15,7 @@
       ci = "commit";
       S  = "status";
       s  = "status --short";
+      gpf  = "push origin --force-with-lease";
     };
     extraConfig = {
       gpg.format = "ssh";

@@ -82,8 +82,8 @@
         enable = true;
         # onActivation.cleanup = "uninstall";
 
-        taps = [ ];
-        brews = [ ];
+        taps  = [];
+        brews = [];
         casks = [];
       };
 
