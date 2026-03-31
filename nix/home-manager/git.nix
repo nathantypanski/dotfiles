@@ -25,6 +25,7 @@
       gpg.ssh.program = "/etc/profiles/per-user/${username}/bin/ssh-keygen";
       core.sshCommand = "/etc/profiles/per-user/${username}/bin/ssh";
       url."git@github.com:".insteadOf = "https://github.com/";
+      core.fsmonitor = false;
     };
   };
 }
