@@ -124,7 +124,7 @@ in {
     procps
     fzf
     bashInteractive
-    silver-searcher
+    ripgrep
     aspellDicts.en
 
     go
@@ -194,8 +194,8 @@ in {
     '')
     xwayland
     xwayland-run
-    xorg.xhost
-    xorg.xauth
+    xhost
+    xauth
     fontconfig
     font-manager
     terminus_font
@@ -217,7 +217,7 @@ in {
     mpv
 
     eza
-    uutils-coreutils-noprefix
+    uutils-coreutils
   ];
 
   programs.wofi = {
