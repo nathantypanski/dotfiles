@@ -35,6 +35,9 @@ in
     programs.firefox = {
       enable = true;
       package = pkgs.firefox-devedition;
+      # keep profiles in ~/.mozilla/firefox; new HM default moves them to
+      # $XDG_CONFIG_HOME/mozilla/firefox, which would orphan the existing profile
+      configPath = ".mozilla/firefox";
     };
 
     home.packages = with pkgs; [
