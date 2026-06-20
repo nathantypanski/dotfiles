@@ -1,6 +1,14 @@
 { lib, pkgs, homeDirectory, username, userEmail, ... }:
 
+let
+  # OpenSSH with FIDO2/U2F support for YubiKey security keys.
+  # Pinned to the store path so ssh-keygen/ssh are guaranteed to exist
+  # regardless of profile layout (standalone home-manager vs. NixOS).
+  opensshFido = pkgs.openssh.override { withFIDO = true; };
+in
 {
+  home.packages = [ opensshFido ];
+
   programs = {
     git = {
       enable = true;
@@ -19,10 +27,10 @@
         gpg.ssh = {
           allowedSignersFile = "${homeDirectory}/.config/git/allowed_signers";
           # Use Nix OpenSSH with FIDO2 support for YubiKey
-          program = "/etc/profiles/per-user/${username}/bin/ssh-keygen";
+          program = lib.getExe' opensshFido "ssh-keygen";
         };
         core = {
-          sshCommand = "/etc/profiles/per-user/${username}/bin/ssh";
+          sshCommand = lib.getExe' opensshFido "ssh";
           fsmonitor = false;
         };
         url."git@github.com:".insteadOf = "https://github.com/";
