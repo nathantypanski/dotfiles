@@ -7,7 +7,7 @@
       main = {
         font = "${termFont}:size=14";
       };
-      colors = {
+      colors-dark = {
         foreground = "dcdccc";
         background = "121212";
         selection-foreground = "3f3f3f";
