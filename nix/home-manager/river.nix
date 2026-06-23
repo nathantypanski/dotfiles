@@ -199,11 +199,6 @@ in {
         default-layout = "rivertile";
 
         declare-mode = ["normal" "tag" "layout"];
-        map = {
-          normal = {
-            Tab = "spawn river-tag-history";
-          };
-        };
 
         rule-add = {
           "-app-id" = {
@@ -269,6 +264,7 @@ in {
       # Basic keybinds
       log "Setting up keybindings"
       "${riverctl}" map normal Super Return spawn "${term}"
+      "${riverctl}" map normal Super Tab spawn river-last-tag
       "${riverctl}" map normal Super P spawn pick-ruby
       "${riverctl}" map normal Super+Shift W spawn wg-picker
       "${riverctl}" map normal Super N spawn ns-popup
@@ -318,14 +314,14 @@ in {
       for i in $(seq 0 9); do
             tags=$(( i == 0 ? (1 << 9) : (1 << (i - 1)) ))
 
-            # Switch to tag
-            "${riverctl}" map normal "Super" "$i" toggle-focused-tags "$tags"
+            # Switch to tag (records history for Super+Tab last-tag toggle)
+            "${riverctl}" map normal "Super" "$i" spawn "river-focus-tag $tags"
 
-            # Move window to tag
+            # Join/leave a tag in the current view without switching away
+            "${riverctl}" map normal "Super+Control" "$i" toggle-focused-tags "$tags"
+
+            # Move focused window to tag
             "${riverctl}" map normal "Super+Shift" "$i" set-view-tags "$tags"
-
-            # Switch to tag
-
       done
 
       # Tag mode - for moving windows to tags
@@ -338,7 +334,7 @@ in {
             tags=$(( i == 0 ? (1 << 9) : (1 << (i - 1)) ))
 
             # In tag mode: numbers switch to tags
-            "${riverctl}" map tag None "$i" set-focused-tags "$tags"
+            "${riverctl}" map tag None "$i" spawn "river-focus-tag $tags"
             # In tag mode: Shift+numbers move window to tag
             "${riverctl}" map tag Shift "$i" set-view-tags "$tags"
       done
@@ -628,37 +624,32 @@ in {
         exec "$(command -v swaylock || echo /usr/bin/swaylock)" "$@"
       '')
 
-      # proof of concept
-      (pkgs.writeShellScriptBin "river-tag-history" ''
-        #!/bin/bash
+      # Switch the focused tags to $1, recording the previous tag so that
+      # `river-last-tag` (Super+Tab) can jump back. river doesn't expose the
+      # currently focused tags to scripts, so we track them ourselves: every
+      # normal/tag-mode digit switch goes through this wrapper.
+      (pkgs.writeShellScriptBin "river-focus-tag" ''
+        set -euo pipefail
+        state="''${XDG_RUNTIME_DIR:-/tmp}/river-tags"
+        new="$1"
+        cur="$(cat "$state.current" 2>/dev/null || echo 1)"
+        if [ "$new" != "$cur" ]; then
+          printf '%s' "$cur" > "$state.previous"
+          printf '%s' "$new" > "$state.current"
+        fi
+        ${riverctl} set-focused-tags "$new"
+      '')
 
-        STATE_FILE="/tmp/river-tag-history"
-
-        # Read current focused tags from river
-        get_current_tags() {
-            # This is tricky - river doesn't expose current tags easily
-            # We'll track it ourselves
-            cat "$STATE_FILE.current" 2>/dev/null || echo "1"
-        }
-
-        case "$1" in
-            save)
-                # Save current as previous, then save new current
-                current=$(cat "$STATE_FILE.current" 2>/dev/null || echo "1")
-                echo "$current" > "$STATE_FILE.previous"
-                echo "$2" > "$STATE_FILE.current"
-                ;;
-            toggle)
-                previous=$(cat "$STATE_FILE.previous" 2>/dev/null || echo "1")
-                current=$(cat "$STATE_FILE.current" 2>/dev/null || echo "1")
-
-                # Swap them
-                echo "$current" > "$STATE_FILE.previous"
-                echo "$previous" > "$STATE_FILE.current"
-
-                riverctl set-focused-tags "$previous"
-                ;;
-        esac
+      # Jump back to the previously focused tag (toggles between the current
+      # and previous tag, like Super+Tab in many window managers).
+      (pkgs.writeShellScriptBin "river-last-tag" ''
+        set -euo pipefail
+        state="''${XDG_RUNTIME_DIR:-/tmp}/river-tags"
+        prev="$(cat "$state.previous" 2>/dev/null || echo 1)"
+        cur="$(cat "$state.current" 2>/dev/null || echo 1)"
+        printf '%s' "$cur" > "$state.previous"
+        printf '%s' "$prev" > "$state.current"
+        ${riverctl} set-focused-tags "$prev"
       '')
 
       (pkgs.writeShellScriptBin "spawn-river" ''
