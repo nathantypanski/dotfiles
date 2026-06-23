@@ -33,6 +33,9 @@ in
           sshCommand = lib.getExe' opensshFido "ssh";
           fsmonitor = false;
         };
+        push = {
+          autoSetupRemote = true;
+        };
         url."git@github.com:".insteadOf = "https://github.com/";
         aliases = {
           co = "checkout";
