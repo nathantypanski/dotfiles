@@ -39,6 +39,9 @@ in
     python313Packages.python-lsp-ruff
     python313Packages.flake8
 
+    bundix
+    watchman # required for srb lsp
+
     (tree-sitter.withPlugins (p: builtins.filter (x: x != null) (treeSitterFor langs p)))
   ] ++ lspServers;
 }
