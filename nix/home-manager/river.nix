@@ -236,7 +236,7 @@ in {
             scroll-method = "two-finger";
             scroll-factor = "0.3";
             accel-profile = "adaptive";
-            pointer-accel = "0.2";
+            pointer-accel = "0.1";
           };
         };
 
