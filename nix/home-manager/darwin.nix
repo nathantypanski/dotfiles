@@ -76,7 +76,7 @@ in {
     awk-language-server
     pentestgpt
     kanha
-    python312Packages.sectools
+
 
     # OpenSSH with FIDO2/U2F support for YubiKey security keys
     (openssh.override {
