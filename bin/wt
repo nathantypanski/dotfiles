@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+
+# Create a git worktree for a new branch, based off a given ref.
+# Prints the worktree path on success (so callers can cd to it).
+
+set -euo pipefail
+
+log() { echo >&2 "$@"; }
+
+usage() {
+    cat << EOF
+Usage: $(basename "$0") <new-branch> [base-ref]
+
+Creates a git worktree for <new-branch>, branching from <base-ref>
+(default: origin/master). The worktree is placed as a sibling of the
+current repo root: <repo-parent>/<repo-name>-<new-branch>.
+
+Prints the worktree path on success.
+
+Examples:
+    wt my-feature
+    wt my-feature origin/main
+    wt fix-thing HEAD
+EOF
+}
+
+if [[ $# -eq 0 ]] || [[ "${1:-}" == "-h" ]] || [[ "${1:-}" == "--help" ]]; then
+    usage
+    exit 0
+fi
+
+branch="$1"
+base_ref="${2:-origin/master}"
+
+repo_root=$(git rev-parse --show-toplevel)
+repo_name=$(basename "$repo_root")
+repo_parent=$(dirname "$repo_root")
+
+worktree_dir="${repo_parent}/${repo_name}-${branch}"
+
+if [[ -d "$worktree_dir" ]]; then
+    log "Error: directory already exists: $worktree_dir"
+    exit 1
+fi
+
+log "Creating worktree at $worktree_dir (branch: $branch, base: $base_ref)"
+git worktree add -b "$branch" "$worktree_dir" "$base_ref"
+
+echo "$worktree_dir"
