@@ -47,10 +47,6 @@ in
           w  = "worktree";
           wt  = "worktree";
         };
-
-        pager = {
-          diff = "${lib.getExe pkgs.diffnav}";
-        };
       };
     };
   };

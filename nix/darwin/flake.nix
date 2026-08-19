@@ -30,11 +30,12 @@
     };
     homeDirectory = "/Users/${username}";
 
-    reversing = true;
+    reversing = false;
 
     configuration = {pkgs, lib, ... }: {
       # Necessary for using flakes on this system.
       nix.settings.experimental-features = "nix-command flakes";
+      nix.settings.trusted-users = [ "root" username ];
       nix.settings.extra-substituters = [
         "https://nix-community.cachix.org"
       ];

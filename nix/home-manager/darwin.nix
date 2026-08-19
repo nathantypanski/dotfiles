@@ -17,7 +17,7 @@ in {
     (import ./emacs.nix { inherit config pkgs; })
     (import ./languages.nix { inherit config pkgs; })
     (import ./git.nix {
-      inherit homeDirectory username secrets;
+      inherit lib pkgs homeDirectory username secrets;
       userEmail = secrets.userEmail;
     })
   ];
@@ -43,17 +43,13 @@ in {
     podman
     tmux
     nix-search
-    silver-searcher
     tig
     utm
-    transmission_4-qt5
     claude-code
     ripgrep
     niv
     tree-sitter-grammars.tree-sitter-typescript
     javascript-typescript-langserver
-    electrum
-    electrum-ltc
     solana-cli
     go-ethereum
     yubikey-manager
@@ -71,11 +67,10 @@ in {
     xan
     pass
     claude-code
-    (aspellWithDicts
-      (dicts: with dicts; [ de en en-computers en-science es fr la ]))
     awk-language-server
     pentestgpt
     kanha
+    terminus_font_ttf
 
 
     # OpenSSH with FIDO2/U2F support for YubiKey security keys
@@ -87,6 +82,8 @@ in {
     postgresql
     graphite-cli
     gh
+    _1password-cli
+    awscli2
   ] ++ lib.optionals reversing [
     cutter
     rizin
@@ -103,6 +100,19 @@ in {
     enableZshIntegration = true;
     enable = true;
   };
+
+  home.file.".config/helix/languages.toml".text = ''
+    [language-server.sorbet]
+    command = "srb"
+    args = ["tc", "--lsp", "--disable-watchman"]
+
+    [language-server.ruby-lsp]
+    command = "ruby-lsp"
+
+    [[language]]
+    name = "ruby"
+    language-servers = ["sorbet", "ruby-lsp"]
+  '';
 
   # Let Home Manager install and manage itself
   programs.home-manager.enable = true;

@@ -14,6 +14,8 @@ let
     "hcl"
     "sql"
     "ruby"
+    "proverif"
+    "cryptol"
   ];
 
   treeSitterFor = langs: p: map (lang:
@@ -31,10 +33,11 @@ in
     gopls
     rustup
     bash-language-server
+    nixd
 
     python313Packages.mcp
     python313Packages.python-lsp-server
-    python313Packages.pylsp-mypy
+    # python313Packages.pylsp-mypy
     python313Packages.pylsp-rope
     python313Packages.python-lsp-ruff
     python313Packages.flake8

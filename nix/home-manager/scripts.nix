@@ -5,5 +5,8 @@
     (writeShellScriptBin "clone" ''
       ${builtins.readFile ./../../bin/clone}
     '')
+    (writeShellScriptBin "wt" ''
+      ${builtins.readFile ./../../bin/wt}
+    '')
   ];
 }

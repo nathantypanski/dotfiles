@@ -29,9 +29,6 @@ in
 
   home.packages = with pkgs; [
     # System dependencies for vterm
-    (aspellWithDicts
-      (dicts: with dicts; [ de en en-computers en-science es fr la ]))
-
     cmake
     pinentry-emacs
     (pkgs.writeShellScriptBin "bundle-rubocop" ''

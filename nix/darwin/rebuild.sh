@@ -18,6 +18,7 @@ sudo true
 #
 echo >&2 "running 'nix build .#darwinConfigurations.${HOSTNAME}.system'"
 
+sudo rm -rf "${SCRIPT_DIR}/result"
 HOST=$(hostname) nix --extra-experimental-features flakes --extra-experimental-features nix-command build "${SCRIPT_DIR}#darwinConfigurations.default.system" --impure
 
 echo >&2 "${SCRIPT_DIR}/result/sw/bin/darwin-rebuild activate"

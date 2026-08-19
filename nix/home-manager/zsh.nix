@@ -1,7 +1,7 @@
 { homeDirectory, pkgs, lib, enableCompletion, ... }:
 
 let
-  isDarwin = pkgs.stdenv.isDarwin;
+  isDarwin = pkgs.stdenv.hostPlatform.isDarwin;
   grmlZshrc = if isDarwin
     then "${pkgs.grml-zsh-config}/etc/zsh/zshrc"
               else "/etc/zsh/zshrc";
@@ -147,6 +147,12 @@ in
       bindkey -M menuselect 'k' vi-up-line-or-history   # up
       bindkey -M menuselect 'l' vi-forward-char         # right
       bindkey -M menuselect 'j' vi-down-line-or-history # bottom
+
+      wt() {
+          local dir
+          dir=$(command wt "$@") || return $?
+          cd "$dir"
+      }
 
       ggptemacs() {
           # Set API keys if not already present
