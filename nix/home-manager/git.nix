@@ -37,7 +37,9 @@ in
           autoSetupRemote = true;
         };
         url."git@github.com:".insteadOf = "https://github.com/";
-        aliases = {
+        # NB: this is the gitconfig section name, so it must be `alias`
+        # (singular). `aliases` emits an [aliases] section that git ignores.
+        alias = {
           co = "checkout";
           br = "branch";
           ci = "commit";

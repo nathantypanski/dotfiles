@@ -14,8 +14,12 @@ let
     "hcl"
     "sql"
     "ruby"
-    "proverif"
     "cryptol"
+  ];
+
+  # Grammars nixpkgs doesn't ship in tree-sitter-grammars; built locally.
+  extraGrammars = [
+    (pkgs.callPackage ../pkgs/tree-sitter-proverif.nix { })
   ];
 
   treeSitterFor = langs: p: map (lang:
@@ -45,6 +49,7 @@ in
     bundix
     watchman # required for srb lsp
 
-    (tree-sitter.withPlugins (p: builtins.filter (x: x != null) (treeSitterFor langs p)))
+    (tree-sitter.withPlugins (p:
+      builtins.filter (x: x != null) (treeSitterFor langs p) ++ extraGrammars))
   ] ++ lspServers;
 }

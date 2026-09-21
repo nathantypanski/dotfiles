@@ -4,6 +4,9 @@ let
   emacsPackage = if pkgs.stdenv.isDarwin
               then pkgs.emacs-macport
               else pkgs.emacs-unstable-pgtk;
+
+  # Not in nixpkgs' tree-sitter-grammars set; see nix/pkgs/.
+  tree-sitter-proverif = pkgs.callPackage ../pkgs/tree-sitter-proverif.nix { };
 in
 {
   programs.emacs = {
@@ -23,7 +26,7 @@ in
         tree-sitter-dockerfile
         tree-sitter-c
         tree-sitter-sql
-      ]))
+      ] ++ [ tree-sitter-proverif ]))
     ]);
   };
 
