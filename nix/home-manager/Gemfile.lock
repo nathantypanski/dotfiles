@@ -3,14 +3,17 @@ GEM
   specs:
     language_server-protocol (3.17.0.5)
     logger (1.7.0)
-    prism (1.5.1)
-    rbs (3.9.5)
+    prism (1.9.0)
+    rbs (4.0.2)
       logger
-    ruby-lsp (0.26.1)
+      prism (>= 1.6.0)
+      tsort
+    ruby-lsp (0.26.9)
       language_server-protocol (~> 3.17.0)
       prism (>= 1.2, < 2.0)
       rbs (>= 3, < 5)
     sorbet-runtime (0.6.12586)
+    tsort (0.2.0)
 
 PLATFORMS
   ruby
